@@ -2,7 +2,21 @@
 
 \section{Simultaneous Localisation and Mapping}
 
-Simultaneous Localisation and Mapping, kurz SLAM, ist ein Verfahren zum Analyse einer unbekannten Umgebung und Erstellung einer Map, während gleichzeitig die lokale Position innerhalb dieser Map bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Das meistern dieser Technik würde Roboter wirklich autonom steuern lassen. Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben. (vgl. \cite{slam} S. 1-2)
+Simultaneous Localisation and Mapping, kurz SLAM, ist das Problem der Auswertung einer unbekannten Umgebung und Erstellung einer Map, während gleichzeitig die lokale Position innerhalb dieser Map bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Dabei ist SLAM ein Alltagsproblem: Das Problem der räumlichen Erkundung. Jeder Mensch und jedes Tier hat dieses Verfahren gemeistert und benutzt es unterbewusst zur Navigation in unserer Realität. Die Lösung für dieses Problems, wenn es für einen Roboter automatisiert ausgeführt werden soll, ist dagegen sehr komplex. Durch das Meistern dieser Technik kann man Roboter wirklich autonom steuern. 
+Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben. (vgl. \cite{slam} S. 1-2) 
+
+Dabei benötigt der Roboter mindestens einen exterozeptiven Sensor um äußere Informationen zu sammeln.
+SLAM besteht aus drei grundlegenden Operationen, die iterativ pro Zeitintervall ausgeführt werden.
+
+\textbf{Der Roboter bewegt} sich und erreicht eine neue Position in der Umwelt. Diese Bewegung erzeugt, durch unvermeidbares Rauschen und Fehler, Ungewissheit über die wirkliche Position des Roboters. Eine automatisierte Lösung benötigt ein mathematisches Modell für diese Bewegung. Dies ist das \glqq\textit{Motion Model}\grqq
+
+\textbf{Der Roboter entdeckt neue Features} in seiner Umgebung, welche in die Umgebungskarte aufgenommen werden müssen. Diese Features heißen \glqq Landmarks\grqq . Da die Position der Landmarks, durch Fehler in den exterozeptiven Sensoren und die Position des Roboters ungewiss ist, müssen diese beiden Faktoren passend arrangiert werden. Eine automatisierte Lösung benötigt ein mathematisches Modell, das die Position der Landmarks anhand er Sensordaten bestimmt. Dies ist das \glqq textit{Inverse Oberservation Model}. \grqq
+
+\textbf{Der Roboter entdeckt Landmarks, die schon gemappt wurden} und verwendet diese um seine eigene Position, sowie die aller Landmarks zu korrigieren. Diese Operation reduziert die Unsicherheit über den Standort des Roboters, sowie der Landmarks. Die automatisierte Lösung erfordert ein mathemathisches Modell, um die Werte der Messungen aus den prognostizierten Positionen der Landmarks und der Position des Roboters zu berechnen. Dies ist das \glqq \textit{Direct Observation Model} \grqq
+
+Mit diesen drei Modellen ist es möglich eine automatisierte Lösung für SLAM zu entwerfen. Diese Lösung muss diese drei Modelle verbinden und alle Daten korrekt und oganisiert halten, sowie die korrekten Entscheidungen bei jedem Schritt machen. (vgl. \cite{ekf_slam} S.2-3)
+
+
 
 \begin{figure}[H]
 	\centering
@@ -25,7 +39,58 @@ Während sich der Roboter durch die Umgebung bewegt, werden die Korrelationen st
 Lösungen für das SLAM Problem benötigen eine angemessene Repräsentation für die Observierungen der Landmarks, welche eine konsistente und schnelle Berechnung ermöglichen. Die geläufigste Repräsentation besteht in der Form einer Zustandsraumdarstellung mit Gaußschen Rauschen, was zur Verwendung des \glqq Extended Kalman Filter\grqq (EKF) führt. Eine weitere alternative Repräsentation ist die Beschreibung der Features als Datenset aus Stichproben in einer nicht gaußschen Wahrscheinlichkeitsverteilung. Diese Methodik benutzt den \glqq Rao-Blackwellised particle filter\grqq oder den Fast-SLAM Algorithmus. (vgl. \cite{slam} S. 2-4)
 
 
-\subsection{EKF-SLAM}
+\subsection{Extended Kalman Filter - SLAM}
+Der Kalman Filter ist eine Schätzfunktion für das \glqq linear-quadratic-problem\grqq , welches das Problem der Schätzung des augenblicklichen Zustands eines linearen dynamischen Systems, gestört durch weißes Rauschen, darstellt. Der Kalman Filter wird auch dazu benutzt um die mögliche Zukunft von dynamischen Systemen vorherzusagen, die von Menschen nicht kontrolliert werden können, wie zum Beispiel die Flugbahn von Himmelskörpern, oder der Kurs von gehandelten Rohstoffen. (vgl. \cite{ekf} S.1)
+
+Bei Extended Kalman Filter - SLAM ist die Map ein großer Stapel an Vektor und Sensordaten, sowie Zuständen von Landmarks.
+
+\begin{equation}
+  x =  \begin{bmatrix}
+		R\\
+		M
+     	\end{bmatrix}
+     = \begin{bmatrix}
+		R\\
+		L_1\\
+		...\\
+		L_n
+     	\end{bmatrix}
+\end{equation}
+
+\( R\) ist der Zustand des Roboters und \( M = (L_1, ..., L_n)\)  ist das Set an Zuständen der Landmarks.
+Bei EKF wird die Map durch eine gaußsche Variable modelliert, die den Mittelwert und die Kovarianzmatrix des Zustandsvektors verwendet, die jeweils durch \(\overline{x}\) und \(P\) beschrieben werden. Das Ziel ist es die Map \{\(\overline{x}, P\)\} zu allen Zeiten auf dem aktuellsten Stand zu halten.
+
+
+\begin{equation}
+  \overline{x} =  
+  		\begin{bmatrix}
+		\overline{R}\\
+		\overline{M}
+     	\end{bmatrix}
+     = 
+     	\begin{bmatrix}
+		\overline{R}\\
+		\overline{L_1}\\
+		...\\
+		\overline{L_n}
+     	\end{bmatrix}
+     	\quad\quad
+     P = 
+     	\begin{bmatrix}
+		P_{RR} & P_{RM}\\
+		P_{MR} & P_{MM}
+     	\end{bmatrix}
+     = 
+     	\begin{bmatrix}
+		P_{RR} & P_{RL1} & ... & P_{RLn}\\
+		P_{L1R} & P_{L1L1} & ... & P_{L1Ln}\\
+		... & ... & ... & ... \\
+		P_{LnR} & P_{LnL1} & ... & P_{LnLn}
+     	\end{bmatrix}
+\end{equation}
+
+Diese Map, die als stochastische Map bezeichnet wird, wird durch die Vorhersage- und Korrekturprozesse des EKF in Stand gehalten. Um eine echte Erkundung der Umgebung zu erreichen, wird der EKF Algorithmus mit einem extra Schritt der Landmark Erkennung und Initialisierung gestartet, bei dem neue Landmarks der Map hinzugefügt werden. Die Landmark Initialisierung erfolgt durch eine Umkehrung der Bewertungsfunktion und der Verwendung dieser und der Ableitungsmatrix, um die beobachteten Landmarks und die benötigten Co- und Crossvarianzen für den Rest der Map zu berechnen. Diese Beziehungen werden dann an den Zustandsvektor und die Kovarianzmatrix angehängt. (vgl. \cite{ekf_slam} S.6-7)
+
 
 \url{http://www.iri.upc.edu/people/jsola/JoanSola/objectes/curs_SLAM/SLAM2D/SLAM%20course.pdf}
 
