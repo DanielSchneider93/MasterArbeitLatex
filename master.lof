@@ -1,10 +1,14 @@
 \select@language {ngerman}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Das Realit\IeC {\"a}t - Virtualit\IeC {\"a}t Kontinuum, Bildquelle \cite {ar_vr}\relax }}{2}{figure.caption.2}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Kantenbasiertes rekursives Tracking, Bildquelle \cite {model_based} S.3\relax }}{5}{figure.caption.3}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Tracking Pipeline Bildquelle \cite {natural_feature}\relax }}{6}{figure.caption.4}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite {slam}\relax }}{5}{figure.caption.2}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Die Landmarks sind durch Federn verbunden, welche die Korrelation zwischen ihnen darstellen. Bildquelle \cite {slam}\relax }}{6}{figure.caption.3}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite {slam}\relax }}{10}{figure.caption.5}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Die Landmarks sind durch Federn verbunden, welche die Korrelation zwischen ihnen darstellen. Bildquelle \cite {slam}\relax }}{11}{figure.caption.6}
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

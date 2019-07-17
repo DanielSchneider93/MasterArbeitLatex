@@ -98,6 +98,12 @@ Eine zentrale Einschränkung des EKF basierten SLAM Ansatzes ist die Komplexitä
 
 \url{http://www.iri.upc.edu/people/jsola/JoanSola/objectes/curs_SLAM/SLAM2D/SLAM%20course.pdf}
 
+\section{ORB-SLAM}
+TODO
+
+https://arxiv.org/pdf/1502.00956.pdf
+https://arxiv.org/pdf/1610.06475.pdf
+
 \section{FAST-SLAM}
 
 Fast-SLAM (Fast SLAM 1.0) zerlegt das SLAM-Problem in ein Lokalisierungsproblem des Roboters und eine Reihe von Landmark Schatzungsproblemen, die auf der Schätzung der Roboterposition beruhen. Fast-SLAM verwendet einen modifizierten Partikelfilter zur Schätzung der \glqq A-posteriori-Wahrscheinlichkeit\grqq  für die Roboterposition. Partikelfilter sind vom Prinzip her ähnlich wie Kalman Filter. Diese werden auch zur Schätzung von Zuständen verwendet, können aber viele verschiedene mögliche Zustände betrachten. Diese Anzahl an Zuständen wird Partikel genannt. Jedes Partikel besitzt wiederum Kalman-Filter, welche die Positionen der Landmarks schätzen, abhängig von der Pfadschätzung. Eine naive Implementation dieser Idee führt zu einem Algorithmus, der \(O(MK)\) Zeit benötigt, wobei \(M\) die Anzahl an Partikeln im Partikel Filter und \( K\) die Anzahl an Landmarks ist. Mit der Verwendung einer Baumstruktur kann die Laufzeit von FastSLAM auf \(O(MlogK)\) reduziert werden, was diesen Algorithmus deutlich schneller als EKF basierte SLAM ALgortihmen macht. (vgl. \cite{ekf_problems} S.1-2, \cite{slam_studi} S.18-19)
@@ -105,6 +111,8 @@ Fast-SLAM (Fast SLAM 1.0) zerlegt das SLAM-Problem in ein Lokalisierungsproblem 
 Bei Fast-SLAM werden nicht nur die unterschiedlichen geschätzten Positionen verwendet, sondern auch verschiedene Maps der Umgebung betrachtet. Da verschiedenste Maps mit verschieden Warscheinlichkeiten der geschätzten Positionen betrachtet werden, können Fehler in der Map, die sich durch falsche gemessene oder geschätzte Positionen ergeben, durch die Anzahl an verschieden Maps relativieren. Es können sich im Laufe der Zeit Maps, die vorher weniger wahrscheinliche Positionen hatten, als richtig herausstellen. (vgl.  \cite{slam_studi} S.23)
 
 Fast-SLAM 2.0 ist eine weiterentwickelte Variante von Fast-SLAM. Hierbei wird eine Vorauswahl getroffen, berechnet durch einen weiteren Kalman Filtern, in wie weit und mit welcher Varianz die Partikel um den Mittelpunkt verteilt werden. Es ergibt sich eine bessere Auswahl des Mittelpunktes und des Streuradius für den Partikelfilter als in Fast-SLAM 1.0. Diese Methodik reduziert die Anzahl an Partikel und generierten Maps, ist demnach auch schneller berechnet. (vgl. \cite{slam_studi} S.29-30)
+
+
 
 
 \section{SLAM für mobiles Augumented Reality}

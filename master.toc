@@ -1,37 +1,48 @@
 \select@language {ngerman}
-\contentsline {chapter}{\numberline {1}Einf\IeC {\"u}hrung und Motivation}{1}{chapter.1}
+\contentsline {chapter}{\numberline {1}Motivation}{1}{chapter.1}
 \contentsline {chapter}{\numberline {2}Augmented Reality}{2}{chapter.2}
-\contentsline {section}{\numberline {2.1}Augmented Reality SDKs - Markt\IeC {\"u}bersicht}{2}{section.2.1}
-\contentsline {chapter}{\numberline {3}Photogrammetrie}{3}{chapter.3}
-\contentsline {section}{\numberline {3.1}Einf\IeC {\"u}hrung in die Photogrammetrie}{3}{section.3.1}
-\contentsline {section}{\numberline {3.2}Mathe in der Photogrammetrie}{3}{section.3.2}
-\contentsline {section}{\numberline {3.3}Pipeline}{3}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Feature Matching}{3}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Image Matching}{3}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Structure from Motion}{3}{subsection.3.3.3}
-\contentsline {subsection}{\numberline {3.3.4}Depth Maps}{3}{subsection.3.3.4}
-\contentsline {section}{\numberline {3.4}Photogrammetrie f\IeC {\"u}r Smartphones}{3}{section.3.4}
-\contentsline {section}{\numberline {3.5}Evaluierung der photogrammetrischen Technologie f\IeC {\"u}r Echtzeit AR Anwendungen}{3}{section.3.5}
-\contentsline {chapter}{\numberline {4}Simultaneous Localisation and Mapping}{4}{chapter.4}
-\contentsline {section}{\numberline {4.1}Extended Kalman Filter - SLAM}{7}{section.4.1}
-\contentsline {section}{\numberline {4.2}FAST-SLAM}{8}{section.4.2}
-\contentsline {section}{\numberline {4.3}SLAM f\IeC {\"u}r mobiles Augumented Reality}{9}{section.4.3}
-\contentsline {section}{\numberline {4.4}SLAM als Core f\IeC {\"u}r viele AR APIs}{10}{section.4.4}
-\contentsline {chapter}{\numberline {5}Implementation einer AR Anwendung f\IeC {\"u}r Android}{11}{chapter.5}
-\contentsline {section}{\numberline {5.1}Verwendete Hard und Software}{11}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}Ar Core}{11}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Sceneform}{11}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}Google Location Service}{11}{subsection.5.1.3}
-\contentsline {subsection}{\numberline {5.1.4}Dexter}{11}{subsection.5.1.4}
-\contentsline {subsection}{\numberline {5.1.5}Volley}{11}{subsection.5.1.5}
-\contentsline {section}{\numberline {5.2}Implentierung}{11}{section.5.2}
-\contentsline {chapter}{\numberline {6}Praxistest}{12}{chapter.6}
-\contentsline {section}{\numberline {6.1}Anwendungsbeispiele}{12}{section.6.1}
-\contentsline {section}{\numberline {6.2}Benchmarks}{12}{section.6.2}
-\contentsline {section}{\numberline {6.3}Tests}{12}{section.6.3}
-\contentsline {chapter}{\numberline {7}Weitere Verfahren}{13}{chapter.7}
-\contentsline {section}{\numberline {7.1}Depth Map mit Dual Camera}{13}{section.7.1}
-\contentsline {section}{\numberline {7.2}???}{13}{section.7.2}
-\contentsline {chapter}{\numberline {8}Zusammenfassung und Ausblick}{14}{chapter.8}
-\contentsline {chapter}{Literaturverzeichnis}{15}{section*.4}
-\contentsline {chapter}{Abbildungsverzeichnis}{17}{section*.6}
+\contentsline {section}{\numberline {2.1}Augmented Reality - Software Development Kits}{2}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Markt\IeC {\"u}bersicht - SDKs}{3}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Arten des Augmented Reality Trackings}{3}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Referenzmarken-basiertes Tracking}{3}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Hybrid-basiertes Tracking}{4}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Modell-basiertes Tracking}{4}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}Nat\IeC {\"u}rliches Feature Tracking}{5}{subsection.2.2.4}
+\contentsline {section}{\numberline {2.3}Warum beleuchte ich Photogrammetrie im Rahmen von AR}{7}{section.2.3}
+\contentsline {chapter}{\numberline {3}Photogrammetrie}{8}{chapter.3}
+\contentsline {section}{\numberline {3.1}Einf\IeC {\"u}hrung in die Photogrammetrie}{8}{section.3.1}
+\contentsline {section}{\numberline {3.2}Mathe in der Photogrammetrie}{8}{section.3.2}
+\contentsline {section}{\numberline {3.3}Pipeline}{8}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Feature Matching}{8}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Image Matching}{8}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Structure from Motion}{8}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.3.4}Depth Maps}{8}{subsection.3.3.4}
+\contentsline {section}{\numberline {3.4}Photogrammetrie f\IeC {\"u}r Smartphones}{8}{section.3.4}
+\contentsline {section}{\numberline {3.5}Evaluierung der photogrammetrischen Technologie f\IeC {\"u}r Echtzeit AR Anwendungen}{8}{section.3.5}
+\contentsline {chapter}{\numberline {4}Simultaneous Localisation and Mapping}{9}{chapter.4}
+\contentsline {section}{\numberline {4.1}Extended Kalman Filter - SLAM}{12}{section.4.1}
+\contentsline {section}{\numberline {4.2}ORB-SLAM}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}FAST-SLAM}{14}{section.4.3}
+\contentsline {section}{\numberline {4.4}SLAM f\IeC {\"u}r mobiles Augumented Reality}{14}{section.4.4}
+\contentsline {section}{\numberline {4.5}SLAM als Core f\IeC {\"u}r viele AR APIs}{16}{section.4.5}
+\contentsline {chapter}{\numberline {5}Vergleich der Verfahren}{17}{chapter.5}
+\contentsline {section}{\numberline {5.1}\IeC {\"A}hnlichkeiten und Unterschiede}{17}{section.5.1}
+\contentsline {section}{\numberline {5.2}Analyse der Echtzeitf\IeC {\"a}higkeit}{17}{section.5.2}
+\contentsline {chapter}{\numberline {6}Implementation einer AR Anwendung f\IeC {\"u}r Android}{18}{chapter.6}
+\contentsline {section}{\numberline {6.1}Verwendete Hard und Software}{18}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Ar Core}{18}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Sceneform}{18}{subsection.6.1.2}
+\contentsline {subsection}{\numberline {6.1.3}Google Location Service}{18}{subsection.6.1.3}
+\contentsline {subsection}{\numberline {6.1.4}Dexter}{18}{subsection.6.1.4}
+\contentsline {subsection}{\numberline {6.1.5}Volley}{18}{subsection.6.1.5}
+\contentsline {section}{\numberline {6.2}Implentierung}{18}{section.6.2}
+\contentsline {chapter}{\numberline {7}Praxistest}{19}{chapter.7}
+\contentsline {section}{\numberline {7.1}Anwendungsbeispiele}{19}{section.7.1}
+\contentsline {section}{\numberline {7.2}Benchmarks}{19}{section.7.2}
+\contentsline {section}{\numberline {7.3}Tests}{19}{section.7.3}
+\contentsline {chapter}{\numberline {8}Weitere Verfahren}{20}{chapter.8}
+\contentsline {section}{\numberline {8.1}Depth Map mit Dual Camera}{20}{section.8.1}
+\contentsline {section}{\numberline {8.2}???}{20}{section.8.2}
+\contentsline {chapter}{\numberline {9}Zusammenfassung und Ausblick}{21}{chapter.9}
+\contentsline {chapter}{Literaturverzeichnis}{22}{section*.7}
+\contentsline {chapter}{Abbildungsverzeichnis}{24}{section*.9}
