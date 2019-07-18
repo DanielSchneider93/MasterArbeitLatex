@@ -14,7 +14,7 @@ Im Rahmen dieser Arbeit wird sich, wenn der Begriff Augmented Reality (AR) verwe
 
 \section{Augmented Reality - Software Development Kits}
 
-\glqq Software Development Kits\grqq (SDK) oder auch Frameworks, sind Werkzeuge und Bibliotheken, welche eine Programmierumgebung und Basistechnologien liefern, um Programme zu entwickeln. Im Bereich von Augmented Reality SDKs umfassen Frameworks meistens die drei Hauptkomponenten: (vgl. \cite{sdks} S.3)
+\glqq Software Development Kits\grqq (SDK) oder auch Frameworks, sind Werkzeuge und Bibliotheken, welche eine Programmierumgebung und Basistechnologien liefern, um Programme zu entwickeln. Im Bereich von Augmented Reality umfassen Frameworks meistens die drei Hauptkomponenten: (vgl. \cite{sdks} S.3)
 
 \begin{itemize}
 
@@ -26,35 +26,57 @@ Im Rahmen dieser Arbeit wird sich, wenn der Begriff Augmented Reality (AR) verwe
 \item \textbf{Rendering}: Überlagerung der virtuellen Medieninformationen über das Bild und Anzeige der generieren Mixed Reality.
 \end{itemize}
 
-\subsection{Marktübersicht - SDKs}
+\subsection{Marktübersicht - Software Development Kits}
+
+Die folgende Tabelle gibt eine Übersicht an gängigen SDKs, und deren Plattformkompatibilität. \\
+
+\begin{table}[h!]
+\hskip-1.5cm
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+        & Vuforia & Wikitude & Metaio & ARToolKit & Kudan & EasyAR & MaxST & ARCore & ARKit \\ \hline
+Android &   \checkmark      &    \checkmark      &    \checkmark    &     \checkmark      &   \checkmark    &    \checkmark    &    \checkmark   &     \checkmark   &    x   \\ \hline
+iOS     &    \checkmark      &   \checkmark        &   \checkmark      &    \checkmark        &   \checkmark    &    \checkmark     &   \checkmark     &    \checkmark     &    \checkmark    \\ \hline
+Windows &     \checkmark     &    \checkmark       &     \checkmark    &    \checkmark        &   x    &     \checkmark    &  \checkmark      &    x    &    x   \\ \hline
+\end{tabular}
+\end{table}
+
+
+Bis auf das von Apple entwickelte ARKit, sind alle hier genannten Frameworks für Android verwendbar. Weiterhin unterstützen alle das Betriebsystem iOS, sowie Windows, bis auf Kudan, ARCore und ARKit. Im praktischen Teil dieser Arbeit werden mehrere dieser Software Development Kits auf der Android Plattform verwendet, getestet und analysiert.
+
+\section{Voraussetzungen für Augmented Reality}
+Augmented Reality Anwendungen haben hohe Anforderungen an die Rechnenpower der Technik, die Verarbeitungsgeschwindigkeit der Algorithmen und Robustheit der verwendeten Verfahren. (vgl. \cite{vorraussetzungen} S.1)
+
 
 \begin{itemize}
 
-\item Vuforia
-\item Wikitude
-\item Metaio
-\item ARToolKit
-\item Kudan
-\item EasyAR
-\item MaxST
-\item ARcore
-\item ARKit
+\item \textbf{Hohe räumliche Genauigkeit}: 6 \glqq Degrees of Freedom\grqq{} (Freiheitsgrade) in Position und Ausrichtung. 
 
+\item \textbf{Sehr geringer Jitter (Zittern)}: Das Rauschen im Tracking System muss minimal gehalten werden.
+
+\item \textbf{Hohe Aktualisierungsraten}: mindestens 30Hz, besser mehrere 100Hz.
+
+\item \textbf{Sehr geringer Lag}: Die Verzögerung von Messung bis zur Trackerausgabe muss minimal sein.
+
+\item \textbf{Volle Mobilität}: Bewegungsfreiheit für den Nutzer: Keine Kabel, kein eingeschränkte Umfang an Bedienmöglichkeiten.
 \end{itemize}
 
-
+Erst durch die Entwicklung der Technik in den letzten zwei Jahrzehnten und einer damit eingehenden Steigerung der Rechenpower von mobilen Geräten hat sich Augmented Reality auf Smartphones durchsetzen können.
 
 \section{Arten des Augmented Reality Trackings}
 
-(Evtl bessere quellen für ref und hybrid)
+Das Erkennen der Umgebung und die Lokalisierung der Kamera (Camera Pose Estimation), ist der ausschlaggebende Schritt zur Realisierung von Augmented Reality. Erst dies erlaubt die Projektion von digitalen Modellen in der richtigen Position auf den echten Bildern. Präzise und robuste Kamerapositionsdaten sind eine Grundvoraussetzung für eine Vielzahl an Anwendungen, wie dynamischer Szenenanalyse und Interpretation, 3D-Szenestrukturerkennung und Videodatenkompression. Augmented Reality Umgebungen sind ein Hauptanwendungsgebiet der Kameralokalisierung, da ein eingeschränkter Arbeitsbereich hohe Anforderungen an die Robustheit und Schnelligkeit stellt. Es existieren viele verschiedene Ansätze um die Kameralokalisierung im Raum zu lösen. Das Problem wird als nichtlineares Problem betrachtet und wird meistens durch die \glqq Method of least squares\grqq{} (Methode der kleinsten Quadrate) oder nichtlineare Optimierungsalgorithmen gelöst, typischerweise durch das Gauß-Newton oder Levenberg-Marquardt Verfahren. (vgl. \cite{camera_pose} S.1) Im Folgenden werden die vier gängigsten Ansätze zur Lösung dieses Tracking Problems erläutert. 
+
 
 \subsection{Referenzmarken-basiertes Tracking}
 
-Markerbasiertes Tracking war lange Zeit eine der häufigsten verwendeten Techniken um Augmented Realtiy zu realisieren. Dies liegt in der einfachen Erkennung der typischerweise schwarz-weißen Marker mit hohem Kontrast. Dadurch kann neben der Relation des Geräts zum Marker auch relativ einfach die Entfernung und der Winkel berechnet werden. Der Nachteil liegt in der Limitierung der Anwendungsgebiete, in denen diese Technik verwendet werden kann, da Marker immer im Sichtfeld der Kamera lokalisiert sein müssen und nicht von anderen Objekten verdeckt werden dürfen. Weiterhin müssen immer externe Ressourcen verwendet werden um diese Marker zu erstellen und zu verwenden, was bei der Verbreitung der Anwendung immer mit einem Mehraufwand verbunden ist. (vgl. \cite{comparative_sdks} S.13)
+Markerbasiertes Tracking war lange Zeit eine der häufigsten verwendeten Techniken um Augmented Realtiy zu realisieren. Dies liegt in der einfachen Erkennung der typischerweise schwarz-weißen Marker mit hohem Kontrast. Dadurch kann neben der Relation des Geräts zum Marker auch relativ einfach die Entfernung und der Winkel berechnet werden. Der Nachteil liegt in der Limitierung der Anwendungsgebiete, in denen diese Technik verwendet werden kann, da Marker immer im Sichtfeld der Kamera lokalisiert sein müssen und nicht von anderen Objekten verdeckt werden dürfen. Weiterhin müssen immer externe Ressourcen verwendet werden um diese Marker zu erstellen, zu registrieren und zu verwenden, was bei der Verwendung der Anwendung und damit der Nutzerfreundlicheit, immer mit einem Mehraufwand verbunden ist. (vgl. \cite{comparative_sdks} S.13)
 
 \subsection{Hybrid-basiertes Tracking}
 
 Hybrid basiertes Tracking verwendet mehrere Datenquellen wie das Global Positioning System (GPS), Kompass oder Beschleunigungssensoren zur Bestimmung der Orientierung und Lokalisierung des Geräts. Dabei wird per GPS der Standort des Geräts bestimmt, um Objekte in der Nähe zu identifizieren, die augmentiert werden sollen. Mit Hilfe des Kompasses kann dann ein Pfad erstellt und überprüft werden, ob die Orientierung des Geräts auch in diese Richtung zeigt. Der Beschleunigungssensor bestimmt die Ausrichtung des Geräts mithilfe der Gravitation. Durch die Vereinigung all dieser Informationen kann berechnet werden, was im Sichtfeld ergänzt werden soll, ohne dass eine Auswertung und Verarbeitung des realen aufgenommen Bildes stattzufinden hat. Anschließend werden die Informationen über das Kamerabild gelegt.  (vgl. \cite{comparative_sdks} S.13)
+
+(Evtl bessere quellen für ref und hybrid)
 
 \subsection{Modell-basiertes Tracking}
 
@@ -72,7 +94,7 @@ Außerdem sind Ansätze wie \glqq optical flow based tracking\grqq{}, was zeitli
 
 \subsection{Natürliches Feature Tracking}
 
-Natürliches Feature Tracking ist ein bildbasiertes Verfahren und kann die Position des Gerätes zur Umgebung, ohne das Wissen über einen vorherigen Zustand bestimmen. Diese Methode ist in der Regel sehr rechenintensiv und benötigt hohe Prozessorleistung. (vgl. \cite{model_based} S.1-2) Diese Technik verwendet die Merkmale von Objekten in der echten Welt und erkennt die natürlichen Eigenschaften dieser. Diese Merkmale werden Features genannt und sind typischerweise, basierend auf einem mathematischem Algorithmus, sehr gut unterscheidbar und außern sich in der Form von Ecken, Kanten oder starke Kontrasten. Die Feature Deskriptoren eines Bildes werden zur späteren Erkennung gespeichert. Anhand des gespeicherten Datensets aus Merkmalen kann dann erkannt werden, ob ein Bild den gleichen Inhalt zeigt, unabhängig von Entfernung, Orientierung, Beleuchtungsintensität oder Verdeckung. (vgl. \cite{comparative_sdks} S.13) Es gibt eine Vielzahl an natürlichen Feature Tracking Systemen, wie SIFT (Scale-Invariant Feature Transform), SURF (Speeded Up Robust Features) oder \glqq Random Ferns\grqq{}. Diese unterscheiden sich hauptsächlich durch die Bildmerkmale zwischen Videobild und dem Modell der Umgebung die verfolgt werden soll. Die Grundsätzliche Pipeline kann wie in Abbildung 2.3 dargestellt, beschrieben werden.
+Natürliches Feature Tracking ist ein bildbasiertes Verfahren und kann die Position des Gerätes zur Umgebung, ohne das Wissen über einen vorherigen Zustand, bestimmen. Diese Methode ist in der Regel sehr rechenintensiv und benötigt hohe Prozessorleistung. (vgl. \cite{model_based} S.1-2) Diese Technik verwendet die Merkmale von Objekten in der echten Welt und erkennt die natürlichen Eigenschaften dieser. Diese Merkmale werden Features genannt und sind typischerweise, basierend auf einem mathematischem Algorithmus, sehr gut unterscheidbar und außern sich in der Form von Ecken, Kanten oder starke Kontrasten. Die Feature Deskriptoren eines Bildes werden zur späteren Erkennung gespeichert. Anhand des gespeicherten Datensets aus Merkmalen kann dann erkannt werden, ob ein Bild den gleichen Inhalt zeigt, unabhängig von Entfernung, Orientierung, Beleuchtungsintensität, Rauschen oder Verdeckung. (vgl. \cite{comparative_sdks} S.13) Es gibt eine Vielzahl an natürlichen Feature Tracking und Matching Systemen, wie SIFT (Scale-Invariant Feature Transform), SURF (Speeded Up Robust Features), FAST (Features from Accelerated Segment Test), BRIEF (Binary Robust Independent Elementary Features) oder ORB (Oriented FAST and Rotated BRIEF). Diese unterscheiden sich hauptsächlich durch die erkannten Bildmerkmale im Videobild und dem erzeugtem Modell der Umgebung, die verfolgt werden soll. Die Grundsätzliche Pipeline kann wie in Abbildung 2.3 dargestellt, beschrieben werden.
 
 \begin{figure}[H]
 	\centering
@@ -80,14 +102,24 @@ Natürliches Feature Tracking ist ein bildbasiertes Verfahren und kann die Posit
 	\caption{Tracking Pipeline Bildquelle \cite{natural_feature}}
 \end{figure} 
 
-Die Keypoint Erkennung wird normalerweise mit einer \glqq FAST corner detector\grqq{} bewerkstelligt.
-
-\url{http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/AV1011/AV1FeaturefromAcceleratedSegmentTest.pdf}
-
-Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptors ab. Bei SIFT beispielsweise schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten, kompensiert die erkannte Orientierung und beschreibt abschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann, während des Echtzeit Trackings, auf Gemeinsamkeiten geprüft werden kann. \glqq Outlier removal\grqq{} oder auch die Ausreißerbeseitigung besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
+Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptorssystems ab. Bei SIFT beispielsweise schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten, kompensiert die erkannte Orientierung und beschreibt abschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann, während des Echtzeit Trackings, auf Gemeinsamkeiten geprüft werden kann.  (vgl. \cite{natural_feature} S.28-29) 
 
 
-Die planare Homographie bezieht sich auf die Transformation zwischen zwei Ebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
+FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller als SIFT. Wie in Abbildung 2.4 zu sehen ist, arbeitet der ursprüngliche Segementtest mit einem Kreis von 16 Pixeln um den Eckenkandidaten $p$. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{fast.png}
+	\caption{12 Punkt Segment Test für die Eckenerkennung \cite{fast}}
+\end{figure}
+
+
+Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
+
+\glqq Outlier removal\grqq{} oder auch die Ausreißerbeseitigung besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
+
+
+Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
 
 \begin{equation}
   s  
@@ -104,9 +136,9 @@ Die planare Homographie bezieht sich auf die Transformation zwischen zwei Ebenen
      	\end{bmatrix}
       = 
      	\begin{bmatrix}
-		h_11 & h_12 & h_13\\
-		h_21 & h_22 & h_23\\
-		h_31 & h_32 & h_33
+		h_{11} & h_{12} & h_{13}\\
+		h_{21} & h_{22} & h_{23}\\
+		h_{31} & h_{32} & h_{33}
      	\end{bmatrix}
       \
      	\begin{bmatrix}
@@ -127,20 +159,15 @@ oder
 h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
 \end{equation}
 
-Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography})
+Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen. \glqq given a set of correspondences between 3D
+features and their projections in the images plane, pose estimation
+consists in computing the position and orientation of the camera \grqq{}.
 
-Die verschiedenen Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq (Positionsschätzung) verwendet.
+\url{http://sci-hub.tw/10.1109/TVCG.2015.2513408} !!!! <- sehr gute quelle
 
-\url{http://sci-hub.tw/10.1109/TVCG.2015.2513408}
+ Abschließend wird, basierend auf dem Gauß-Newton-Verfahren eine Reduzierung des \glqq re-projection error\grqq{} erreicht. Typischerweise sind zwei bis vier Wiederholungen genug. (vgl. \cite{natural_feature} S.28-29)
 
- Abschließend wird, basierend auf dem Gauß-Newton-Verfahren eine Reduzierung des \glqq re-projection error\grqq{} erreicht. 
- 
-\url{https://mathepedia.de/Gausz-Newton-Verfahren.html} 
- 
- Typischerweise sind zwei bis vier Wiederholungen genug. (vgl. \cite{natural_feature} S.28-29)
+\section{Photogrammetrie vs. SLAM für Augmented Reality}
 
+In diesem Kapitel wurde eine Einführung in Augmented Reality, deren Vorraussetzungen und aktuellen Umsetzungen dargelegt. Im folgenden Teil dieser Arbeit wird Photogrammetrie, sowie SLAM (Simultaneous Localisation and Mapping), welches von den meisten Augmented Reality SDKs inzwischen verwendet wird, beschrieben. Anschließend wird ein Vergleich der beiden Verfahren durchgeführt, um Gemeinsamkeiten, Unterschiede, sowie Möglichkeiten und Schwächen der einzelnen Verfahren aufzuzeigen und in Kontext zu bringen. Anschließend wird evaluiert ob photogrammetrische Verfahren in Kontext der Augmented Reality eingesetzt werden können.
 
-SIFT
-SURF
-
-\section{Warum beleuchte ich Photogrammetrie im Rahmen von AR}
