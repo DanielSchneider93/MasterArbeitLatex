@@ -28,9 +28,57 @@ Der Ausgleich der Strahlenbündel in einem Set an Fotos beinhaltet die Rotation 
 
 Das Verfahren des Bündelblockausgeleichs, verwendet die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert. Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
 
-\url{https://ethz.ch/content/dam/ethz/special-interest/baug/igp/photogrammetry-remote-sensing-dam/documents/pdf/math-of-photogrammetry.pdf}
 \url{http://sci-hub.tw/https://doi.org/10.3846/20296991.2015.1051335}
 \url{http://sci-hub.tw/10.1111/0031-868X.00210}
+
+\section{Nicht-lineare Methode der kleinsten Quadrate}
+Die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) ist eine sehr leistungsfähige und flexible Technik, um alle Arten von Datenabgleichsproblemen zu lösen. Die verschiedenen Werkzeuge dieser Methode können eingesetzt werden, um beispielsweise die Beurteilung der Korrelationsqualität zu bewerten. Gleichzeitig ermöglicht das System die Stabilisierung und Verbesserung des Korrelationsverfahrens, durch die Berücksichtigung geometrischer Randbedingungen. (vgl. \cite{least_quares} S.1) Im folgenden Abschnitt werden verschiedene Methoden zur Bestimmung der externen Kameraparameter während des Bündelblockausgleichs vorgestellt. Die Methode der kleinsten Quadrate ist dabei essentiell für die Anwendbarkeit dieser Algorithmen. Die nicht lineare Methode der kleinsten Quadrate ist ein Standardoptimierungsproblem und wird definiert als \cite{nonlinear_1} :
+
+\begin{equation}
+minimiere: \sum_{i=1}^m f_i(x)^2 =  ||f(x)||^2
+\end{equation} 
+
+Wobei: 
+
+$f_1(x),...,f_m(x)$ differenzierbare Funktionen einer Vektorvariablen $x$ sind.
+
+$f$ eine Funktion von $\textbf{R}^n$ zu $\textbf{R}^m$ mit den Komponenten $f_i(x)$ ist:
+
+\begin{equation}
+f(x) = \begin{bmatrix}
+f_1(x)\\ f_2(x)\\ \cdots \\ f_m(x)
+\end{bmatrix}
+\end{equation} 
+
+Das Ziel ist es ein $x$ zu finden, dass $||f(x)||^2$ minimiert. In unserem Fall, der Positionsbestimmung von Objekten im Raum mit der Grundlage mehrerer Kamerabilder, kann $f$ folgendermaßen aufgestellt werden:
+
+Das \textbf{Kameramodell} wird beschrieben durch die Parameter: $a \in  \textbf{R}^{2\times 3}, b \in \textbf{R}^2, c \in  \textbf{R}^3, d \in \textbf{R}$ welche die Position und Orientierung charakterisieren. Ein Objekt an Position $x \in \textbf{R}^3 $ erzeugt ein Bild an der Position $x^\prime \in \textbf{R}^2$ auf der Bildebene.
+
+\begin{equation}
+x \prime = \frac{1}{c^Tx+d} (Ax +b )
+\end{equation}
+
+$c^Tx+d >0$, wenn das Objekt vor der Kamera ist. Angenommen ein Objekt an Position $x_{ex}$ wird von $l$ Kameras betrachtet. (Beschrieben durch $a_i,b_i,c_i,d_i$) Das Bild des Objekts in der Bildebene von Kamera $i$ ist an Position:
+
+\begin{equation}
+y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i
+\end{equation}
+
+Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dreidimensionale Position $e_{ex}$ von den $l$ Beobachtungen $y_1,...,y_l$ zu schätzen. 
+
+\textbf{Nicht-lineare Methode der kleinsten Quadrate:} Berechne die Schätzung von $\hat x$ durch die Minimierung von (vgl. \cite{nonlinear_1} S.5-6):
+
+\begin{equation}
+\sum_{i=1}^l || y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i||²
+\end{equation}
+
+\subsection{Gauß-Newton-Verfahren}
+
+\url{http://www.seas.ucla.edu/~vandenbe/133A/lectures/nlls.pdf}
+
+\subsection{Levenberg-Marquard Methode}
+ \url{https://stanford.edu/class/ee103/lectures/nlls_slides.pdf}
+
 
 \subsection{Bestimmung der externen Kameraparameter mit der Kollinearitätsbedingung}
 
@@ -138,14 +186,59 @@ Wobei:
 \item $\varepsilon$ der Abweichungsvektor ist.
 \end{itemize}
 
-Zur Verwendung der iterativen Lösung der kleinsten Quadrate, ist die Berechnung der Ausgangswerte von Unbekannten, wie beim Verfahren mit der Kollinearitätsbedinung, notwendig.
+Zur Verwendung der iterativen Lösung der kleinsten Quadrate, ist die Berechnung der Ausgangswerte von Unbekannten, wie beim Verfahren mit der Kollinearitätsbedinung, notwendig. (vgl. \cite{comparative_conditions_study} S.68)
 
 
-\subsection{direct linear transformation}
+\subsection{Bestimmung der externen Kameraparameter mit der Direct Linear Transformation Methode}
+
+Das \glqq direkte lineare Transformationsverfahren\grqq{} (DLT) modelliert die Transformation zwischen Bildkoordinatensystem und Objektkoordinatensystem als lineare Funktion und wurde von Abdel-Aziz und Karara \cite{dlt_intro} eingeführt. Die direkte lineare Transformation kann aus den Kollinearitätsgleichungen abgeleitet werden und lassen sich mathematisch wie folgt ausdrücken (\cite{dlt} S.72)
+
+\begin{equation}
+\begin{aligned}
+x=\frac{L_1X+L_2Y+L_3Z+L4}{L_9X+L_{10}Y+L_{11}Z+1} \\
+y=\frac{L_5X+L_6Y+L_7Z+L_8}{L_9X+L_{10}Y+L_{11}Z+1}
+\end{aligned}
+\end{equation}
+
+Wobei $x,y$ die Bildkoordinaten, $L_1,...,L_{11}$ die Transformationskoeffizienten und $X,Y,Z$ die Objektkoordinaten des Punktes sind. Die Werte der inneren und externen Kameraparameter werden dann berechnet durch:
+
+\begin{equation}
+\begin{bmatrix}
+X_0 \\ Y_0 \\ Z_0 
+\end{bmatrix}
+ = -
+ \begin{bmatrix}
+ L_1 & L_2 & L_3 \\
+ L_5 & L_6 & L_7 \\
+ L_9 & L_{10} & L_{11}
+ \end{bmatrix}^{-1}
+ \begin{bmatrix}
+ L_4 \\ L_8 \\ 1.0
+ \end{bmatrix}
+ \end{equation}
+ 
+ \begin{equation}
+ \begin{aligned}
+ x_0 &= (L_1L_9 + L_2L_{10} + L_3L_{11})/(L²_9 + L²_{10} + L²_{11}); \\
+ y_0 &= (L_5L_9 + L_6L_{10} + L_7L_{11})/(L²_9 + L²_{10} + L²_{11}); \\
+ \omega &= tan^{-1}(-L_{10}/L_{11}); \\
+ \phi &= sin^{-1}(-L_9 \sqrt{(L²_9 + L²_{10} + L²_{11})} \\
+  \kappa &= cos^{-1}((x_0L_9 - L_1)/(cos \phi \sqrt{(x_0L_9-L_1)² + (x_0L_{10}-L_2)² + (x_0L_{11}-L_3)²})); \\
+ f&=(x_0L_9)/(cos \kappa \cdot \phi \sqrt{L²_9 + L²_{10} + L²_{11}}) 
+ \end{aligned}
+ \end{equation}
+
+Wobei $X_0,Y_0,Z_0,\omega ,\phi , \kappa $ die externen Kameraparameter, $x_0,y_0$ die Bildkoordinaten des optischen Zentrums und $f$ die Brennweite ist. 
+
+Das direkte lineare Transformationsverfahren hat lange Zeit in den Bereichen Photogrammetrie, Computer Vision, Robotik und Biomechanik Verwendung gefunden. Dies liegt an der linearen Formulierung der Beziehung zwischen Objekt- und Bildkoordinaten. Weiterhin können Bildkoordinaten in einem nicht-orthogonalem System, mit unterschiedlichen Skalen ausgedrückt werden und die Position des Koordinatensystems kann unbekannt, sowie die Brennweite beliebig sein und von Bild zu Bild variieren. (vgl. \cite{dlt} S.72)
+
+
 
 \subsection{Feature Matching}
 
 \subsection{Image Matching}
+
+state of art source
 
 \subsection{Structure from Motion}
 
