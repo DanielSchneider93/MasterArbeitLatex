@@ -31,8 +31,18 @@ Das Verfahren des Bündelblockausgeleichs, verwendet die Methoden der \glqq coll
 \url{http://sci-hub.tw/https://doi.org/10.3846/20296991.2015.1051335}
 \url{http://sci-hub.tw/10.1111/0031-868X.00210}
 
+Neun Elemente:
+\url{http://sci-hub.tw/10.1111/phor.12037}
+
+Gutes Paper:
+\url{file:///C:/Users/Daniel/Downloads/qu2018msc.pdf}
+
 \section{Nicht-lineare Methode der kleinsten Quadrate}
-Die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) ist eine sehr leistungsfähige und flexible Technik, um alle Arten von Datenabgleichsproblemen zu lösen. Die verschiedenen Werkzeuge dieser Methode können eingesetzt werden, um beispielsweise die Beurteilung der Korrelationsqualität zu bewerten. Gleichzeitig ermöglicht das System die Stabilisierung und Verbesserung des Korrelationsverfahrens, durch die Berücksichtigung geometrischer Randbedingungen. (vgl. \cite{least_quares} S.1) Im folgenden Abschnitt werden verschiedene Methoden zur Bestimmung der externen Kameraparameter während des Bündelblockausgleichs vorgestellt. Die Methode der kleinsten Quadrate ist dabei essentiell für die Anwendbarkeit dieser Algorithmen. Die nicht lineare Methode der kleinsten Quadrate ist ein Standardoptimierungsproblem und wird definiert als \cite{nonlinear_1} :
+Die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) ist eine sehr leistungsfähige und flexible Technik, um alle Arten von Datenabgleichsproblemen zu lösen. Das Verfahren wird eingesetzt, um eine parametrisierbare Funktion an ein Datenset von Messwerten anzupassen, durch Minimierung der Summe des quadratischen Fehlers zwischen Funktion und Datenpunkten. Die verschiedenen Werkzeuge dieser Methode können auch eingesetzt werden, um beispielsweise die Korrelationsqualität der Messdaten zu bewerten. Gleichzeitig ermöglicht das System die Stabilisierung und Verbesserung der Korrelation, durch die Berücksichtigung geometrischer Randbedingungen. Wenn die anzupassende Funktion nicht linear ist, ist das Problem der kleinsten Quadrate ebenfalls nicht linear. Nichtlineare Lösungen der Methode der kleinsten Quadrate reduzieren iterativ die Summe der quadratischen Fehler zwischen Funktion und Messwerten, durch eine Abfolge von Aktualisierungen der Parameterwerte. (vgl. \cite{least_quares} S.1, \cite{lev_mar} S.1)
+
+In den folgenden Abschnitten werden verschiedene Methoden zur Bestimmung der externen Kameraparameter während des Bündelblockausgleichs vorgestellt. Die Methode der kleinsten Quadrate ist dabei essentiell für die Anwendbarkeit dieser Algorithmen, weswegen diese sowie das Gauss-Newton und das Levenberg-Marquardt Verfahren vorgestellt wird. 
+
+Die nicht lineare Methode der kleinsten Quadrate ist ein Standardoptimierungsproblem und wird definiert als \cite{nonlinear_1} :
 
 \begin{equation}
 minimiere: \sum_{i=1}^m f_i(x)^2 =  ||f(x)||^2
@@ -74,10 +84,94 @@ Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dre
 
 \subsection{Gauß-Newton-Verfahren}
 
-\url{http://www.seas.ucla.edu/~vandenbe/133A/lectures/nlls.pdf}
+Das Gauß-Newton Verfahren ist eine Technik zur Lösung der nicht linearen Methode der kleinsten Quadrate. Das Verfahren besteht aus einer Folge von linearen Annäherungen der kleinsten Quadrate an das nicht lineare Problem, bei dem jedes einzelne durch einen direkten oder iterativen Prozess gelöst wird. (vgl. \cite{approx_gn} S.1) Gegeben ist die Definition der Problemstellung der kleinsten Quadrate, siehe (3.1). Beginnend mit einer anfänglichen Schätzung $x^{(1)}$, werden weitere Näherungslösungen $k = 1,2,...$ berechnet (vgl. \cite{nonlinear_1} S.16-17).
 
-\subsection{Levenberg-Marquard Methode}
- \url{https://stanford.edu/class/ee103/lectures/nlls_slides.pdf}
+Dazu wird $f$ um $x^{(k)}$ linearisiert:
+
+\begin{equation}
+\overline{f}(x;x^{(k)}) = f(x^{(k)})+Df(x^{(k)})(x-x^{(k)})
+\end{equation}
+
+Ersetze die affine Annäherung $ \overline{f}(x;x^{(k)})$ für $f$ im Problem der kleinsten Quadrate (3.1):
+\begin{equation}
+minimiere: ||\overline{f}(x;x^{(k)})||²
+\end{equation}
+
+Die Lösung dieses linearen Problems wird nun als $x^{(k+1)}$ verwendet. 
+
+Das Problem der kleinsten Quadrate ist in Wiederholung $k$ des Gauß-Newton Verfahrens gelöst:
+\begin{equation}
+minimiere: ||f(x^{(k)}) + Df(x^{(k)})(x-x^{(k)})||²
+\end{equation}
+
+Wenn $Df(x^{(k)}) $ linear unabhängige Spalten hat, wird die Lösung gegeben durch:
+\begin{equation}
+x^{k+1} = x^{(k)}-\Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})
+\end{equation}
+
+Der Gauß-Newton Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
+\begin{equation}
+\begin{aligned}
+\Delta x^{(k)} &= -\Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})\\ &= -\frac{1}{2} \Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} \nabla g(x^{(k)})
+\end{aligned}
+\end{equation}
+
+Wobei $\nabla g(x)$ der Gradient der Kosten für nichtlineare kleinste Quadrate ist.
+
+Das Gauß-Newton Verfahren eignet sich besonders gut für die Verarbeitung von großen Datenmengen mit hoher Varianz. Im Vergleich zum Newton-Verfahren ist der Algorithmus attraktiver, da er keine Auswertung der zweiten Ableitungen in der Hesse-Matrix der Zielfunktion benötigt. (vgl.\cite{approx_gn} S.1, \cite{nonlinear_1} S.16-17)
+
+
+\subsection{Levenberg-Marquardt Methode}
+
+Die Levenberg-Marquardt Methode wurde 1944 von Kenneth Levenberg \cite{levenberg} veröffentlicht, in den 1960er Jahren von Donald Marquardt wiederentdeckt und wurde entwickelt um nicht lineare Probleme der kleinsten Quadrate zu lösen. Der Algorithmus kombiniert zwei Minimierungsmethoden: \glqq Gradient descent\grqq{} (Gradientenverfahren) und das Gauß-Newton Verfahren. Beim Gradientenverfahren wird die Summe der quadratischen Fehler durch die Aktualisierung der Parameter in Richtung der steilsten Richtung zum Minimum hin reduziert. Das Levenberg-Marquardt Verfahren verhält sich wie das Gradientenverfahren, wenn die Parameter weit von ihrem optimalen Wert entfernt sind und wie das Gauß-Newton Verfahren, wenn die Parameter nahe an ihrem optimalen Wert liegen. Es wechselt also adaptiv die Parameterupdates zwischen den beiden Verfahren. (vgl. \cite{lev_mar} S.1)
+
+Der Algorithmus befasst sich mit zwei Problembereichen des Gauß-Newton Verfahrens:
+
+\begin{itemize}
+\item Wie aktualisiert man $x^{(k)}$, wenn die Spalten von $Df(x^{(k)})$ linear Abhängig sind.
+
+\item Wie verfährt man, wenn das Gauß-Newton Update $||f(x)||²$ nicht reduziert.
+\end{itemize}
+
+Das Verfahren wird mathematisch wie folgt beschrieben:
+
+Berechnung von $x^{(k+1)}$ durch Lösung eines normalisierten Problems der kleinsten Quadrate:
+\begin{equation}
+minimiere: ||\overline{f}(x;x^{(k)})||² + \lambda^{(k)}||x-x^{(k)}||²
+\end{equation}
+
+$\overline{f}(x;x^{(k)})$ ist dabei wie in Gleichung 3.6 gegeben. Mit $\lambda^{(k)} > 0$ gibt es immer eine eindeutige Lösung.
+
+Das normalisierte Problem der kleinsten Quadrate wird in Iteration $k$ gelöst:
+\begin{equation}
+minimiere: ||f(x^{(k)}) + Df(x^{(k)})(x-x^{(k)})||² + \lambda^{(k)}||x-x^{(k)}|²
+\end{equation}
+
+Die Lösung ist gegeben durch:
+\begin{equation}
+x^{(k+1)} = x^{(k)} -\Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})
+\end{equation}
+
+Der Levenberg-Marquardt Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
+\begin{equation}
+\begin{aligned}
+\Delta x^{(k)} &= -\Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})\\ &= -\frac{1}{2} \Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} \nabla g(x^{(k)})
+\end{aligned}
+\end{equation}
+
+Für $\lambda^{(k)}=0$ ist das der Gauß-Newton Schritt; für große $\lambda{(k)}$:
+\begin{equation}
+\Delta x^{(k)} \approx -\frac{1}{2}\lambda^{(k)}\nabla g(x^{(k)})
+\end{equation}
+
+Es gibt verschiedene Strategien um $\lambda^{(k)}$ anzupassen:
+
+\begin{itemize}
+\item Nach Iteration $k$, berechne Lösung $\hat{x}$ von Gleichung (3.11)
+\item Wenn $||f(\hat{x})||²<||f(x^{(k)})||²$, verwende $x^{(k+1)} = \hat{x}$ und verringere $\lambda$
+\item Wenn $||f(\hat{x})||²>||f(x^{(k)})||²$, lasse $x$ gleich (verwende $x^{(k+1)} = x^{(k)}$), und erhöhe $\lambda$
+\end{itemize}
+(vgl. \cite{nonlinear_1} S.19-21)
 
 
 \subsection{Bestimmung der externen Kameraparameter mit der Kollinearitätsbedingung}
