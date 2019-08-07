@@ -2,7 +2,7 @@
 
 \section{Einführung in die Photogrammetrie}
 
-Das Grundprinzip der Messung mit Kameras ist einfach. Licht breitet sich mit einer bestimmten Wellenlänge, in annähernd geraden Strahlen aus. Diese Strahlen werden vom Sensor der Kamera aufgenommen, sodass diese die Richtungen im dreidimensionalen Raum misst. Der grundlegende geometrische Zusammenhang der Photogrammetrie ist somit die Zentralprojektion, die sich mathematisch durch die Kollinearitätsgleichung beschreiben lässt. Ein dreidimensionaler Punkt in der echten Welt, sein Bild in der Kamera und das Projektionszentrum müssen alle auf einer geraden Linie liegen. (vgl. \cite{fiundations_pg} S.1) Das fundamentale photogrammetrische Problem besteht in der Bestimmung von internen und externen Ausrichtungsparametern der Kamera und der  Messung von Objekt und Raumkoordinaten der aufgenommenen Fotografien. 
+Das Grundprinzip der Messung mit Kameras ist trivial. Licht breitet sich mit einer bestimmten Wellenlänge, in annähernd geraden Strahlen aus. Diese Strahlen werden vom Sensor der Kamera aufgenommen, sodass diese die Richtungen im dreidimensionalen Raum misst. Der grundlegende geometrische Zusammenhang der Photogrammetrie ist somit die Zentralprojektion, die sich mathematisch durch die Kollinearitätsgleichung beschreiben lässt. Ein dreidimensionaler Punkt in der echten Welt, sein Bild in der Kamera und das Projektionszentrum müssen alle auf einer geraden Linie liegen. (vgl. \cite{fiundations_pg} S.1) Das fundamentale photogrammetrische Problem besteht in der Bestimmung von internen und externen Ausrichtungsparametern der Kamera und der  Messung von Objekt und Raumkoordinaten der aufgenommenen Fotografien. 
 
 
 \begin{itemize}
@@ -16,26 +16,162 @@ Das Grundprinzip der Messung mit Kameras ist einfach. Licht breitet sich mit ein
 
 Weiterhin müssen Parameter, welche die Verzeichnung, also die nicht maßstabsgetreue Abbildung von Objekten, betrachtet werden. Diese Parameter, die beispielsweise in der Objektivkorrektur verwendet werden, müssen, um die interne Orientierung der Kamera genau abzubilden, mit in die Berechnung einfließen.
 
-\item \textbf{Externe Orientierung}: Bei der externen Orientierung wird versucht die genaue räumliche dreidimensionale Lage der Kamera zum Zeitpunkt der Belichtung des Bildes zu rekonstruieren. Für die Bestimmung der Orientierung von ein oder mehreren Fotos, können verschiedene Methoden verwendet werden. Dies kann in Teilschritten (relative und absolute Orientierung) oder gleichzeitig (Bündelblockausgleich) durchgeführt werden. (vgl. \cite{exterior_review} S.616)
+\item \textbf{Externe Orientierung}: Bei der externen Orientierung wird versucht die genaue räumliche dreidimensionale Lage der Kamera zum Zeitpunkt der Belichtung des Bildes zu rekonstruieren. Für die Bestimmung der Orientierung von ein oder mehreren Fotos, können verschiedene Methoden verwendet werden. Dies kann in Teilschritten (relative und absolute Orientierung) oder gleichzeitig (Bündelblockausgleich) durchgeführt werden. 
 \end{itemize}
 
+In der Photogrammetrie werden häufig drei grundlegende Bedingungen verwendet, um die Parameter der externen Orientierung zu bestimmen. Dies sind die Bedingungen der Kollinearität, der Koplanarität und der Koangularität. Diese Verfahren verwenden alle Punktkoordinaten als Eingabedaten, aber in vielen Fällen sind auch räumliche oder kamerabedingte Einschränkungen möglich. In Bereich der Computer Vision wird die Bestimmung der externen Orientierung als \glqq pose estimation problem\grqq{} (Posenschätzungsproblem) bezeichnet. Im Vergleich zur Photogrammetrie ist dieser Bereich darauf fokussiert die Lösung der Posenschätzung unter der Verwendung von minimalen Objektinformationen zu erreichen. Direkte lineare Lösungen basieren hier hauptsächlich auf Konzepten der projektiven algebraischen Geometrie. Homogene Koordinaten werden verwendet um Kameraparameter abzuleiten, entsprechend der direkten linearen Transformation, welche häufig in der Photogrammetrie und in der Fernerkundung eingesetzt wird. (vgl. \cite{exterior_review} S.616)
+
+Die Grundsätzliche Pipeline um anhand von zweidimensionalen Bildern die internen und externen Kameraparameter, sowie die Lage der Bilder zueinander im dreidimensionalen Raum zu rekonstruieren kann wie in Abbildung 2.3 dargestellt, beschrieben werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{tracking_pipeline.png}
+	\caption{Tracking Pipeline Bildquelle \cite{natural_feature}}
+\end{figure} 
+
+Die Schritte \glqq Keypoint detection\grqq{}, \glqq  Descriptor creator and matching\grqq{} sowie \glqq Outlier Removal\grqq{} werden in Kapitel 3.2, die \glqq Pose estimation and refinement\grqq{} in Kapitel 3.3 beschrieben.
+
+
+\section{Feature \& Image Matching}
+
+Um verschiedene Bilder miteinander in Beziehung setzen zu können, müssen die Features einer dreidimensionalen Szene in den verschiedenen Bildern abgeglichen werden. Seit einigen Jahren sind \glqq Image Feature Detectors and Descriptors\grqq{} die am weitesten verbreiteten Techniken für diese Anwendungen. Zu dem Anwendungsbereich dieser Algorithmen zählen beispielsweise 3D-Rekonstruktion, Panoramaerstellung, Bildklassifizierung, Objekterkennung oder Roboterlokalisierung. Heute gibt es eine Vielzahl an verschiedenen Algorithmen, welche die Erkennung und Beschreibung von Features implementieren, um \glqq Regions of Interest\grqq{}, Ecken oder Kanten zu erhalten. (vgl. \cite{robust_feature} S.3) Weiterhin sollte zwischen \glqq Feature Detektors\grqq{} und \glqq Feature Descriptors\grqq{} unterschieden werden. Detektoren sind Operationen, welche zweidimensionale Positionen im Bild suchen (ein Bildpunkt oder eine Region), die unter verschiedenen Transformationen stabil sind und einen hohen Informationsgehalt enthalten. Die Ergebnisse werden als \glqq Interest Points\grqq{}, affine Regionen, invariante Regionen, oder Ecken bezeichnet. Deskriptoren hingegen analysieren das Bild und liefern für einen bestimmten \glqq Point of Interest\grqq{} im Bild einen 2D-Vektor mit Pixelinformationen. Diese Informationen sind dann Features, um diesen bestimmten Punkt im Bild zu klassifizieren und ihn mit anderen Features aus anderen Bildern zu vergleichen. (vgl. \cite{det_des} S.1)
+
+
+Die Eigenschaften eines guten Feature Matching Systems sind: 
+
+\begin{itemize}
+\item \textbf{Invarianz}: Unabhängig von geometrischen oder radiometrischen Verzerrungen (Drehung, Skalierung, Rotation)
+\item \textbf{Stabilität}: Rrobust gegen Bildrauschen
+\item \textbf{Unterscheidbarkeit}: Klare Unterscheidbarkeit zum Hintergrund
+\item \textbf{Einzigartigkeit}: Jedes Feature ist zu jedem anderen einzigartig
+\end{itemize}
+
+Das Merkmalserkennung und -anpassung wird in drei Schritte unterteilt \cite{robust_feature}: 
+
+\begin{itemize}
+\item[(1)] \textbf{Detektion}: Finden der Keypoints in jedem Bild.
+\item[(2)] \textbf{Beschreibung}: Im Idealfall sollte die lokale Umgebung um ein Feature immer invariant gegenüber Skalierung, Drehung, Rauschen, Änderung der Beleuchtung  oder affinen Transformationen sein. Die Merkmalsbeschreibungen für jeden Keypoint werden anhand seiner Nachbarschaft bestimmt. Zu jedem Keypoint wird ein \glqq descriptor vector\grqq{} (Beschreibungsvektor) berechnet.
+\item[(3)] \textbf{Matching}: Um ähnliche Merkmale zwischen verschiedenen Bildern zu identifizieren werden die Deskriptoren verglichen. Ist ein Feature in zwei Bildern enthalten, zeigen die Bilder das gleiche Objekt.
+\end{itemize}
+
+Die häufigsten Verwendeten Verfahren sind \glqq Scale Invariant Feature Transform\grqq{} (SIFT) (Lowe, 2004), \glqq Features from Accelerated Segment Test\grqq{} (FAST) (Rosten and Drummond, 2005), \glqq Speeded Up Robust Features\grqq{} (SURF) (Bay et al., 2006), \glqq Binary Robust Invariant Scalable Key Points\grqq{} (BRISK) (Leutenegger et al., 2001),\glqq Binary Robust Independent Elementary Features\grqq{} (BRIEF) (Calonder et al. 2010) oder \glqq Oriented FAST and Rotated BRIEF \grqq{} (ORB) (Rublee et al. 2011). Diese unterscheiden sich hauptsächlich durch die erkannten Features im Bild, die getrackt werden sollen, sowie dem erzeugtem Modell der Umgebung. (vgl. \cite{robust_feature} S.3, \cite{natural_feature} S.28-29)
+
+
+Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptorssystems ab.
+
+\subsection{Scale Invariant Feature Transform} 
+
+Bei SIFT schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten und beschreibt anschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die Features werden in einem \glqq Differce of Gaussian\grqq{} (DoG) Skalenraum erfasst,  der die Differenz der \glqq Gaussian convolutions\grqq{} (Gaußschen Faltung) des Originalbilds repräsentiert (Abbildung 3.3-a).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{sift.png}
+	\caption{(a) Unterschied des Gaußschen (DoG) Skalenraums. (b) Überwiegende Aurichtung des radiometrischen Gradienten. (c) SIFT Deskriptor. Bildquelle: \cite{old_new_feature}}
+\end{figure}
+
+Jedem lokalem Maximum der DoG Funktion ist eine dominante Orientierung des radiometrischen Gradienten zugewiesen, um die Invarianz gegenüber Rotation zu gewährleisten (Abbildung 3.3-b).
+Schließlich wird jedem Keypoint ein Deskriptor zugeordnet, welcher die extrahierten Features, welche die Helligkeitsinvarianz in der Umgebung zum Keypoint beschreiben, als 128-dimensionalen Vektor zusammenfasst (Abbildung 3.3-c). Den Deskriptor kann man als 3D-Histogramm der Lage und Orientierung des Gradienten verstehen. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann gegen andere Bilder, auf Gemeinsamkeiten geprüft werden kann. Dies geschieht über die Auswertung des Mindestabstands zwischen zwei Deskriptoren. Dazu werden die Entferungen mithilfe des  Euklidischen Abstands oder des Mahalanobis-Abstands berechnet.  (vgl. \cite{natural_feature} S.28-29, \cite{det_des} S.3, \cite{old_new_feature} S.3) 
+
+\subsection{Features from Accelerated Segment Test}
+FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller als SIFT. Wie in Abbildung 2.4 zu sehen ist, arbeitet FAST mit einem Segementtest mit einem Kreis von 16 Pixeln um einen Eckenkandidaten $p$. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{fast.png}
+	\caption{12 Punkt Segment Test für die Eckenerkennung \cite{fast}}
+\end{figure}
+
+Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
+
+\subsection{BRISK}
+
+\subsection{BRIEF}
+
+\subsection{ORB}
+
+\subsection{Outlier Removal}
+
+\glqq Outlier removal\grqq{} oder auch die Ausreißerbeseitigung besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
+
+
+Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
+
+\begin{equation}
+  s  
+  		\begin{bmatrix}
+		x'\\
+		y'\\
+		1
+     	\end{bmatrix}
+     = H
+     	\begin{bmatrix}
+		x\\
+		y\\
+		1
+     	\end{bmatrix}
+      = 
+     	\begin{bmatrix}
+		h_{11} & h_{12} & h_{13}\\
+		h_{21} & h_{22} & h_{23}\\
+		h_{31} & h_{32} & h_{33}
+     	\end{bmatrix}
+      \
+     	\begin{bmatrix}
+		x\\
+		y\\
+		1
+     	\end{bmatrix}
+\end{equation}
+
+Die Homographiematrix ist eine 3x3 Matrix mit 8 DoF (Degrees of Freedom). Sie wird standardmäßig normalisiert mit: 
+
+\begin{equation}
+h_33 = 1
+\end{equation}
+
+oder 
+\begin{equation}
+h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
+\end{equation}
+
+Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. \cite{natural_feature} beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen. \glqq given a set of correspondences between 3D
+features and their projections in the images plane, pose estimation
+consists in computing the position and orientation of the camera \grqq{}.
+
+
+\url{http://sci-hub.tw/10.1109/TVCG.2015.2513408}
+
+\section{Der Bündelblockausgleich}
+
+Das Verfahren des Bündelblockausgeleichs, verwendet nun die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert. Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
+
 Khalid El-AShmawy \cite{comparative_conditions_study} beschreibt die Verwendung von Strahlenbündel, die durch Fotos generiert werden, als zweifelsfrei den flexibelsten Ansatz zur Blockbildung, Blockanpassung und für Photogrammetrie im Allgemeinen und mit den besten Ergebnissen. In der Nahbereichsphotogrammetrie, bei der mehrstufige und konvergente Konfigurationen möglich sind, ist der Bündelansatz in seiner stärksten Form vertreten. 
-
-
 Der Ausgleich der Strahlenbündel in einem Set an Fotos beinhaltet die Rotation und Translation von jedem Bündel im Raum in eine Position, in der alle Strahlen sich an der korrekten Position im Objektraum schneiden. (vgl. \cite{comparative_conditions_study} S.66)
 
-\section{Bündelblockausgleich}
+Im Allgemeinen besteht ein Bündelblockausgleichsproblem aus den folgenden neun Elementen \cite{bundle_adjustment}:
 
-Das Verfahren des Bündelblockausgeleichs, verwendet die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert. Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
+\begin{itemize}
+\item[(1)] Ein Projektionsmodell, welches die Projektion von 3D-Objektpunkte in 2D-Bildpunkte beschreibt. Dazu gehören innere, sowie äußere Orientierung.
 
-\url{http://sci-hub.tw/https://doi.org/10.3846/20296991.2015.1051335}
-\url{http://sci-hub.tw/10.1111/0031-868X.00210}
+\item[(2)] Ein unbekannter Parametersatz, der bestimmt werden soll, dies können entweder innere oder äußere Parameter sowie Objektpunkte sein.
 
-Neun Elemente:
-\url{http://sci-hub.tw/10.1111/phor.12037}
+\item[(3)] Eine Reihe an Beobachtungen, typischerweise Messungen von 2D-Bildpunkten oder Kamerapositionen.
 
-Gutes Paper:
-\url{file:///C:/Users/Daniel/Downloads/qu2018msc.pdf}
+\item[(4)] Ein Reihe bekannter Parameter, wie innere Orientierung, oder Koordinaten von Kontrollpunkten.
+
+\item[(5)] Optional eine Reihe von Einschränkungen, zwischen Parametern oder Beobachtungen.
+
+\item[(6)] Ein Verfahren, um die initialen Werte der unbekannten Parameter zu bestimmen.
+
+\item[(7)] Ein Anpassungsalgorithmus, um die optimalen Parameterwerte anhand der initialen Werte zu finden.
+
+\item[(8)] Ein Verfahren zur Erkennung von Ausreißern in den Beobachtungen.
+
+\item[(9)] Eine Methode zur automatischen Erkennung von instabilen Parametern.
+
+\end{itemize}
+
+In den folgenden Abschnitten wird sich hauptsächlich auf Schritt (7) bezogen, dem Finden der optimalen Parameterwerte anhand der initialen Daten.
 
 \section{Nicht-lineare Methode der kleinsten Quadrate}
 Die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) ist eine sehr leistungsfähige und flexible Technik, um alle Arten von Datenabgleichsproblemen zu lösen. Das Verfahren wird eingesetzt, um eine parametrisierbare Funktion an ein Datenset von Messwerten anzupassen, durch Minimierung der Summe des quadratischen Fehlers zwischen Funktion und Datenpunkten. Die verschiedenen Werkzeuge dieser Methode können auch eingesetzt werden, um beispielsweise die Korrelationsqualität der Messdaten zu bewerten. Gleichzeitig ermöglicht das System die Stabilisierung und Verbesserung der Korrelation, durch die Berücksichtigung geometrischer Randbedingungen. Wenn die anzupassende Funktion nicht linear ist, ist das Problem der kleinsten Quadrate ebenfalls nicht linear. Nichtlineare Lösungen der Methode der kleinsten Quadrate reduzieren iterativ die Summe der quadratischen Fehler zwischen Funktion und Messwerten, durch eine Abfolge von Aktualisierungen der Parameterwerte. (vgl. \cite{least_quares} S.1, \cite{lev_mar} S.1)
@@ -60,23 +196,19 @@ f_1(x)\\ f_2(x)\\ \cdots \\ f_m(x)
 \end{bmatrix}
 \end{equation} 
 
-Das Ziel ist es ein $x$ zu finden, dass $||f(x)||^2$ minimiert. In unserem Fall, der Positionsbestimmung von Objekten im Raum mit der Grundlage mehrerer Kamerabilder, kann $f$ folgendermaßen aufgestellt werden:
-
-Das \textbf{Kameramodell} wird beschrieben durch die Parameter: $a \in  \textbf{R}^{2\times 3}, b \in \textbf{R}^2, c \in  \textbf{R}^3, d \in \textbf{R}$ welche die Position und Orientierung charakterisieren. Ein Objekt an Position $x \in \textbf{R}^3 $ erzeugt ein Bild an der Position $x^\prime \in \textbf{R}^2$ auf der Bildebene.
+Das \textbf{Kameramodell} wird beschrieben durch die Parameter: $A \in  \textbf{R}^{2\times 3}, b \in \textbf{R}^2, c \in  \textbf{R}^3, d \in \textbf{R}$ welche die Position und Orientierung charakterisieren. Ein Objekt an Position $x \in \textbf{R}^3 $ erzeugt ein Bild an der Position $x^\prime \in \textbf{R}^2$ auf der Bildebene.
 
 \begin{equation}
 x \prime = \frac{1}{c^Tx+d} (Ax +b )
 \end{equation}
 
-$c^Tx+d >0$, wenn das Objekt vor der Kamera ist. Angenommen ein Objekt an Position $x_{ex}$ wird von $l$ Kameras betrachtet. (Beschrieben durch $a_i,b_i,c_i,d_i$) Das Bild des Objekts in der Bildebene von Kamera $i$ ist an Position:
+$c^Tx+d >0$, wenn das Objekt vor der Kamera ist. Angenommen ein Objekt an Position $x_{ex}$ wird von $l$ Kameras betrachtet. (Beschrieben durch $A_i,b_i,c_i,d_i$) Das Bild des Objekts in der Bildebene von Kamera $i$ ist an Position:
 
 \begin{equation}
 y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i
 \end{equation}
 
-Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dreidimensionale Position $e_{ex}$ von den $l$ Beobachtungen $y_1,...,y_l$ zu schätzen. 
-
-\textbf{Nicht-lineare Methode der kleinsten Quadrate:} Berechne die Schätzung von $\hat x$ durch die Minimierung von (vgl. \cite{nonlinear_1} S.5-6):
+Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dreidimensionale Position $e_{ex}$ von den $l$ Beobachtungen $y_1,...,y_l$ zu schätzen. Dies kann nun mit der nicht-linearen Methode der kleinsten Quadrate berechnet werden. $\hat x$ wird durch die Minimierung von (3.5) berechnet. (vgl. \cite{nonlinear_1} S.5-6)
 
 \begin{equation}
 \sum_{i=1}^l || y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i||²
@@ -118,12 +250,12 @@ Der Gauß-Newton Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
 
 Wobei $\nabla g(x)$ der Gradient der Kosten für nichtlineare kleinste Quadrate ist.
 
-Das Gauß-Newton Verfahren eignet sich besonders gut für die Verarbeitung von großen Datenmengen mit hoher Varianz. Im Vergleich zum Newton-Verfahren ist der Algorithmus attraktiver, da er keine Auswertung der zweiten Ableitungen in der Hesse-Matrix der Zielfunktion benötigt. (vgl.\cite{approx_gn} S.1, \cite{nonlinear_1} S.16-17)
+Das Gauß-Newton Verfahren eignet sich besonders gut für die Verarbeitung von großen Datenmengen mit hoher Varianz. Im Vergleich zum normalen Newton-Verfahren ist der Algorithmus attraktiver, da er keine Auswertung der zweiten Ableitungen in der Hesse-Matrix der Zielfunktion benötigt. (vgl.\cite{approx_gn} S.1, \cite{nonlinear_1} S.16-17)
 
 
-\subsection{Levenberg-Marquardt Methode}
+\subsection{Levenberg-Marquardt Verfahren}
 
-Die Levenberg-Marquardt Methode wurde 1944 von Kenneth Levenberg \cite{levenberg} veröffentlicht, in den 1960er Jahren von Donald Marquardt wiederentdeckt und wurde entwickelt um nicht lineare Probleme der kleinsten Quadrate zu lösen. Der Algorithmus kombiniert zwei Minimierungsmethoden: \glqq Gradient descent\grqq{} (Gradientenverfahren) und das Gauß-Newton Verfahren. Beim Gradientenverfahren wird die Summe der quadratischen Fehler durch die Aktualisierung der Parameter in Richtung der steilsten Richtung zum Minimum hin reduziert. Das Levenberg-Marquardt Verfahren verhält sich wie das Gradientenverfahren, wenn die Parameter weit von ihrem optimalen Wert entfernt sind und wie das Gauß-Newton Verfahren, wenn die Parameter nahe an ihrem optimalen Wert liegen. Es wechselt also adaptiv die Parameterupdates zwischen den beiden Verfahren. (vgl. \cite{lev_mar} S.1)
+Das Levenberg-Marquardt Verfahren wurde 1944 von Kenneth Levenberg \cite{levenberg} veröffentlicht, in den 1960er Jahren von Donald Marquardt wiederentdeckt und entwickelt um nicht lineare Probleme der kleinsten Quadrate zu lösen. Der Algorithmus kombiniert zwei Minimierungsmethoden: \glqq Gradient descent\grqq{} (Gradientenverfahren) und das Gauß-Newton Verfahren. Beim Gradientenverfahren wird die Summe der quadratischen Fehler durch die Aktualisierung der Parameter in Richtung der steilsten Richtung zum Minimum hin reduziert. Das Levenberg-Marquardt Verfahren verhält sich wie das Gradientenverfahren, wenn die Parameter weit von ihrem optimalen Wert entfernt sind und wie das Gauß-Newton Verfahren, wenn die Parameter nahe an ihrem optimalen Wert liegen. Es wechselt also adaptiv die Parameterupdates zwischen den beiden Verfahren. (vgl. \cite{lev_mar} S.1)
 
 Der Algorithmus befasst sich mit zwei Problembereichen des Gauß-Newton Verfahrens:
 
@@ -171,12 +303,12 @@ Es gibt verschiedene Strategien um $\lambda^{(k)}$ anzupassen:
 \item Wenn $||f(\hat{x})||²<||f(x^{(k)})||²$, verwende $x^{(k+1)} = \hat{x}$ und verringere $\lambda$
 \item Wenn $||f(\hat{x})||²>||f(x^{(k)})||²$, lasse $x$ gleich (verwende $x^{(k+1)} = x^{(k)}$), und erhöhe $\lambda$
 \end{itemize}
-(vgl. \cite{nonlinear_1} S.19-21)
+(vgl. \cite{nonlinear_1} S.20-22)
 
 
-\subsection{Bestimmung der externen Kameraparameter mit der Kollinearitätsbedingung}
+\subsection{Die Kollinearitätsbedingung}
 
-Die gleichzeitige Anpassung verwendet die Kollinearitätsbedingung  um zwei Gleichungen für jeden gemessenen Bildpunkt aufzustellen. Die Lösung all dieser Gleichungen erfolgt dann nach der Methode der kleinesten Quadrate. Die Bedingung der Kollinearität sagt aus, dass ein Objektpunkt $P$, sein Bildpunkt $p$ und das perspektivische Zentrum $O$, alle auf der gleichen Geraden liegen müssen. Mathematisch wird die Bedingung wie folgt ausgedrückt  \cite{coll_exterior}:
+Die Bestimmung der externen Kameraparameter mit Hilfe der Kollinearitätsbedingung, um die gleichzeitige Anpassung der Parameter im Bündelblockausgleich zu berechnen, erfolgt durch die Aufstellung von zwei Gleichungen für jeden gemessenen Bildpunkt. Die Lösung all dieser Gleichungen erfolgt dann nach der Methode der kleinesten Quadrate. Die Bedingung der Kollinearität sagt aus, dass ein Objektpunkt $P$, sein Bildpunkt $p$ und das perspektivische Zentrum $O$, alle auf der gleichen Geraden liegen müssen. Mathematisch wird die Bedingung wie folgt ausgedrückt  \cite{coll_exterior}:
 
 \begin{equation}
 \begin{aligned}
@@ -222,9 +354,9 @@ Wobei:
 Beobachtungsgleichungen können dann durch das Zusammenführen von Gleichung (3.2) und (3.3) erhalten werden. Die grundlegenden Voraussetzungen an den Bündelblockausgleich sind die Schätzungen der Parameter für innere und äußere Orientierung der Kamera. Weiterhin können die - je nach spezifischem Ansatz - Schätzungen für die Objekt und Raumkoordinaten aller Kontrollpunkte  nützlich sein. Deshalb sollte ein Bündelverfahren immer eine praktikable Methode enthalten, mit der die ungefähren geschätzten initialen Werte ermittelt werden können. Dieses Vorwissen sorgt nicht nur für eine reduzierte Anzahl an Iterationen, sondern resultiert auch in schnelleren und genaueren Ergebnissen. (vgl. \cite{comparative_conditions_study} S.67)
 
 
-\subsection{Bestimmung der externen Kameraparameter mit der Koplanaritätsbedingung}
+\subsection{Die Koplanaritätsbedingung}
 
-Die Koplanaritätsbedingung impliziert, dass die beiden perspektivischen Zentren von zwei Aufnahmen, ein beliebiger Objektpunkt und die entsprechenden Bildpunkte auf den beiden Fotos, alle in einer gemeinsamen Ebene liegen müssen (vgl. Abbildung 3.2). Die Koplanaritätsbedingung kann wie folgt dargestellt werden (\cite{pose_est_epi} S.1204):
+Die Koplanaritätsbedingung ist ein weiteres Verfahren zur Lösung des Bündelblockausgleichs und impliziert, dass die beiden perspektivischen Zentren von zwei Aufnahmen, ein beliebiger Objektpunkt und die entsprechenden Bildpunkte auf den beiden Fotos, alle in einer gemeinsamen Ebene liegen müssen (vgl. Abbildung 3.2). Die Koplanaritätsbedingung kann wie folgt dargestellt werden (\cite{pose_est_epi} S.1204):
 
 \begin{equation}
 F_i = \begin{vmatrix}
@@ -283,9 +415,9 @@ Wobei:
 Zur Verwendung der iterativen Lösung der kleinsten Quadrate, ist die Berechnung der Ausgangswerte von Unbekannten, wie beim Verfahren mit der Kollinearitätsbedinung, notwendig. (vgl. \cite{comparative_conditions_study} S.68)
 
 
-\subsection{Bestimmung der externen Kameraparameter mit der Direct Linear Transformation Methode}
+\subsection{Das direkte lineare Transformationsverfahren}
 
-Das \glqq direkte lineare Transformationsverfahren\grqq{} (DLT) modelliert die Transformation zwischen Bildkoordinatensystem und Objektkoordinatensystem als lineare Funktion und wurde von Abdel-Aziz und Karara \cite{dlt_intro} eingeführt. Die direkte lineare Transformation kann aus den Kollinearitätsgleichungen abgeleitet werden und lassen sich mathematisch wie folgt ausdrücken (\cite{dlt} S.72)
+Die Methode der \glqq direct linear transformation\grqq{}  modelliert die Transformation zwischen Bildkoordinatensystem und Objektkoordinatensystem als lineare Funktion und wurde von Abdel-Aziz und Karara \cite{dlt_intro} eingeführt. Die direkte lineare Transformation kann aus den Kollinearitätsgleichungen abgeleitet werden und lassen sich mathematisch wie folgt ausdrücken (\cite{dlt} S.72)
 
 \begin{equation}
 \begin{aligned}
@@ -327,21 +459,13 @@ Wobei $X_0,Y_0,Z_0,\omega ,\phi , \kappa $ die externen Kameraparameter, $x_0,y_
 Das direkte lineare Transformationsverfahren hat lange Zeit in den Bereichen Photogrammetrie, Computer Vision, Robotik und Biomechanik Verwendung gefunden. Dies liegt an der linearen Formulierung der Beziehung zwischen Objekt- und Bildkoordinaten. Weiterhin können Bildkoordinaten in einem nicht-orthogonalem System, mit unterschiedlichen Skalen ausgedrückt werden und die Position des Koordinatensystems kann unbekannt, sowie die Brennweite beliebig sein und von Bild zu Bild variieren. (vgl. \cite{dlt} S.72)
 
 
-
-\subsection{Feature Matching}
-
-\subsection{Image Matching}
-
-state of art source
-
-\subsection{Structure from Motion}
+\section{Structure from Motion}
 
 6.2 Structure from motion
 
+Gutes Paper:
+\url{file:///C:/Users/Daniel/Downloads/qu2018msc.pdf}
+
 \url{http://sci-hub.tw/https://doi.org/10.1007/s10462-012-9365-8}
 
-\subsection{Depth Maps}
-
-\section{Photogrammetrie für Smartphones}
-
-\section{Evaluierung der photogrammetrischen Technologie für Echtzeit AR Anwendungen}
+\section{Depth Maps}

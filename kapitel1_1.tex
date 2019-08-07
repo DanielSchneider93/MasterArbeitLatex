@@ -90,84 +90,12 @@ Beim Modell-basiertem Tracking wird ein rekursiver Algorithmus verwendet. Hierbe
 
 Außerdem sind Ansätze wie \glqq optical flow based tracking\grqq{}, was zeitliche Informationen, entnommen aus der Bewegung der Projektion des Objekts relativ zur Bildebene verwendet, sowie texturbasierte Ansätze verbreitet. (vgl. \cite{model_based} S.1-2)
 
-
-
 \subsection{Natürliches Feature Tracking}
 
-Natürliches Feature Tracking ist ein bildbasiertes Verfahren und kann die Position des Gerätes zur Umgebung, ohne das Wissen über einen vorherigen Zustand, bestimmen. Diese Methode ist in der Regel sehr rechenintensiv und benötigt hohe Prozessorleistung. (vgl. \cite{model_based} S.1-2) Diese Technik verwendet die Merkmale von Objekten in der echten Welt und erkennt die natürlichen Eigenschaften dieser. Diese Merkmale werden Features genannt und sind typischerweise, basierend auf einem mathematischem Algorithmus, sehr gut unterscheidbar und außern sich in der Form von Ecken, Kanten oder starke Kontrasten. Die Feature Deskriptoren eines Bildes werden zur späteren Erkennung gespeichert. Anhand des gespeicherten Datensets aus Merkmalen kann dann erkannt werden, ob ein Bild den gleichen Inhalt zeigt, unabhängig von Entfernung, Orientierung, Beleuchtungsintensität, Rauschen oder Verdeckung. (vgl. \cite{comparative_sdks} S.13) Es gibt eine Vielzahl an natürlichen Feature Tracking und Matching Systemen, wie SIFT (Scale-Invariant Feature Transform), SURF (Speeded Up Robust Features), FAST (Features from Accelerated Segment Test), BRIEF (Binary Robust Independent Elementary Features) oder ORB (Oriented FAST and Rotated BRIEF). Diese unterscheiden sich hauptsächlich durch die erkannten Bildmerkmale im Videobild und dem erzeugtem Modell der Umgebung, die verfolgt werden soll. Die Grundsätzliche Pipeline kann wie in Abbildung 2.3 dargestellt, beschrieben werden.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{tracking_pipeline.png}
-	\caption{Tracking Pipeline Bildquelle \cite{natural_feature}}
-\end{figure} 
-
-Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptorssystems ab. Bei SIFT beispielsweise schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten, kompensiert die erkannte Orientierung und beschreibt abschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann, während des Echtzeit Trackings, auf Gemeinsamkeiten geprüft werden kann.  (vgl. \cite{natural_feature} S.28-29) 
-
-
-FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller als SIFT. Wie in Abbildung 2.4 zu sehen ist, arbeitet der ursprüngliche Segementtest mit einem Kreis von 16 Pixeln um den Eckenkandidaten $p$. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{fast.png}
-	\caption{12 Punkt Segment Test für die Eckenerkennung \cite{fast}}
-\end{figure}
-
-
-Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
-
-\glqq Outlier removal\grqq{} oder auch die Ausreißerbeseitigung besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
-
-
-Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
-
-\begin{equation}
-  s  
-  		\begin{bmatrix}
-		x'\\
-		y'\\
-		1
-     	\end{bmatrix}
-     = H
-     	\begin{bmatrix}
-		x\\
-		y\\
-		1
-     	\end{bmatrix}
-      = 
-     	\begin{bmatrix}
-		h_{11} & h_{12} & h_{13}\\
-		h_{21} & h_{22} & h_{23}\\
-		h_{31} & h_{32} & h_{33}
-     	\end{bmatrix}
-      \
-     	\begin{bmatrix}
-		x\\
-		y\\
-		1
-     	\end{bmatrix}
-\end{equation}
-
-Die Homographiematrix ist eine 3x3 Matrix mit 8 DoF (Degrees of Freedom). Sie wird standardmäßig normalisiert mit: 
-
-\begin{equation}
-h_33 = 1
-\end{equation}
-
-oder 
-\begin{equation}
-h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
-\end{equation}
-
-Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. \cite{natural_feature} beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen. \glqq given a set of correspondences between 3D
-features and their projections in the images plane, pose estimation
-consists in computing the position and orientation of the camera \grqq{}.
-
-\url{http://sci-hub.tw/10.1109/TVCG.2015.2513408} !!!! <- sehr gute quelle
-
- Abschließend wird, basierend auf dem Gauß-Newton-Verfahren eine Reduzierung des \glqq re-projection error\grqq{} erreicht. Typischerweise sind zwei bis vier Wiederholungen genug. (vgl. \cite{natural_feature} S.28-29)
+Natürliches Feature Tracking ist ein bildbasiertes Verfahren und kann die Position des Gerätes zur Umgebung, ohne das Wissen über einen vorherigen Zustand, bestimmen. Diese Methode ist in der Regel sehr rechenintensiv und benötigt hohe Prozessorleistung. (vgl. \cite{model_based} S.1-2) Diese Technik verwendet die Merkmale von Objekten in der echten Welt und erkennt ihre natürlichen Eigenschaften. Diese Merkmale werden \glqq Features\grqq genannt und sind typischerweise, basierend auf einem mathematischem Algorithmus, sehr gut unterscheidbar und außern sich in der Form von Ecken, Kanten oder starke Kontrasten. Die Feature Deskriptoren eines Bildes werden zur späteren Erkennung gespeichert. Anhand des gespeicherten Datensets aus Merkmalen kann dann erkannt werden, ob ein Bild den gleichen Inhalt zeigt, unabhängig von Entfernung, Orientierung, Beleuchtungsintensität, Rauschen oder Verdeckung. (vgl. \cite{comparative_sdks} S.13) Dies wird, meistens basierend auf dem Verfahren der kleinsten Quadrate, mit Gauß-Newton oder Levenberg-Marquardt durchgeführt, um eine Reduzierung des \glqq re-projection error\grqq{} (Reprojektionsfehlers) zu erreichen, um alle internen und externen Kameraparameter zu bestimmen. Dies sind nicht-lineare Methoden zur Lösung des Problems der kleinsten Quadrate. Typischerweise sind zwei bis vier Wiederholungen genug. (vgl. \cite{natural_feature} S.28-29) Die genaue Funktionsweise des Natürlichen Feature Trackings wird in Kapitel 3.5 und 3.6 weiter ausgeführt.
+ 
 
 \section{Photogrammetrie vs. SLAM für Augmented Reality}
 
-In diesem Kapitel wurde eine Einführung in Augmented Reality, deren Vorraussetzungen und aktuellen Umsetzungen dargelegt. Im folgenden Teil dieser Arbeit wird Photogrammetrie, sowie SLAM (Simultaneous Localisation and Mapping), welches von den meisten Augmented Reality SDKs inzwischen verwendet wird, beschrieben. Anschließend wird ein Vergleich der beiden Verfahren durchgeführt, um Gemeinsamkeiten, Unterschiede, sowie Möglichkeiten und Schwächen der einzelnen Verfahren aufzuzeigen und in Kontext zu bringen. Anschließend wird evaluiert ob photogrammetrische Verfahren in Kontext der Augmented Reality eingesetzt werden können.
+In diesem Kapitel wurde eine kurze Einführung in Augmented Reality gegeben und deren Voraussetzungen sowie aktuellen Umsetzungen dargelegt. Im folgenden Teil dieser Arbeit wird Photogrammetrie, sowie SLAM (Simultaneous Localisation and Mapping), welches von den meisten Augmented Reality Software Development Kits inzwischen verwendet wird, beschrieben. Anschließend wird ein Vergleich der beiden Verfahren durchgeführt, um Gemeinsamkeiten, Unterschiede, sowie Möglichkeiten und Schwächen der einzelnen Verfahren aufzuzeigen und in Kontext zu bringen. Anschließend wird evaluiert ob photogrammetrische Verfahren in Kontext der Augmented Reality eingesetzt werden können.
 

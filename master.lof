@@ -3,14 +3,15 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Das Realit\IeC {\"a}t - Virtualit\IeC {\"a}t Kontinuum, Bildquelle \cite {ar_vr}\relax }}{3}{figure.caption.2}
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Kantenbasiertes rekursives Tracking, Bildquelle \cite {model_based} S.3\relax }}{7}{figure.caption.4}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Tracking Pipeline Bildquelle \cite {natural_feature}\relax }}{8}{figure.caption.5}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces 12 Punkt Segment Test f\IeC {\"u}r die Eckenerkennung \cite {fast}\relax }}{9}{figure.caption.6}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Kamera Kalibierungsmodell, Bildquelle \cite {pp}\relax }}{11}{figure.caption.7}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Koplanarit\IeC {\"a}tsbedinung, Bildquelle \cite {comparative_conditions_study}\relax }}{19}{figure.caption.8}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kamera Kalibierungsmodell, Bildquelle \cite {pp}\relax }}{9}{figure.caption.5}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Tracking Pipeline Bildquelle \cite {natural_feature}\relax }}{11}{figure.caption.6}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces (a) Unterschied des Gau\IeC {\ss }schen (DoG) Skalenraums. (b) \IeC {\"U}berwiegende Aurichtung des radiometrischen Gradienten. (c) SIFT Deskriptor. Bildquelle: \cite {old_new_feature}\relax }}{13}{figure.caption.7}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces 12 Punkt Segment Test f\IeC {\"u}r die Eckenerkennung \cite {fast}\relax }}{14}{figure.caption.8}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Koplanarit\IeC {\"a}tsbedinung, Bildquelle \cite {comparative_conditions_study}\relax }}{23}{figure.caption.9}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite {slam}\relax }}{24}{figure.caption.9}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Die Landmarks sind durch Federn verbunden, welche die Korrelation zwischen ihnen darstellen. Bildquelle \cite {slam}\relax }}{25}{figure.caption.10}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite {slam}\relax }}{28}{figure.caption.10}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Die Landmarks sind durch Federn verbunden, welche die Korrelation zwischen ihnen darstellen. Bildquelle \cite {slam}\relax }}{29}{figure.caption.11}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
