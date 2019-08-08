@@ -54,7 +54,7 @@ Das Merkmalserkennung und -anpassung wird in drei Schritte unterteilt \cite{robu
 \item[(3)] \textbf{Matching}: Um ähnliche Merkmale zwischen verschiedenen Bildern zu identifizieren werden die Deskriptoren verglichen. Ist ein Feature in zwei Bildern enthalten, zeigen die Bilder das gleiche Objekt.
 \end{itemize}
 
-Die häufigsten Verwendeten Verfahren sind \glqq Scale Invariant Feature Transform\grqq{} (SIFT) (Lowe, 2004), \glqq Features from Accelerated Segment Test\grqq{} (FAST) (Rosten and Drummond, 2005), \glqq Speeded Up Robust Features\grqq{} (SURF) (Bay et al., 2006), \glqq Binary Robust Invariant Scalable Key Points\grqq{} (BRISK) (Leutenegger et al., 2001),\glqq Binary Robust Independent Elementary Features\grqq{} (BRIEF) (Calonder et al. 2010) oder \glqq Oriented FAST and Rotated BRIEF \grqq{} (ORB) (Rublee et al. 2011). Diese unterscheiden sich hauptsächlich durch die erkannten Features im Bild, die getrackt werden sollen, sowie dem erzeugtem Modell der Umgebung. (vgl. \cite{robust_feature} S.3, \cite{natural_feature} S.28-29)
+Die häufigsten Verwendeten Verfahren sind \glqq Scale Invariant Feature Transform\grqq{} (SIFT) (Lowe, 2004), \glqq Features from Accelerated Segment Test\grqq{} (FAST) (Rosten and Drummond, 2005), \glqq Speeded Up Robust Features\grqq{} (SURF) (Bay et al., 2006),\glqq Binary Robust Independent Elementary Features\grqq{} (BRIEF) (Calonder et al. 2010) oder \glqq Oriented FAST and Rotated BRIEF \grqq{} (ORB) (Rublee et al. 2011). Diese unterscheiden sich hauptsächlich durch die erkannten Features im Bild, die getrackt werden sollen, sowie dem erzeugtem Modell der Umgebung. (vgl. \cite{robust_feature} S.3, \cite{natural_feature} S.28-29)
 
 
 Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptorssystems ab.
@@ -83,11 +83,19 @@ FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller a
 
 Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
 
-\subsection{BRISK}
-
 \subsection{BRIEF}
 
-\subsection{ORB}
+Die Verwendung von BRIEF (Binary Robust Independent Elementary Features) Deskriptoren hat sich  aus den steigenden Anforderungen an eine stärker einschränkende Arbeitsumgebung für rechenintensive Computer Vision basierte Systeme entwickelt. Ältere Methoden wie etwa SIFT oder SURF (Speeded Up Robust Features) neigen dazu bei einem großen Set an Features viel Speicher zu benötigen. Der 128-dimensionale Vektor mit dem SIFT die Features beschreibt ist für Echtzeitanwendungen zu rechenintensiv. SURF etwa speichert die Histogramme der lokalen Gradienten als Gleitkommazahlen in einem 64-dimensionalen Vektor. Für Echtzeitanwendungen ist SURF jedoch ebenfalls zu teuer, da die Anzahl an zu speichernden Deskriptoren nicht gut skalierbar ist. BRIEF verwendet den Ansatz der direkten Berechnung von binären Zeichenketten aus Patches die aus dem Bild extrahiert werden. Die Intensitätswerte der Pixel werden paarweise ausgewertet, um einzigartigen Bits in jedem Bitstring zu erhalten. Für jeden geglätteten Bildpunkt wird ein Test durchgeführt (vgl. \cite{brief} S.3, \cite{orb_slam} S.13-14):
+
+
+\begin{equation}
+\tau(p;x,y)= \biggl\{
+\end{equation}
+
+
+
+http://publications.lib.chalmers.se/records/fulltext/256291/256291.pdf
+\url{https://www.researchgate.net/publication/221304115_BRIEF_Binary_Robust_Independent_Elementary_Features}
 
 \subsection{Outlier Removal}
 
@@ -134,16 +142,18 @@ oder
 h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
 \end{equation}
 
-Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. \cite{natural_feature} beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen. \glqq given a set of correspondences between 3D
-features and their projections in the images plane, pose estimation
-consists in computing the position and orientation of the camera \grqq{}.
+Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. \cite{natural_feature} beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen: \glqq given a set of correspondences between 3D features and their projections in the images plane, pose estimation consists in computing the position and orientation of the camera \grqq{}. Bei photogrammetrischen Verfahren wird die Positionsschätzung heute hauptsächlich mit dem Bündelblockausgleich durchgeführt, der alle Parameter gleichzeitig in mehreren Iterationsschritten anpasst.
 
-
-\url{http://sci-hub.tw/10.1109/TVCG.2015.2513408}
 
 \section{Der Bündelblockausgleich}
 
-Das Verfahren des Bündelblockausgeleichs, verwendet nun die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert. Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
+Das Verfahren des Bündelblockausgeleichs, verwendet nun die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert (Siehe Abbildung 3.5). Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{bundle.png}
+	\caption{Visualisierung des Bündelblockausgleichs. Bildquelle \cite{efficient_bundle}}
+\end{figure}
 
 Khalid El-AShmawy \cite{comparative_conditions_study} beschreibt die Verwendung von Strahlenbündel, die durch Fotos generiert werden, als zweifelsfrei den flexibelsten Ansatz zur Blockbildung, Blockanpassung und für Photogrammetrie im Allgemeinen und mit den besten Ergebnissen. In der Nahbereichsphotogrammetrie, bei der mehrstufige und konvergente Konfigurationen möglich sind, ist der Bündelansatz in seiner stärksten Form vertreten. 
 Der Ausgleich der Strahlenbündel in einem Set an Fotos beinhaltet die Rotation und Translation von jedem Bündel im Raum in eine Position, in der alle Strahlen sich an der korrekten Position im Objektraum schneiden. (vgl. \cite{comparative_conditions_study} S.66)
@@ -461,11 +471,10 @@ Das direkte lineare Transformationsverfahren hat lange Zeit in den Bereichen Pho
 
 \section{Structure from Motion}
 
-6.2 Structure from motion
+Structure from Motion (SfM) ist ein Oberbegriff aus der Photogrammetrie  unter dem verschiedene Verfahren zusammengefasst werden können. Immer wenn es eine relative Bewegung zwischen Kamera und den realen 3D-Objekten gibt, werden die 3D-Objekte aus unterschiedlichen Blickrichtungen auf das 2D-Bild projiziert. Die Rekonstruktion der 3D-Struktur der Originalobjekte aus diesen 2D-Bildsequenzen wird als SfM bezeichnet. Structure from Motion ist nicht nur in der Photogrammetrie vertreten, sondern hat auch in der Computervision Anwendungsbereiche gefunden, wie etwa bei der 3D-Geometrie-Rekonstruktion oder bei SLAM. In den letzten Jahrzehnten sind verschiedene Ansätze zur Lösung dieses SfM Problems entstanden, wie die \glqq Maximum likehood estimation\grqq{}, \glqq Kalman und Extended Kalman Filter\grqq{}, \glqq Particle Filter\grqq{} oder das \glqq Hidden Markov Model\grqq{}. (vgl. \cite{efficient_bundle} S.5)
 
-Gutes Paper:
-\url{file:///C:/Users/Daniel/Downloads/qu2018msc.pdf}
+\url{https://www.sciencedirect.com/science/article/pii/S0169555X12004217}
 
-\url{http://sci-hub.tw/https://doi.org/10.1007/s10462-012-9365-8}
-
+gehört das noch dazu??
 \section{Depth Maps}
+gehört das noch dazu?
