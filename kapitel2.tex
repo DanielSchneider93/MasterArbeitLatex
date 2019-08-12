@@ -83,19 +83,24 @@ FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller a
 
 Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
 
-\subsection{BRIEF}
+\subsection{Binary Robust Independent Elementary Features}
 
-Die Verwendung von BRIEF (Binary Robust Independent Elementary Features) Deskriptoren hat sich  aus den steigenden Anforderungen an eine stärker einschränkende Arbeitsumgebung für rechenintensive Computer Vision basierte Systeme entwickelt. Ältere Methoden wie etwa SIFT oder SURF (Speeded Up Robust Features) neigen dazu bei einem großen Set an Features viel Speicher zu benötigen. Der 128-dimensionale Vektor mit dem SIFT die Features beschreibt ist für Echtzeitanwendungen zu rechenintensiv. SURF etwa speichert die Histogramme der lokalen Gradienten als Gleitkommazahlen in einem 64-dimensionalen Vektor. Für Echtzeitanwendungen ist SURF jedoch ebenfalls zu teuer, da die Anzahl an zu speichernden Deskriptoren nicht gut skalierbar ist. BRIEF verwendet den Ansatz der direkten Berechnung von binären Zeichenketten aus Patches die aus dem Bild extrahiert werden. Die Intensitätswerte der Pixel werden paarweise ausgewertet, um einzigartigen Bits in jedem Bitstring zu erhalten. Für jeden geglätteten Bildpunkt wird ein Test durchgeführt (vgl. \cite{brief} S.3, \cite{orb_slam} S.13-14):
+Die Verwendung von BRIEF (Binary Robust Independent Elementary Features) Deskriptoren hat sich  aus den steigenden Anforderungen an eine stärker einschränkende Arbeitsumgebung für rechenintensive Computer Vision basierte Systeme entwickelt. Ältere Methoden wie etwa SIFT oder SURF (Speeded Up Robust Features) neigen dazu bei einem großen Set an Features viel Speicher zu benötigen. Der 128-dimensionale Vektor mit dem beispielsweise SIFT die Features beschreibt ist für Echtzeitanwendungen zu rechenintensiv. SURF etwa speichert die Histogramme der lokalen Gradienten als Gleitkommazahlen in einem 64-dimensionalen Vektor. Für Echtzeitanwendungen ist SURF jedoch ebenfalls zu teuer, da die Anzahl an zu speichernden Deskriptoren nicht gut skalierbar ist. BRIEF verwendet einen Ansatz, bei dem Bitvektoren aus Ausschnitten (Patches) des Bilds berechnet werden, nachdem diese geglättet wurden. Die Intensitätswerte der Pixel werden paarweise ausgewertet, um einzigartige oder gleiche Bits in jedem Bitvektor zu finden. 
 
-
+Für jeden geglätteten Bildpunkt wird ein Test $\tau$ für den Patch $p$ durchgeführt (vgl. \cite{brief} S.3, \cite{orb_slam} S.13-14):
 \begin{equation}
-\tau(p;x,y)= \biggl\{
+\tau(p;x,y)= \biggl\{ \begin{array}{ll}
+         1, \quad p(x)<p(y)\\
+        0, \quad otherwise\end{array}
 \end{equation}
 
+Wobei $p(x)$ die Intensität des Pixels bei $x=(u,v)^T$ im zu untersuchenden geglätteten Bild Patch ist. Die Auswahl eines Sets an $n_d (x,y)$-Bildpatches, definiert eindeutig ein Set an Binären Tests. Der BRIEF Deskriptor wird als $n_d$ dimensionaler Bitstring definiert:
+\begin{equation}
+f_{n_d}(p):= \sum_{1\geq i \geq n_d} 2^{i-1} \tau (p;x_i,y_i)
+\end{equation}
 
+Die Metrik, um die Deskriptoren zu vergleichen, ist die Hamming-Distanz, welche die Unterschiedlichkeit zwischen zwei Zeichenketten, anhand der Auswertung der Anzahl verschiedener Zeichen für die gleichen Positionen in zwei Strings der selben Länge, beschreibt. (vgl. \cite{orb_slam} S.13-14)
 
-http://publications.lib.chalmers.se/records/fulltext/256291/256291.pdf
-\url{https://www.researchgate.net/publication/221304115_BRIEF_Binary_Robust_Independent_Elementary_Features}
 
 \subsection{Outlier Removal}
 

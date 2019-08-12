@@ -13,8 +13,8 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite {slam}\relax }}{29}{figure.caption.11}
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Die Landmarks sind durch \glqq Federn\grqq {} verbunden, welche die Korrelation zwischen ihnen darstellen. Bildquelle \cite {slam}\relax }}{30}{figure.caption.12}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces ORB-SLAM System \IeC {\"U}bersicht: Tracking, Mapping und Loop Closing. Bildquelle \cite {orbslam_og}\relax }}{34}{figure.caption.13}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces L\IeC {\"o}sung des SLAM Problems ohne (a) und mit (b) einem Loop closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die \IeC {\"a}u\IeC {\ss }eren Punkte stellen die Features in der Karte dar. Bildquelle \cite {loop_closure}\relax }}{36}{figure.caption.14}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces L\IeC {\"o}sung des SLAM Problems ohne (a) und mit (b) einem Loop closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die \IeC {\"a}u\IeC {\ss }eren Punkte stellen die Features in der Karte dar. Bildquelle \cite {loop_closure}\relax }}{31}{figure.caption.13}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces ORB-SLAM System \IeC {\"U}bersicht: Tracking, Mapping und Loop Closing. Bildquelle \cite {orbslam_og}\relax }}{36}{figure.caption.14}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

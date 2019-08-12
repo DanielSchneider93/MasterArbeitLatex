@@ -34,6 +34,28 @@ Je mehr Landmarks in das Modell aufgenommen werden, desto stetig besser wird das
 
 Während sich der Roboter durch die Umgebung bewegt, werden die Korrelationen stetig aktualisiert. Je mehr Beobachtungen über die Umwelt gemacht werden, desto steifer werden die Federn in diesem Modell. Im Nachhinein werden neue Beobachtungen von Landmarks durch das ganze Netzwerk propagiert und je nach Input, kleinere oder größere Anpassungen vorgenommen.
 
+\section{Loop closure detection}
+
+Die \glqq Loop closure detection\grqq{} (Schleifenerkennung) besteht in der Erkennung von bereits besuchten Orten, nach der zyklischen Erkundung der Umwelt nach beliebiger Länge des Weges. Dies ist eins der größten Hindernisse um SLAM im großen Maßstab zu verwenden und der Vermeidung von kritischen Fehlern. Daraus ergibt sich ein weiteres Problem, das \glqq perceptual aliasing\grqq{} genannt wird und bei dem zwei verschiedene Orte aus der Umgebung als ein gleicher Ort erkannt werden. Dies stellt vor allem bei sich wiederholenden Features in der Umgebung, wie Fluren, ähnlichen architektonischen Elementen oder Zonen mit vielen Büschen oder Bäumen ein großes Problem dar. Eine gute Methode zur Schleifenerkennung darf keine falsch-positiven Ergebnisse und nur ein Minimum an falsch-negativen Ergebnissen liefern. Deshalb müssen alle Loop Closure Systeme auf eine Präzision von 100 \% abzielen. Dies wird benötigt, da ein einzelnes falsch-positives Ergebnis zu irreparablen Fehlern in der Erstellung der Karte führt. Falsch-negative hingegen reduzieren nur den Anteil der Rückrufquote, haben aber keinen Einfluss auf die Präzision der Genauigkeit der Karte. (vgl. \cite{survey} S.64-65)
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{loop.png}
+	\caption{ Lösung des SLAM Problems ohne (a) und mit (b) einem Loop closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die äußeren Punkte stellen die Features in der Karte dar. Bildquelle \cite{loop_closure}}
+\end{figure}  
+
+Algorithmen für die Schleifenerkennung lassen sich in drei Gruppen unterteilen (\cite{loop_closure} S.212):
+
+\begin{itemize}
+\item \textbf{map-to-map}: Die Schleifenerkennung erfolgt durch die Aufteilung der globalen Karte in Teilkarten und dem finden von Übereinstimmungen zwischen diesen Teilkarten.
+
+\item \textbf{image-to-map}: Die Suche wird anhand von Übereinstimmungen zwischen Bild und Karte ermöglicht und die Position des Systems wird dann in Bezug zur Karte wieder hergestellt.
+
+\item \textbf{image-to-image}: Die Schleifenerkennung wird anhand von Bildfeatures zwischen verschiedenen Bildern durchgeführt.
+
+\end{itemize}
+Nach der Erkennung einer Schleife wird das globale Kartenmodell angepasst, um die gewonnenen Erkenntnisse in die Karte zu übernehmen. (vgl. \cite{loop_closure} S.213)
+
 \section{Visual SLAM}
 
 Wenn Kameras als einziger exterozeptiver Sensor verwendet werden, spricht man von \glqq Visual SLAM \grqq{} oder \glqq Vision-Based SLAM\grqq{}. Viele visuelle SLAM Ansätze haben jedoch Probleme wenn sie unter folgenden Bedingungen eingesetzt werden:
@@ -118,7 +140,7 @@ Fast-SLAM 2.0 ist eine weiterentwickelte Variante von Fast-SLAM. Hierbei wird ei
 
 \section{ORB-SLAM}
 
-ORB-SLAM (Oriented FAST and Rotated BRIEF - SLAM) ist eine Weiterentwicklung und Kombination von den Feature Erkennugsalgorithmen FAST und BRIEF. Der erste Schritt von ORB-SLAM ist es ORB-Features aus dem Bild zu extrahieren. Dies geschieht durch das Finden von Ecken mit FAST und der anschließenden Erstellung eines Deskriptors mit BRIEF.
+ORB-SLAM (Oriented FAST and Rotated BRIEF - SLAM) ist eine Weiterentwicklung und Kombination von den Feature Erkennugsalgorithmen FAST und BRIEF. ORB Deskriptoren sind sehr schnell berechnet und können sehr schnell verglichen werden, während sie gleichzeitig einen gute perspektivische Invarianz besitzen. (\cite{orbslam_og} S.3) Der erste Schritt von ORB-SLAM ist es ORB-Features aus dem Bild zu extrahieren. Dies geschieht durch das Finden von Ecken mit FAST und der anschließenden Erstellung eines Deskriptors mit BRIEF.
 
 \begin{figure}[H]
 	\centering
@@ -126,8 +148,13 @@ ORB-SLAM (Oriented FAST and Rotated BRIEF - SLAM) ist eine Weiterentwicklung und
 	\caption{ORB-SLAM System Übersicht: Tracking, Mapping und Loop Closing. Bildquelle \cite{orbslam_og}}
 \end{figure} 
 
+ORB-SLAM arbeitet mit verschiedenen Threads, um das Tracking, Mapping und Loop Closing parallel auszuführen. 
 
-\textbf{Tracking}
+Der \textbf{Tracking} Thread ist für die Lokalisierung der Kamera zuständig und entscheidet auch, welche Keyframes verwendet werden. Keyframes sind die Menge der ausgewählten Frames, die für die Erstellung der Map verwendet werden. Dabei wird mit einem \glqq Survival of the Fittest\grqq{} Ansatz gearbeitet, der die nützlichsten Keyframes findet. Die initiale Positionsschätzung wird durch das Feature Matching zwischen ausgewähltem und vorherigem Keyframe erreicht. Danach wird die aktuelle Position mithilfe eines Bewegungsmodells optimiert, um die korrespondierenden Map Points auf dem Keyframe vorherzusagen und die 3D-Rekonstruktion zu optimieren. Wenn das Tracking eines vorherigen Frames verloren geht, wird ein globaler Lokalisierungsalgorithmus verwendet, um ein neues Keyframe zu finden, dass dann wieder mit dem aktuellen Frame verglichen werden kann. Ein erfolgreicher Tracking Schritt resultiert in dem Finden einer Kamerapose und einem initalen Set an Features, aus denen dann eine lokale Karte berechnet werden kann. 
+
+Die \textbf{Map} wird aus den ermittelten Keyframes und den darin enthaltenen Map Points im zweiten Thread erstellt. Wenn ein Keyframe erfasst wird, wird es in einem Graphen abgelegt, der Keyframes als Nodes und die gemeinsam beobachteten Map Points in den verschiedenen Keyframes als Verbindungen zwischen den Nodes modelliert. Die Gewichtung der Kanten ist die Anzahl der Map Points, die auf beiden Keyframes observiert wurden. Um eine unbeschränktes Wachstum des Graphen zu vermeiden werden Keyframes aussortiert, die im Vergleich zu anderen Keyframes zu ähnlich sind. Map Points werden ebenfalls aussortiert, wenn sie gleichzeitig von zu wenigen Keyframes erfasst werden. Auf diese Weise können Keyframes sehr großzügig in den Graphen eingefügt werden und bei Redundanz wieder entfernt werden.
+
+Das \textbf{Loop Closing} wird vom dritten Thread ausgeführt. Wenn erkannt wird, dass ein bestimmter Ort schon einmal besucht wurde, kann dann der Drift, der sich beim Durchlaufen der Schleife angesammelt hat korrigiert werden. Bei ORB-SLAM wird die Schleifenerkennung beim Einfügen jedes Keyframes in den Graphen vorgenommen. Dazu wird die Ähnlichkeit zwischen den Keyframes betrachtet, indem ein Ähnlichkeitswert zwischen den Keyframes, mithilfe der Repräsentation des \glqq Bag-of-words\grqq{} Modells, berechnet wird. Wenn ein Keyframe mehr Ähnlichkeiten mit einem neu eingefügten Keyframe aufweist, als seine Nachbarn im Graphen, ist es ein Kandidat für die Loop Closure. Wenn drei miteinander verbundene Kandidaten gefunden wurden, gilt der Loop als akzeptiert und die Schleife wird geschlossen. Abschließend wird der Graph aktualisiert. (vgl. \cite{orbslam_og} S.6-8, \cite{orb_slam} S.4-5)
 
 http://publications.lib.chalmers.se/records/fulltext/256291/256291.pdf
 
@@ -138,27 +165,7 @@ ORB SLAM 2:
 https://arxiv.org/pdf/1610.06475.pdf
 
 
-\section{Loop closure detection}
 
-Die \glqq Loop closure detection\grqq{} (Schleifenerkennung) besteht in der Erkennung von bereits besuchten Orten, nach der zyklischen Erkundung der Umwelt nach beliebiger Länge des Weges. Dies ist eins der größten Hindernisse um SLAM im großen Maßstab zu verwenden und der Vermeidung von kritischen Fehlern. Daraus ergibt sich ein weiteres Problem, das \glqq perceptual aliasing\grqq{} genannt wird und bei dem zwei verschiedene Orte aus der Umgebung als ein gleicher Ort erkannt werden. Dies stellt vor allem bei sich wiederholenden Features in der Umgebung, wie Fluren, ähnlichen architektonischen Elementen oder Zonen mit vielen Büschen oder Bäumen ein großes Problem dar. Eine gute Methode zur Schleifenerkennung darf keine falsch-positiven Ergebnisse und nur ein Minimum an falsch-negativen Ergebnissen liefern. Deshalb müssen alle Loop Closure Systeme auf eine Präzision von 100 \% abzielen. Dies wird benötigt, da ein einzelnes falsch-positives Ergebnis zu irreparablen Fehlern in der Erstellung der Karte führt. Falsch-negative hingegen reduzieren nur den Anteil der Rückrufquote, haben aber keinen Einfluss auf die Präzision der Genauigkeit der Karte. (vgl. \cite{survey} S.64-65)
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{loop.png}
-	\caption{ Lösung des SLAM Problems ohne (a) und mit (b) einem Loop closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die äußeren Punkte stellen die Features in der Karte dar. Bildquelle \cite{loop_closure}}
-\end{figure}  
-
-Algorithmen für die Schleifenerkennung lassen sich in drei Gruppen unterteilen (\cite{loop_closure} S.212):
-
-\begin{itemize}
-\item \textbf{map-to-map}: Die Schleifenerkennung erfolgt durch die Aufteilung der globalen Karte in Teilkarten und dem finden von Übereinstimmungen zwischen diesen Teilkarten.
-
-\item \textbf{image-to-map}: Die Suche wird anhand von Übereinstimmungen zwischen Bild und Karte ermöglicht und die Position des Systems wird dann in Bezug zur Karte wieder hergestellt.
-
-\item \textbf{image-to-image}: Die Schleifenerkennung wird anhand von Bildfeatures zwischen verschiedenen Bildern durchgeführt.
-
-\end{itemize}
-Nach der Erkennung einer Schleife wird das globale Kartenmodell angepasst, um die gewonnenen Erkenntnisse in die Karte zu übernehmen. (vgl. \cite{loop_closure} S.213)
 
 \section{SLAM für mobiles Augumented Reality}
 
