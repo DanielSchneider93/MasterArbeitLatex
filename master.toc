@@ -24,8 +24,6 @@
 \contentsline {subsection}{\numberline {3.4.3}Die Kollinearit\IeC {\"a}tsbedingung}{22}{subsection.3.4.3}
 \contentsline {subsection}{\numberline {3.4.4}Die Koplanarit\IeC {\"a}tsbedingung}{24}{subsection.3.4.4}
 \contentsline {subsection}{\numberline {3.4.5}Das direkte lineare Transformationsverfahren}{26}{subsection.3.4.5}
-\contentsline {section}{\numberline {3.5}Structure from Motion}{27}{section.3.5}
-\contentsline {section}{\numberline {3.6}Depth Maps}{27}{section.3.6}
 \contentsline {chapter}{\numberline {4}Simultaneous Localisation and Mapping}{28}{chapter.4}
 \contentsline {section}{\numberline {4.1}Loop closure detection}{31}{section.4.1}
 \contentsline {section}{\numberline {4.2}Visual SLAM}{32}{section.4.2}
@@ -33,24 +31,25 @@
 \contentsline {section}{\numberline {4.4}FAST-SLAM}{34}{section.4.4}
 \contentsline {section}{\numberline {4.5}ORB-SLAM}{35}{section.4.5}
 \contentsline {section}{\numberline {4.6}SLAM f\IeC {\"u}r mobiles Augumented Reality}{37}{section.4.6}
-\contentsline {chapter}{\numberline {5}Vergleich von Photogrammetrie und SLAM}{40}{chapter.5}
-\contentsline {section}{\numberline {5.1}\IeC {\"A}hnlichkeiten und Unterschiede}{40}{section.5.1}
-\contentsline {section}{\numberline {5.2}Analyse der Echtzeitf\IeC {\"a}higkeit}{40}{section.5.2}
-\contentsline {chapter}{\numberline {6}Implementation einer AR Anwendung f\IeC {\"u}r Android}{41}{chapter.6}
-\contentsline {section}{\numberline {6.1}Verwendete Hard und Software}{41}{section.6.1}
-\contentsline {subsection}{\numberline {6.1.1}Ar Core}{41}{subsection.6.1.1}
-\contentsline {subsection}{\numberline {6.1.2}Sceneform}{41}{subsection.6.1.2}
-\contentsline {subsection}{\numberline {6.1.3}Google Location Service}{41}{subsection.6.1.3}
-\contentsline {subsection}{\numberline {6.1.4}Dexter}{41}{subsection.6.1.4}
-\contentsline {subsection}{\numberline {6.1.5}Volley}{41}{subsection.6.1.5}
-\contentsline {section}{\numberline {6.2}Implentierung}{41}{section.6.2}
-\contentsline {chapter}{\numberline {7}Praxistest}{42}{chapter.7}
-\contentsline {section}{\numberline {7.1}Anwendungsbeispiele}{42}{section.7.1}
-\contentsline {section}{\numberline {7.2}Benchmarks}{42}{section.7.2}
-\contentsline {section}{\numberline {7.3}Tests}{42}{section.7.3}
-\contentsline {chapter}{\numberline {8}Weitere Verfahren}{43}{chapter.8}
-\contentsline {section}{\numberline {8.1}Depth Map mit Dual Camera}{43}{section.8.1}
-\contentsline {section}{\numberline {8.2}3-D Rekonstruktion}{43}{section.8.2}
-\contentsline {chapter}{\numberline {9}Zusammenfassung und Ausblick}{44}{chapter.9}
-\contentsline {chapter}{Literaturverzeichnis}{45}{section*.16}
-\contentsline {chapter}{Abbildungsverzeichnis}{50}{section*.18}
+\contentsline {section}{\numberline {4.7}Structure from Motion}{39}{section.4.7}
+\contentsline {chapter}{\numberline {5}Vergleich von Photogrammetrie und SLAM}{41}{chapter.5}
+\contentsline {section}{\numberline {5.1}\IeC {\"A}hnlichkeiten und Unterschiede}{41}{section.5.1}
+\contentsline {section}{\numberline {5.2}Unterschiede zwischen Visual SLAM, Photogrammetrie und SfM}{42}{section.5.2}
+\contentsline {chapter}{\numberline {6}Implementation einer AR Anwendung f\IeC {\"u}r Android}{44}{chapter.6}
+\contentsline {section}{\numberline {6.1}Verwendete Hard und Software}{44}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Ar Core}{44}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Sceneform}{44}{subsection.6.1.2}
+\contentsline {subsection}{\numberline {6.1.3}Google Location Service}{44}{subsection.6.1.3}
+\contentsline {subsection}{\numberline {6.1.4}Dexter}{44}{subsection.6.1.4}
+\contentsline {subsection}{\numberline {6.1.5}Volley}{44}{subsection.6.1.5}
+\contentsline {section}{\numberline {6.2}Implentierung}{44}{section.6.2}
+\contentsline {chapter}{\numberline {7}Praxistest}{45}{chapter.7}
+\contentsline {section}{\numberline {7.1}Anwendungsbeispiele}{45}{section.7.1}
+\contentsline {section}{\numberline {7.2}Benchmarks}{45}{section.7.2}
+\contentsline {section}{\numberline {7.3}Tests}{45}{section.7.3}
+\contentsline {chapter}{\numberline {8}Weitere Verfahren}{46}{chapter.8}
+\contentsline {section}{\numberline {8.1}Depth Map mit Dual Camera}{46}{section.8.1}
+\contentsline {section}{\numberline {8.2}3-D Rekonstruktion}{46}{section.8.2}
+\contentsline {chapter}{\numberline {9}Zusammenfassung und Ausblick}{47}{chapter.9}
+\contentsline {chapter}{Literaturverzeichnis}{48}{section*.17}
+\contentsline {chapter}{Abbildungsverzeichnis}{54}{section*.19}

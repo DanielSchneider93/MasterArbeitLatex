@@ -185,12 +185,23 @@ Open Source &    x     &    x      &   x     &     \checkmark      &   x    &   
 
 Die Verwendung von SLAM im mobilen Bereich hat jedoch einige Probleme zu meistern. Durch die Ungenauigkeiten der absoluten Lokalisierung, ist es schwierig kontextsensitive Augmentation zu erzeugen. Auch wenn es möglich ist bekannte Objekte im Raum während des Trackings zu bestimmen, und die Information um diese herum zu zeigen, ist es fast unmöglich den gesamten Raum einer Szenerie zu bestimmen. Das zweite Problem liegt in der Ergonomie und Benutzbarkeit der Anwendung durch den Endbenutzer. Typischerweise soll ein Endverbraucher keinem komplexem Protokoll folgen müssen, um sich selbst in der Szene zu lokalisieren. Das System benötigt also eine Verfahren zur schnellen und robusten Lokalisierung im Raum. (vgl. \cite{slam_mobile} S.1)
 
-
-
 \url{https://hal.inria.fr/hal-00994756/document}
 \url{https://pdfs.semanticscholar.org/00f4/41387f04f40aad6491ce23bdeb0ece17d12e.pdf}
-
-
 file:///C:/Users/Daniel/Downloads/AIREVSLAMSurvey.pdf
 
 
+\section{Structure from Motion}
+
+Structure from Motion (SfM) ist ein Oberbegriff für die gleichzeitige Schätzung der Struktur einer dreidimensionalen Szene und der Kamerabewegung in dieser, aus mehreren überlappenden Bildern einer Szene (siehe Abbildung 4.5), unter dem verschiedene Verfahren zusammengefasst werden können. Die Rekonstruktion der 3D-Struktur der Originalobjekte aus diesen 2D-Bildsequenzen wird als SfM bezeichnet. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{sfm.png}
+	\caption{Structure from Motion: Überlappende Fotos zur Rekonstruktion der 3D Szene. Bildquelle \cite{sfm_photo}}
+\end{figure}  
+
+SfM hat in der Computer Vision Community große Beachtung gefunden. Kürzlich vorgestellte SfM haben erhebliche Fortschritte bei der bildbasierten Modellierung und Rendering gemacht. Die meisten Structure from Motion Systeme arbeiten sequentiell, beginnend mit einer kleinen Rekonstruktion und fügen dann schrittweise neue Kameras, durch die Pose Estimation und 3D Punkte durch Triangulation oder mit hierarchischen Verfahren, hinzu. Diese Ansätze erfordern zwischenzeitlich die Durchführung des Bündelblockausgleichs, sowie mehrere Iterationen der Ausreißerbeseitigung, um die Ausbreitung von Fehler zu minimieren, während die Rekonstruktion wächst. Für große Datensets ist dies sehr rechenintensiv. (vgl. \cite{sfm} S.1)
+
+Structure from Motion ist nicht nur in der Computer Vision vertreten, sondern hat auch in der Photogrammetrie bereits Anwendungsbereiche gefunden. In den letzten Jahrzehnten sind verschiedene Ansätze zur Lösung des SfM Problems entstanden, wie die \glqq Maximum likehood estimation\grqq{}, \glqq Kalman und Extended Kalman Filter\grqq{}, \glqq Particle Filter\grqq{} oder das \glqq Hidden Markov Model\grqq{}. (vgl. \cite{efficient_bundle} S.5)
+
+SfM unterscheidet sich von der herkömmlichen Photogrammetrie, indem die Geometrie der Szene, die Kameraposition und die Ausrichtung automatisch ohne die Kenntnis von a priori definierten 3D-Zielen berechnet werden kann. (vgl. \cite{sfm_photo} S.301)
