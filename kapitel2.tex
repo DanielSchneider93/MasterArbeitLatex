@@ -2,46 +2,49 @@
 
 \section{Einführung in die Photogrammetrie}
 
-Das Grundprinzip der Messung mit Kameras ist trivial. Licht breitet sich mit einer bestimmten Wellenlänge, in annähernd geraden Strahlen aus. Diese Strahlen werden vom Sensor der Kamera aufgenommen, sodass diese die Richtungen im dreidimensionalen Raum misst. Der grundlegende geometrische Zusammenhang der Photogrammetrie ist somit die Zentralprojektion, die sich mathematisch durch die Kollinearitätsgleichung beschreiben lässt. Ein dreidimensionaler Punkt in der echten Welt, sein Bild in der Kamera und das Projektionszentrum müssen alle auf einer geraden Linie liegen. (vgl. \cite{fiundations_pg} S.1) Das fundamentale photogrammetrische Problem besteht in der Bestimmung von internen und externen Ausrichtungsparametern der Kamera und der  Messung von Objekt und Raumkoordinaten der aufgenommenen Fotografien. 
+Das Grundprinzip der Messung mit Kameras ist auf die Messung von Licht zurückzuführen. Licht breitet sich mit einer bestimmten Wellenlänge, in annähernd geraden Strahlen aus. Diese Strahlen werden vom Sensor der Kamera aufgenommen, sodass diese die Richtungen im dreidimensionalen Raum misst, aus welchen die Lichtwellen kommen. Der grundlegende geometrische Zusammenhang der Photogrammetrie ist somit die Zentralprojektion, die sich mathematisch durch die Kollinearitätsgleichung beschreiben lässt. Ein dreidimensionaler Punkt in der echten Welt, sein Bild in der Kamera und das Projektionszentrum müssen alle auf einer geraden Linie liegen (vgl. \cite{fiundations_pg} S.1).
 
+Das fundamentale photogrammetrische Problem besteht in der Bestimmung von internen und externen Ausrichtungsparametern der Kamera und der  Messung von Objekt und Raumkoordinaten der aufgenommenen Fotografien. 
 
 \begin{itemize}
-\item \textbf{Interne Orientierung}: Bei der internen Orientierung werden Kameraparameter gemessen und ausgewertet. Dazu wird die \glqq principle distance\grqq{} (Brennweite) und der \glqq principle point\grqq{} (Optisches Zentrum) betrachtet.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.45]{pp.png}
-	\caption{Kamera Kalibierungsmodell, Bildquelle \cite{pp}}
-\end{figure} 
+\item \textbf{Interne Orientierung}: Bei der internen Orientierung werden Kameraparameter gemessen und ausgewertet. Dazu wird die \glqq principle distance\grqq{} (Brennweite) und der \glqq principle point\grqq{} (Optisches Zentrum) betrachtet (vgl. Abbildung 3.1).
 
 Weiterhin müssen Parameter, welche die Verzeichnung, also die nicht maßstabsgetreue Abbildung von Objekten, betrachtet werden. Diese Parameter, die beispielsweise in der Objektivkorrektur verwendet werden, müssen, um die interne Orientierung der Kamera genau abzubilden, mit in die Berechnung einfließen.
 
 \item \textbf{Externe Orientierung}: Bei der externen Orientierung wird versucht die genaue räumliche dreidimensionale Lage der Kamera zum Zeitpunkt der Belichtung des Bildes zu rekonstruieren. Für die Bestimmung der Orientierung von ein oder mehreren Fotos, können verschiedene Methoden verwendet werden. Dies kann in Teilschritten (relative und absolute Orientierung) oder gleichzeitig (Bündelblockausgleich) durchgeführt werden. 
 \end{itemize}
 
-In der Photogrammetrie werden häufig drei grundlegende Bedingungen verwendet, um die Parameter der externen Orientierung zu bestimmen. Dies sind die Bedingungen der Kollinearität, der Koplanarität und der Koangularität. Diese Verfahren verwenden alle Punktkoordinaten als Eingabedaten, aber in vielen Fällen sind auch räumliche oder kamerabedingte Einschränkungen möglich. In Bereich der Computer Vision wird die Bestimmung der externen Orientierung als \glqq pose estimation problem\grqq{} (Posenschätzungsproblem) bezeichnet. Im Vergleich zur Photogrammetrie ist dieser Bereich darauf fokussiert die Lösung der Posenschätzung unter der Verwendung von minimalen Objektinformationen zu erreichen. Direkte lineare Lösungen basieren hier hauptsächlich auf Konzepten der projektiven algebraischen Geometrie. Homogene Koordinaten werden verwendet um Kameraparameter abzuleiten, entsprechend der direkten linearen Transformation, welche häufig in der Photogrammetrie und in der Fernerkundung eingesetzt wird. (vgl. \cite{exterior_review} S.616)
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{pp.png}
+	\caption{Kamera Kalibierungsmodell, Bildquelle \cite{pp}}
+\end{figure} 
+
+In der Photogrammetrie werden häufig drei grundlegende Bedingungen verwendet, um die Parameter der externen Orientierung zu bestimmen. Dies sind die Bedingungen der Kollinearität, der Koplanarität und der Koangularität. Diese Verfahren verwenden alle Punktkoordinaten als Eingabedaten, aber in vielen Fällen sind auch räumliche oder kamerabedingte Einschränkungen möglich. In Bereich der Computer Vision wird die Bestimmung der externen Orientierung als \glqq Pose Estimation Problem\grqq{} (Posenschätzungsproblem) bezeichnet. Im Vergleich zur Photogrammetrie ist dieser Bereich darauf fokussiert die Lösung der Posenschätzung unter der Verwendung von minimalen Objektinformationen zu erreichen. Direkte lineare Lösungen basieren hier hauptsächlich auf Konzepten der projektiven algebraischen Geometrie. Homogene Koordinaten werden verwendet, um Kameraparameter abzuleiten, entsprechend der direkten linearen Transformation, welche häufig in der Photogrammetrie und in der Fernerkundung eingesetzt wird. (vgl. \cite{exterior_review} S.616)
 
 Die Grundsätzliche Pipeline um anhand von zweidimensionalen Bildern die internen und externen Kameraparameter, sowie die Lage der Bilder zueinander im dreidimensionalen Raum zu rekonstruieren kann wie in Abbildung 2.3 dargestellt, beschrieben werden.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{tracking_pipeline.png}
+	\includegraphics[scale=0.55]{tracking_pipeline.png}
 	\caption{Tracking Pipeline Bildquelle \cite{natural_feature}}
 \end{figure} 
 
-Die Schritte \glqq Keypoint detection\grqq{}, \glqq  Descriptor creator and matching\grqq{} sowie \glqq Outlier Removal\grqq{} werden in Kapitel 3.2, die \glqq Pose estimation and refinement\grqq{} in Kapitel 3.3 beschrieben.
+Die Schritte \glqq Keypoint detection\grqq{}, \glqq  Descriptor creator and matching\grqq{} sowie \glqq Outlier removal\grqq{} werden im folgenden Kapitel 3.2, die \glqq Pose estimation and refinement\grqq{} in Kapitel 3.3 beschrieben.
 
 
 \section{Feature \& Image Matching}
 
-Um verschiedene Bilder miteinander in Beziehung setzen zu können, müssen die Features einer dreidimensionalen Szene in den verschiedenen Bildern abgeglichen werden. Seit einigen Jahren sind \glqq Image Feature Detectors and Descriptors\grqq{} die am weitesten verbreiteten Techniken für diese Anwendungen. Zu dem Anwendungsbereich dieser Algorithmen zählen beispielsweise 3D-Rekonstruktion, Panoramaerstellung, Bildklassifizierung, Objekterkennung oder Roboterlokalisierung. Heute gibt es eine Vielzahl an verschiedenen Algorithmen, welche die Erkennung und Beschreibung von Features implementieren, um \glqq Regions of Interest\grqq{}, Ecken oder Kanten zu erhalten. (vgl. \cite{robust_feature} S.3) Weiterhin sollte zwischen \glqq Feature Detektors\grqq{} und \glqq Feature Descriptors\grqq{} unterschieden werden. Detektoren sind Operationen, welche zweidimensionale Positionen im Bild suchen (ein Bildpunkt oder eine Region), die unter verschiedenen Transformationen stabil sind und einen hohen Informationsgehalt enthalten. Die Ergebnisse werden als \glqq Interest Points\grqq{}, affine Regionen, invariante Regionen, oder Ecken bezeichnet. Deskriptoren hingegen analysieren das Bild und liefern für einen bestimmten \glqq Point of Interest\grqq{} im Bild einen 2D-Vektor mit Pixelinformationen. Diese Informationen sind dann Features, um diesen bestimmten Punkt im Bild zu klassifizieren und ihn mit anderen Features aus anderen Bildern zu vergleichen. (vgl. \cite{det_des} S.1)
+Um verschiedene Bilder miteinander in Beziehung setzen zu können, müssen die Features einer dreidimensionalen Szene in den verschiedenen Bildern abgeglichen werden. Seit einigen Jahren sind \glqq Image Feature Detectors and Descriptors\grqq{} die am weitesten verbreiteten Techniken für diese Anwendungen. Zu dem Anwendungsbereich dieser Algorithmen zählen beispielsweise 3D-Rekonstruktion, Panoramaerstellung, Bildklassifizierung, Objekterkennung oder Roboterlokalisierung. Heute gibt es eine Vielzahl an verschiedenen Algorithmen, welche die Erkennung und Beschreibung von Features implementieren, um \glqq Regions of Interest\grqq{}, Ecken oder Kanten zu erhalten (vgl. \cite{robust_feature} S.3).\\
+
+Dazu sollte zwischen \glqq Feature Detektors\grqq{} und \glqq Feature Descriptors\grqq{} unterschieden werden. Detektoren sind Operationen, welche zweidimensionale Positionen im Bild suchen (einen Bildpunkt oder eine Region), die unter verschiedenen Transformationen stabil sind und einen hohen Informationsgehalt enthalten. Die Ergebnisse werden als \glqq Interest Points\grqq{}, affine Regionen, invariante Regionen, oder Ecken bezeichnet. Deskriptoren hingegen analysieren das Bild und liefern für einen bestimmten \glqq Point of Interest\grqq{} im Bild einen 2D-Vektor mit Pixelinformationen. Diese Informationen sind dann Features, um diesen bestimmten Punkt im Bild zu klassifizieren und ihn mit anderen Features aus anderen Bildern zu vergleichen. (vgl. \cite{det_des} S.1)
 
 
 Die Eigenschaften eines guten Feature Matching Systems sind: 
 
 \begin{itemize}
 \item \textbf{Invarianz}: Unabhängig von geometrischen oder radiometrischen Verzerrungen (Drehung, Skalierung, Rotation)
-\item \textbf{Stabilität}: Rrobust gegen Bildrauschen
+\item \textbf{Stabilität}: Robust gegen Bildrauschen
 \item \textbf{Unterscheidbarkeit}: Klare Unterscheidbarkeit zum Hintergrund
 \item \textbf{Einzigartigkeit}: Jedes Feature ist zu jedem anderen einzigartig
 \end{itemize}
@@ -50,18 +53,14 @@ Das Merkmalserkennung und -anpassung wird in drei Schritte unterteilt \cite{robu
 
 \begin{itemize}
 \item[(1)] \textbf{Detektion}: Finden der Keypoints in jedem Bild.
-\item[(2)] \textbf{Beschreibung}: Im Idealfall sollte die lokale Umgebung um ein Feature immer invariant gegenüber Skalierung, Drehung, Rauschen, Änderung der Beleuchtung  oder affinen Transformationen sein. Die Merkmalsbeschreibungen für jeden Keypoint werden anhand seiner Nachbarschaft bestimmt. Zu jedem Keypoint wird ein \glqq descriptor vector\grqq{} (Beschreibungsvektor) berechnet.
+\item[(2)] \textbf{Beschreibung}: Im Idealfall sollte die lokale Umgebung um ein Feature immer invariant gegenüber Skalierung, Drehung, Rauschen, Änderung der Beleuchtung  oder affinen Transformationen sein. Die Merkmalsbeschreibungen für jeden Keypoint werden anhand seiner Nachbarschaft bestimmt. Zu jedem Keypoint wird ein \glqq Descriptor Vector\grqq{} (Beschreibungsvektor) berechnet.
 \item[(3)] \textbf{Matching}: Um ähnliche Merkmale zwischen verschiedenen Bildern zu identifizieren werden die Deskriptoren verglichen. Ist ein Feature in zwei Bildern enthalten, zeigen die Bilder das gleiche Objekt.
 \end{itemize}
 
-Die häufigsten Verwendeten Verfahren sind \glqq Scale Invariant Feature Transform\grqq{} (SIFT) (Lowe, 2004), \glqq Features from Accelerated Segment Test\grqq{} (FAST) (Rosten and Drummond, 2005), \glqq Speeded Up Robust Features\grqq{} (SURF) (Bay et al., 2006),\glqq Binary Robust Independent Elementary Features\grqq{} (BRIEF) (Calonder et al. 2010) oder \glqq Oriented FAST and Rotated BRIEF \grqq{} (ORB) (Rublee et al. 2011). Diese unterscheiden sich hauptsächlich durch die erkannten Features im Bild, die getrackt werden sollen, sowie dem erzeugtem Modell der Umgebung. (vgl. \cite{robust_feature} S.3, \cite{natural_feature} S.28-29)
-
-
-Die Erstellung und das Matching der Deskriptoren hängt von der Wahl des Deskriptorssystems ab.
+Die häufigsten verwendeten Verfahren sind \glqq Scale Invariant Feature Transform\grqq{} (SIFT) (Lowe, 2004), \glqq Features from Accelerated Segment Test\grqq{} (FAST) (Rosten and Drummond, 2005), \glqq Speeded Up Robust Features\grqq{} (SURF) (Bay et al., 2006), \glqq Binary Robust Independent Elementary Features\grqq{} (BRIEF) (Calonder et al. 2010) oder \glqq Oriented FAST and Rotated BRIEF\grqq{} (ORB) (Rublee et al. 2011). Diese unterscheiden sich hauptsächlich durch die erkannten Features im Bild, die getrackt werden sollen, sowie dem erzeugtem Modell der Umgebung (vgl. \cite{robust_feature} S.3, \cite{natural_feature} S.28-29). Im folgenden Abschnitt werden SIFT, FAST und BRIEF erläutert.
 
 \subsection{Scale Invariant Feature Transform} 
-
-Bei SIFT schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten und beschreibt anschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die Features werden in einem \glqq Differce of Gaussian\grqq{} (DoG) Skalenraum erfasst,  der die Differenz der \glqq Gaussian convolutions\grqq{} (Gaußschen Faltung) des Originalbilds repräsentiert (Abbildung 3.3-a).
+SIFT ist 1999 von D. Lowe vorgestellt worden (vgl. \cite{sift}). Bei SIFT schätzt der Algorithmus die dominante Orientierung des Keypoints mit Hilfe von Gradienten und beschreibt anschließend die Keypoints in Bezug zu den Gradienten der Umgebung. Die Features werden in einem \glqq Differce of Gaussian\grqq{} (DoG) Skalenraum erfasst,  der die Differenz der \glqq Gaussian convolutions\grqq{} (Gaußschen Faltung) des Originalbilds repräsentiert (Abbildung 3.3-a).
 
 \begin{figure}[H]
 	\centering
@@ -70,24 +69,24 @@ Bei SIFT schätzt der Algorithmus die dominante Orientierung des Keypoints mit H
 \end{figure}
 
 Jedem lokalem Maximum der DoG Funktion ist eine dominante Orientierung des radiometrischen Gradienten zugewiesen, um die Invarianz gegenüber Rotation zu gewährleisten (Abbildung 3.3-b).
-Schließlich wird jedem Keypoint ein Deskriptor zugeordnet, welcher die extrahierten Features, welche die Helligkeitsinvarianz in der Umgebung zum Keypoint beschreiben, als 128-dimensionalen Vektor zusammenfasst (Abbildung 3.3-c). Den Deskriptor kann man als 3D-Histogramm der Lage und Orientierung des Gradienten verstehen. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann gegen andere Bilder, auf Gemeinsamkeiten geprüft werden kann. Dies geschieht über die Auswertung des Mindestabstands zwischen zwei Deskriptoren. Dazu werden die Entferungen mithilfe des  Euklidischen Abstands oder des Mahalanobis-Abstands berechnet.  (vgl. \cite{natural_feature} S.28-29, \cite{det_des} S.3, \cite{old_new_feature} S.3) 
+Schließlich wird jedem Keypoint ein Deskriptor zugeordnet, der die extrahierten Features, welche die Helligkeitsinvarianz in der Umgebung zum Keypoint beschreiben, als 128-dimensionalen Vektor zusammenfasst (Abbildung 3.3-c). Den Deskriptor kann man als 3D-Histogramm der Lage und Orientierung des Gradienten verstehen. Die erkannten Deskriptoren werden in eine Datenbank gespeichert, in welcher dann gegen andere Bilder, auf Gemeinsamkeiten geprüft werden kann. Dies geschieht über die Auswertung des Mindestabstands zwischen zwei Deskriptoren. Dazu werden die Entferungen mithilfe des  Euklidischen Abstands oder des Mahalanobis-Abstands berechnet.  (vgl. \cite{natural_feature} S.28-29, \cite{det_des} S.3, \cite{old_new_feature} S.3) 
 
 \subsection{Features from Accelerated Segment Test}
-FAST hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller als SIFT. Wie in Abbildung 2.4 zu sehen ist, arbeitet FAST mit einem Segementtest mit einem Kreis von 16 Pixeln um einen Eckenkandidaten $p$. 
+FAST, das 2006 von E. Rosten und T. Drummond vorgestellt wurde, hat eine ähnliche Vorgehensweise, ist jedoch um ein vielfaches schneller als SIFT (vgl. \cite{fast} S.1). Wie in Abbildung 2.4 zu sehen ist, arbeitet FAST mit einem Segementtest mit einem Kreis von 16 Pixeln um einen Eckenkandidaten $p$. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{fast.png}
+	\includegraphics[scale=0.7]{fast.png}
 	\caption{12 Punkt Segment Test für die Eckenerkennung \cite{fast}}
 \end{figure}
 
-Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$ sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
+Der Detektor klassifiziert $p$ als Ecke, wenn es ein Set von $n$ zusammenhängenden Pixeln im Kreis gibt, die alle heller als der Kandidat $I_p$, addiert mit einem Grenzwert $t$, oder alle dunkler als $I_p - t$, sind. $n$ ist zwölf, da dies einen High Speed Test ermöglicht, mit dem eine große Anzahl an Nicht-Ecken schnell ausgeschlossen werden kann. Der Test untersucht nur die vier Pixel 1, 5, 9 und 13. Wenn $p$ eine Ecke ist, dann müssen mindestens drei der vier Pixel heller als $I_p + t$ oder dunkler als $I_p - t$  sein. Wenn dies nicht zutrifft, ist $p$ keine Ecke. (vgl. \cite{fast} S.4-5)
 
 \subsection{Binary Robust Independent Elementary Features}
+BRIEF wurde 2010 von M. Calonder et al vorgestellt \cite{brief}. Die Verwendung von BRIEF (Binary Robust Independent Elementary Features) Deskriptoren hat sich aus den steigenden Anforderungen an eine stärker einschränkende Arbeitsumgebung für rechenintensive Computer Vision basierte Systeme entwickelt. Ältere Methoden wie etwa SIFT oder SURF neigen dazu bei einem großen Set an Features viel Speicher zu benötigen. Der 128-dimensionale Vektor mit dem beispielsweise SIFT die Features beschreibt ist für Echtzeitanwendungen zu rechenintensiv. SURF etwa speichert die Histogramme der lokalen Gradienten als Gleitkommazahlen in einem 64-dimensionalen Vektor. Für Echtzeitanwendungen ist SURF jedoch ebenfalls zu teuer, da die Anzahl an zu speichernden Deskriptoren nicht gut skalierbar ist. BRIEF verwendet einen Ansatz, bei dem Bitvektoren aus Ausschnitten (Patches) des Bilds berechnet werden, nachdem diese geglättet wurden. Die Intensitätswerte der Pixel werden paarweise ausgewertet, um einzigartige oder gleiche Bits in jedem Bitvektor zu finden. 
 
-Die Verwendung von BRIEF (Binary Robust Independent Elementary Features) Deskriptoren hat sich  aus den steigenden Anforderungen an eine stärker einschränkende Arbeitsumgebung für rechenintensive Computer Vision basierte Systeme entwickelt. Ältere Methoden wie etwa SIFT oder SURF (Speeded Up Robust Features) neigen dazu bei einem großen Set an Features viel Speicher zu benötigen. Der 128-dimensionale Vektor mit dem beispielsweise SIFT die Features beschreibt ist für Echtzeitanwendungen zu rechenintensiv. SURF etwa speichert die Histogramme der lokalen Gradienten als Gleitkommazahlen in einem 64-dimensionalen Vektor. Für Echtzeitanwendungen ist SURF jedoch ebenfalls zu teuer, da die Anzahl an zu speichernden Deskriptoren nicht gut skalierbar ist. BRIEF verwendet einen Ansatz, bei dem Bitvektoren aus Ausschnitten (Patches) des Bilds berechnet werden, nachdem diese geglättet wurden. Die Intensitätswerte der Pixel werden paarweise ausgewertet, um einzigartige oder gleiche Bits in jedem Bitvektor zu finden. 
+Für jeden geglätteten Bildpunkt wird ein Test $\tau$ für den Patch $p$ durchgeführt (vgl. \cite{orb_slam} S.13-14 , \cite{brief} S.3):
 
-Für jeden geglätteten Bildpunkt wird ein Test $\tau$ für den Patch $p$ durchgeführt (vgl. \cite{brief} S.3, \cite{orb_slam} S.13-14):
 \begin{equation}
 \tau(p;x,y)= \biggl\{ \begin{array}{ll}
          1, \quad p(x)<p(y)\\
@@ -95,16 +94,19 @@ Für jeden geglätteten Bildpunkt wird ein Test $\tau$ für den Patch $p$ durchg
 \end{equation}
 
 Wobei $p(x)$ die Intensität des Pixels bei $x=(u,v)^T$ im zu untersuchenden geglätteten Bild Patch ist. Die Auswahl eines Sets an $n_d (x,y)$-Bildpatches, definiert eindeutig ein Set an Binären Tests. Der BRIEF Deskriptor wird als $n_d$ dimensionaler Bitstring definiert:
+
 \begin{equation}
 f_{n_d}(p):= \sum_{1\geq i \geq n_d} 2^{i-1} \tau (p;x_i,y_i)
 \end{equation}
 
-Die Metrik, um die Deskriptoren zu vergleichen, ist die Hamming-Distanz, welche die Unterschiedlichkeit zwischen zwei Zeichenketten, anhand der Auswertung der Anzahl verschiedener Zeichen für die gleichen Positionen in zwei Strings der selben Länge, beschreibt. (vgl. \cite{orb_slam} S.13-14)
+Die Metrik, um die Deskriptoren zu vergleichen, ist die Hamming-Distanz, welche die Unterschiedlichkeit zwischen zwei Zeichenketten, anhand der Auswertung der Anzahl verschiedener Zeichen für die gleichen Positionen in zwei Strings der selben Länge, beschreibt (vgl. \cite{orb_slam} S.13-14).
+
+BRIEF ist nicht nur schneller als andere vergleichbare Algorithmen, sondern erzielt auch höhere Erkennungsraten, solange die Invarianz gegenüber größeren Rotationen in der Ebene nicht erforderlich ist. Aus praktischer Sicht hilft die Verwendung von BRIEF dabei, die benötigte Rechenleistung für das Matching von Deskriptoren zu reduzieren, so dass auch Geräte mit sehr begrenzter Rechenleistung in Echtzeit den Algorithmus verwenden können (vgl. \cite{brief} S.13-14).
 
 
 \subsection{Outlier Removal}
 
-\glqq Outlier removal\grqq{} oder auch die Ausreißerbeseitigung besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
+\glqq Outlier Removal\grqq{} oder auch die Ausreißerbeseitigung, besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
 
 
 Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
@@ -143,11 +145,18 @@ h_33 = 1
 \end{equation}
 
 oder 
+
 \begin{equation}
 h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
 \end{equation}
 
-Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. (vgl. \cite{homography}) Die Resultate der Homographie werden als Ausgangspunkt für die \glqq Pose Estimation\grqq{} (Positionsschätzung) der Kamera verwendet.  Eric Marchand et al. \cite{natural_feature} beschreiben die Positionsschätzung als Problem, welches ursprünglich in der Photogrammetrie ihren Ursprung fand und als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen: \glqq given a set of correspondences between 3D features and their projections in the images plane, pose estimation consists in computing the position and orientation of the camera \grqq{}. Bei photogrammetrischen Verfahren wird die Positionsschätzung heute hauptsächlich mit dem Bündelblockausgleich durchgeführt, der alle Parameter gleichzeitig in mehreren Iterationsschritten anpasst.
+Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet (vgl. \cite{homography}). Die Resultate der Homographie werden als Ausgangspunkt für die Pose Estimation der Kamera verwendet. 
+
+\subsection{Pose Estimation}
+
+Der letzte Schritt in der Bestimmung der internen und externen Kameraparameter ist die Pose Estimation. Eric Marchand et al. (\cite{pose_estimation} S.2) beschreiben die Positionsschätzung als Problem, welches ursprünglich als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen: \glqq given a set of correspondences between 3D features and their projections in the images plane, pose estimation consists in computing the position and orientation of the camera\grqq{}. Bei photogrammetrischen Verfahren wird die Positionsschätzung heute hauptsächlich mit dem Bündelblockausgleich durchgeführt, der alle Parameter gleichzeitig in mehreren Iterationsschritten anpasst.
+
+TODO: https://hal.inria.fr/hal-01246370/document
 
 
 \section{Der Bündelblockausgleich}
