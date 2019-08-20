@@ -74,6 +74,7 @@ Das Erkennen der Umgebung und die Lokalisierung der Kamera (Camera Pose Estimati
 	\caption{Kamera Posenschätzung, anhand von Markern. Bildquelle \cite{pose}}
 \end{figure} 
 
+Bis Anfang der 2000er Jahre basierten fast alle visuell basierten Tracking- und Lokalisierungstechniken auf Markern. Dann sind Technologien wie Modellbasiertes Tracking und Tracking ganz ohne Marker entwickelt worden. Schließlich sind Keyframe basierte Systeme populär geworden, wie SLAM (Simultaneous Localization and Mapping), das als Weiterentwicklung aus SfM (Structure from Motion) hervorging (vgl. \cite{pose_estimation} S.1).
 
 Präzise und robuste Kamerapositionsdaten sind eine Grundvoraussetzung für eine Vielzahl von Anwendungen, wie dynamischer Szenenanalyse und Interpretation, 3D-Szenen Strukturerkennung oder Videodatenkompression. Augmented Reality Umgebungen sind ein komplexes Anwendungsgebiet der Kameralokalisierung, da ein eingeschränkter Arbeitsbereich, limitierte Rechenpower und spezifische Anwendungsfälle hohe Anforderungen an die Robustheit und Schnelligkeit der Algorithmen stellen. 
 Es existieren viele verschiedene Ansätze, um die Kameralokalisierung im Raum zu lösen. Das Problem wird als nichtlineares Problem betrachtet und wird meistens durch die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) oder  mit nichtlinearen Optimierungsalgorithmen gelöst, typischerweise durch das Gauß-Newton oder Levenberg-Marquardt Verfahren. (vgl. \cite{camera_pose} S.1) Im Folgenden werden die vier gängigsten Ansätze zur Lösung des Tracking Problems erläutert. 

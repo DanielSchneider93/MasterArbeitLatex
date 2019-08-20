@@ -1,64 +1,69 @@
 \chapter{Simultaneous Localisation and Mapping}
 
-Simultaneous Localisation and Mapping, kurz SLAM, ist das Problem der Auswertung einer unbekannten Umgebung und Erstellung einer Karte, während gleichzeitig die lokale Position innerhalb dieser Karte bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Dabei ist SLAM ein Alltagsproblem: Das Problem der räumlichen Erkundung. Jeder Mensch und jedes Tier hat dieses Verfahren gemeistert und benutzt es unterbewusst zur Navigation in unserer Realität. Wichtige Anwendungsbereiche von SLAM sind die automatische Fahrzeugsteuerung auf unbekannten Terrain, Rettungseinsätze in Umgebungen mit hohem Risiko, planetarische, terrestrische oder ozeanische Exploration, Augmented Reality Anwendungen, visuelle Überwachungssysteme oder in der Medizin.
-Die Lösung dieses Problems, wenn es für einen Roboter automatisiert ausgeführt werden soll, ist dagegen sehr komplex. Durch das Meistern dieser Technik kann man Roboter wirklich autonom steuern. Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben. (vgl. \cite{slam} S. 1-2, \cite{survey} S.56) 
+Simultaneous Localisation and Mapping, kurz SLAM, ist das Problem der Auswertung einer unbekannten Umgebung und Erstellung einer Karte, während gleichzeitig die lokale Position innerhalb dieser Karte bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Dabei ist SLAM ein Alltagsproblem: Das Problem der räumlichen Erkundung. Jeder Mensch und jedes Tier hat dieses Verfahren gemeistert und benutzt es unterbewusst zur Navigation in unserer Realität. Wichtige Anwendungsbereiche von SLAM sind die automatische Fahrzeugsteuerung auf unbekannten Terrain, Rettungseinsätze in Umgebungen mit hohem Risiko, planetarische, terrestrische oder ozeanische Exploration, Augmented Reality Anwendungen, visuelle Überwachungssysteme oder Anwendungen in der Medizin.
+Die Lösung dieses Problems, wenn es für einen Roboter oder für Smartphones automatisiert ausgeführt werden soll, ist dagegen sehr komplex. Durch das Meistern dieser Technik kann man beispielsweise Roboter oder Fahrzeuge wirklich autonom steuern. Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur Positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben (vgl. \cite{slam} S. 1-2, \cite{survey} S.56).
 
 Dabei benötigt man mindestens einen exterozeptiven Sensor um äußere Informationen zu sammeln.
-SLAM besteht aus drei grundlegenden Operationen, die iterativ pro Zeitintervall ausgeführt werden.
+SLAM besteht aus drei grundlegenden Operationen, die iterativ pro Zeitintervall ausgeführt werden ( vgl. \cite{ekf_slam} S.3):
 
-\textbf{Die Kamera bewegt sich} und erreicht eine neue Position in der Umwelt. Diese Bewegung erzeugt, durch unvermeidbares Rauschen und Fehler, Ungewissheit über die wirkliche absolute Position. Eine automatisierte Lösung benötigt ein mathematisches Modell für diese Bewegung. Dies ist das \glqq\textit{Motion Model}\grqq
+\textbf{Die Kamera bewegt sich} und erreicht eine neue Position in der Umwelt. Diese Bewegung erzeugt, durch unvermeidbares Rauschen und Fehler, Ungewissheit über die wirkliche absolute Position. Eine automatisierte Lösung benötigt ein mathematisches Modell für diese Bewegung. Dies ist das \glqq\textit{Motion Model}\grqq{}.
 
-\textbf{Neue Features werden in der Umgebung entdeckt}, welche in die Umgebungskarte aufgenommen werden müssen. Diese Features heißen \glqq Landmarks\grqq . Da die Position der Landmarks, durch Fehler in den exterozeptiven Sensoren genauso wie die aktuelle Position der Kamera ungewiss ist, müssen diese beiden Faktoren passend arrangiert und werden. Eine automatisierte Lösung benötigt ein mathematisches Modell, das die Position der Landmarks anhand er Sensordaten bestimmt. Dies ist das \glqq \textit{Inverse Oberservation Model} \grqq{}.
+\textbf{Neue Features werden in der Umgebung entdeckt}, welche in die Umgebungskarte aufgenommen werden müssen. Diese Features heißen \glqq Landmarks\grqq{}. Da die Position der Landmarks, durch Fehler in den exterozeptiven Sensoren, genauso wie die aktuelle Position der Kamera ungewiss ist, müssen diese beiden Faktoren passend arrangiert werden. Eine automatisierte Lösung benötigt ein mathematisches Modell, das die Position der Landmarks anhand er Sensordaten bestimmt. Dies ist das \glqq{}\textit{Inverse Oberservation Model}\grqq{}.
 
-\textbf{Schon gemappte Landmarks werden entdeckt} welche dann verwendet werden um die eigene Position, sowie die aller anderen Landmarks zu korrigieren. Diese Operation reduziert die Unsicherheit über den aktuellen Standort, sowie die der Landmarks. Die automatisierte Lösung erfordert ein mathemathisches Modell, um die Werte der Messungen aus den prognostizierten Positionen der Landmarks und der aktuellen Position der Kamera berechnet. Dies ist das \glqq \textit{Direct Observation Model} \grqq
+\textbf{Schon gemappte Landmarks werden entdeckt} welche dann verwendet werden um die eigene Position, sowie die aller anderen Landmarks zu korrigieren. Diese Operation reduziert die Unsicherheit über den aktuellen Standort, sowie die der Landmarks. Die automatisierte Lösung erfordert ein mathemathisches Modell, um die Werte der Messungen aus den prognostizierten Positionen der Landmarks und der aktuellen Position der Kamera berechnet. Dies ist das \glqq \textit{Direct Observation Model}\grqq
 
-Mit diesen drei Modellen ist es möglich eine automatisierte Lösung für SLAM zu entwerfen. Diese Lösung muss diese drei Modelle verbinden und alle Daten korrekt, organisiert und aktuell halten, sowie die korrekten Entscheidungen bei jedem Iterationsschritt machen. (vgl. \cite{ekf_slam} S.2-3)
-
-Eine erfolgreiche Lösung des SLAM Problems setzt weiterhin die Lösung des \glqq Loop Closure Detection\grqq Problems vorraus. Dabei müssen bereits besuchte Orte und Landmwarks in der beliebig großen Karte erkannt werden. Wegen der möglichen Komplexität von großen Maps ist dies auch eins der größten Hindernisse, wenn es um die Skalierbarkeit der Lösung des SLAM Problems geht. Wichtig ist, dass die Loop Closure Detection keine Falsch-Positiven Ergebnisse liefert, da dies die Integrität und Korrektheit der kompletten Karte beeinflussen würde. (vgl. \cite{ar_slam} S.4)
+Mit diesen drei Modellen ist es möglich eine automatisierte Lösung für SLAM zu entwerfen. Diese Lösung muss diese drei Modelle verbinden und alle Daten korrekt, organisiert und aktuell halten, sowie die korrekten Entscheidungen bei jedem Iterationsschritt machen (vgl. \cite{ekf_slam} S.2-3).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.35]{slam_problem.png}
+	\includegraphics[scale=0.5]{slam_problem.png}
 	\caption{Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite{slam}}
 \end{figure} 
 
-Wie in Abbildung 4.1. erkennbar ist, bewegt sich in diesem Beispiel ein Roboter durch eine unbekannte Umgebung und nimmt mit seinem Sensor Features der näheren Objekte (Landmarks) auf. Wobei $x_k$ der Vektor des Roboters,  $u_k$ der Bewegungsvektor, $m_i$ der Vektor des Landmarks und $z_ik$ die Oberservation eines Landmarks durch den Roboter zur Zeit $k$ sind. Wie man sehen kann, ist der Fehler zwischen echten und geschätzten Landmarks, bei allen geschätzten Landmarks ähnlich, was an der initialen Betrachtung der Umgebung liegt. Zu diesem Zeitpunk wird nur das erste Feature erkannt. Daraus kann man schließen, dass die Fehler in der Schätzung der Landmarkpositionen korrelieren. Praktisch bedeutet dies, dass die relative Position zweier Landmarks, $m_i - m_j$ zueinander sehr genau sein kann, auch wenn die absolute Position sehr ungenau ist. 
+Eine erfolgreiche Lösung des SLAM Problems setzt weiterhin die Lösung des \glqq Loop Closure Detection\grqq{} Problems vorraus. Dabei müssen bereits besuchte Orte und Landmarks in einer beliebig großen Karte erkannt werden. Wegen der möglichen Komplexität von großen Karten ist dies auch eins der größten Hindernisse, wenn es um die Skalierbarkeit der Lösung des SLAM Problems geht. Wichtig ist, dass die Loop Closure Detection keine Falsch-Positiven Ergebnisse liefert, da dies die Integrität und Korrektheit der kompletten Karte beeinflussen würde (vgl. \cite{ar_slam} S.4, siehe Kapitel 4.1).
 
-Je mehr Landmarks in das Modell aufgenommen werden, desto stetig besser wird das Modell der relativen Positionen, egal wie sich der Roboter bewegt. Dieser Prozess wird in Abbildung 3.2. veranschaulicht.
+Wie in Abbildung 4.1. erkennbar ist, bewegt sich in diesem Beispiel ein Roboter durch eine unbekannte Umgebung und nimmt mit seinem Sensor Features der näheren Objekte (Landmarks) auf. Wobei $x_k$ der Vektor des Roboters,  $u_k$ der Bewegungsvektor, $m_i$ der Vektor des Landmarks und $z_ik$ die Oberservation eines Landmarks durch den Roboter zur Zeit $k$ sind. Wie man sehen kann, ist der Fehler zwischen echten und geschätzten Landmarks, bei allen geschätzten Landmarks ähnlich, was an der initialen Betrachtung der Umgebung liegt. Zu diesem Zeitpunk wird nur das erste Feature erkannt. Daraus kann man schließen, dass die Fehler in der Schätzung der Landmarkpositionen korrelieren. Praktisch bedeutet dies, dass die relative Position zweier Landmarks, $m_i - m_j$ zueinander sehr genau sein kann, auch wenn die absolute Position sehr ungenau ist (vgl. \cite{slam} S.2).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{slam_springs.png}
+	\includegraphics[scale=0.6]{slam_springs.png}
 	\caption{Die Landmarks sind durch \glqq Federn\grqq{} verbunden, welche die Korrelation zwischen ihnen darstellen.  Bildquelle \cite{slam}}
 \end{figure}  
 
+
+Je mehr Landmarks in das Modell aufgenommen werden, desto stetig besser wird das Modell der relativen Positionen, egal wie sich der Roboter bewegt. Dieser Prozess wird in Abbildung 4.2. veranschaulicht.
+
 Während sich der Roboter durch die Umgebung bewegt, werden die Korrelationen stetig aktualisiert. Je mehr Beobachtungen über die Umwelt gemacht werden, desto steifer werden die Federn in diesem Modell. Im Nachhinein werden neue Beobachtungen von Landmarks durch das ganze Netzwerk propagiert und je nach Input, kleinere oder größere Anpassungen vorgenommen.
 
-\section{Loop closure detection}
+\section{Loop Closure Detection}
 
-Die \glqq Loop closure detection\grqq{} (Schleifenerkennung) besteht in der Erkennung von bereits besuchten Orten, nach der zyklischen Erkundung der Umwelt nach beliebiger Länge des Weges. Dies ist eins der größten Hindernisse um SLAM im großen Maßstab zu verwenden und der Vermeidung von kritischen Fehlern. Daraus ergibt sich ein weiteres Problem, das \glqq perceptual aliasing\grqq{} genannt wird und bei dem zwei verschiedene Orte aus der Umgebung als ein gleicher Ort erkannt werden. Dies stellt vor allem bei sich wiederholenden Features in der Umgebung, wie Fluren, ähnlichen architektonischen Elementen oder Zonen mit vielen Büschen oder Bäumen ein großes Problem dar. Eine gute Methode zur Schleifenerkennung darf keine falsch-positiven Ergebnisse und nur ein Minimum an falsch-negativen Ergebnissen liefern. Deshalb müssen alle Loop Closure Systeme auf eine Präzision von 100 \% abzielen. Dies wird benötigt, da ein einzelnes falsch-positives Ergebnis zu irreparablen Fehlern in der Erstellung der Karte führt. Falsch-negative hingegen reduzieren nur den Anteil der Rückrufquote, haben aber keinen Einfluss auf die Präzision der Genauigkeit der Karte. (vgl. \cite{survey} S.64-65)
+Die \glqq Loop Closure Detection\grqq{} (Schleifenerkennung) besteht in der Erkennung von bereits besuchten Orten, nach der zyklischen Erkundung der Umwelt und nach beliebiger Länge des Weges. Dies ist eins der größten Hindernisse um SLAM im großen Maßstab zu verwenden, da kritische Fehler vermieden werden müssen, die schon durch ein falsch-positives Ergebnis entstehen.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{loop.png}
-	\caption{ Lösung des SLAM Problems ohne (a) und mit (b) einem Loop closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die äußeren Punkte stellen die Features in der Karte dar. Bildquelle \cite{loop_closure}}
+	\includegraphics[scale=0.53]{loop.png}
+	\caption{ Lösung des SLAM Problems ohne (a) und mit (b) einem Loop Closure Algorithmus. Die innere Kurve ist der Pfad des mobilen Systems, die äußeren Punkte stellen die Features in der Karte dar. Bildquelle \cite{loop_closure}}
 \end{figure}  
 
-Algorithmen für die Schleifenerkennung lassen sich in drei Gruppen unterteilen (\cite{loop_closure} S.212):
+Es ergibt sich ein weiteres Problem, das \glqq Perceptual Aliasing\grqq{} genannt wird und bei dem zwei verschiedene Orte aus der Umgebung als ein gleicher Ort erkannt werden. Dies stellt vor allem, bei sich wiederholenden Features in der Umgebung, wie Fluren, ähnlichen architektonischen Elementen oder Zonen mit vielen Büschen oder Bäumen, ein großes Problem dar. Eine gute Methode zur Schleifenerkennung darf keine falsch-positiven Ergebnisse und nur ein Minimum an falsch-negativen Ergebnissen liefern. Deshalb müssen alle Loop Closure Systeme auf eine Präzision von 100 \% abzielen. Dies wird benötigt, da ein einzelnes falsch-positives Ergebnis zu irreparablen Fehlern in der Erstellung der Karte führt. Falsch-negative hingegen reduzieren nur den Anteil der Rückrufquote, haben aber keinen Einfluss auf die Präzision der Genauigkeit der Karte (vgl. \cite{survey} S.64-65).
+
+
+
+Algorithmen für die Schleifenerkennung lassen sich in drei Gruppen unterteilen (vgl. \cite{loop_closure} S.212):
 
 \begin{itemize}
-\item \textbf{map-to-map}: Die Schleifenerkennung erfolgt durch die Aufteilung der globalen Karte in Teilkarten und dem finden von Übereinstimmungen zwischen diesen Teilkarten.
+\item \textbf{map-to-map}: Die Schleifenerkennung erfolgt durch die Aufteilung der globalen Karte in Teilkarten und dem Finden von Übereinstimmungen zwischen diesen Teilkarten.
 
-\item \textbf{image-to-map}: Die Suche wird anhand von Übereinstimmungen zwischen Bild und Karte ermöglicht und die Position des Systems wird dann in Bezug zur Karte wieder hergestellt.
+\item \textbf{image-to-map}: Die Suche wird anhand von Übereinstimmungen zwischen Bild und Karte ermöglicht und die Position des Systems wird dann in Bezug zur Karte wiederhergestellt.
 
 \item \textbf{image-to-image}: Die Schleifenerkennung wird anhand von Bildfeatures zwischen verschiedenen Bildern durchgeführt.
 
 \end{itemize}
-Nach der Erkennung einer Schleife wird das globale Kartenmodell angepasst, um die gewonnenen Erkenntnisse in die Karte zu übernehmen. (vgl. \cite{loop_closure} S.213)
+Nach der Erkennung einer Schleife wird das globale Kartenmodell angepasst, um die gewonnenen Erkenntnisse in die Karte zu übernehmen (vgl. \cite{loop_closure} S.213).
 
 \section{Visual SLAM}
 
-Wenn Kameras als einziger exterozeptiver Sensor verwendet werden, spricht man von \glqq Visual SLAM \grqq{} oder \glqq Vision-Based SLAM\grqq{}. Viele visuelle SLAM Ansätze haben jedoch Probleme wenn sie unter folgenden Bedingungen eingesetzt werden:
+Wenn Kameras als einziger exterozeptiver Sensor verwendet werden, spricht man von \glqq Visual SLAM\grqq{} oder \glqq Vision-Based SLAM\grqq{}. Viele visuelle SLAM Ansätze haben jedoch Probleme wenn sie unter folgenden Bedingungen eingesetzt werden:
 
 \begin{itemize}
 \item In externen, dynamischen Umgebungen
@@ -68,17 +73,16 @@ Wenn Kameras als einziger exterozeptiver Sensor verwendet werden, spricht man vo
 \item Bei partieller oder großflächiger Verdeckung des Sensors
 \end{itemize}
 
-Ein Schlüsselelement von erfolgreichen SLAM Systemen ist die Fähigkeit trotz dieser Schwierigkeiten korrekt zu arbeiten. (vgl. \cite{survey} S.56)
+Ein Schlüsselelement von erfolgreichen SLAM Systemen ist die Fähigkeit trotz dieser Schwierigkeiten korrekt zu arbeiten (vgl. \cite{survey} S.56).
 
-Lösungen für das SLAM Problem benötigen eine angemessene Repräsentation für die Observierungen der Landmarks, welche eine konsistente und schnelle Berechnung ermöglichen. Die geläufigste Repräsentation besteht in der Form einer Zustandsraumdarstellung mit Gaußschen Rauschen, was zur Verwendung des \glqq Extended Kalman Filter\grqq{} (EKF) führt. (vgl. \cite{slam} S. 2-4) Weitere gängige Lösungen für das SLAM Problem sind \glqq Maximum Likelihood Techniques\grqq{}, \glqq Sparse Extended Information Filters\grqq{} (SEIFs) und \glqq Rao Blackwellized Particle Filters\grqq{} (RBPFs), \glqq FAST-SLAM\grqq{} und \glqq ORB-SLAM\grqq (vgl. \cite{rao} S. 2). Im folgenden wird der Extended Kalman Filter vorgestellt, der in vielen SLAM Systemen zum Einsatz gekommen ist, sowie seine Weiterentwicklungen FAST-SLAM und ORB-SLAM.
+Lösungen für das visuelle SLAM Problem benötigen eine angemessene Repräsentation für die Observierungen der Landmarks, welche eine konsistente und schnelle Berechnung ermöglichen. Die geläufigste Repräsentation besteht in der Form einer Zustandsraumdarstellung mit Gaußschen Rauschen, was zur Verwendung des \glqq Extended Kalman Filter\grqq{} (EKF) führt (vgl. \cite{slam} S. 2-4). Weitere gängige Lösungen für das SLAM Problem sind \glqq Maximum Likelihood Techniques\grqq{}, \glqq Sparse Extended Information Filters\grqq{} (SEIFs), \glqq Rao Blackwellized Particle Filters\grqq{} (RBPFs), \glqq FAST-SLAM\grqq{} und \glqq ORB-SLAM\grqq{} (vgl. \cite{rao} S. 2). Im folgenden wird der Extended Kalman Filter vorgestellt, der in vielen SLAM Systemen zum Einsatz gekommen ist, sowie seine Weiterentwicklungen FAST-SLAM und ORB-SLAM.
   
  
 
 \section{Extended Kalman Filter - SLAM}
-Eine der ersten Methoden zur Lösung des SLAM Problems war die Verwendung von EKF-SLAM, welches den Extendet Kalman Filter verwendet. Diese Methode wurde 1990 entwickelt (\cite{orb_slam} S.1).
-Der Kalman Filter ist eine Schätzfunktion für das \glqq linear-quadratic-problem\grqq , welches das Problem der Schätzung des augenblicklichen Zustands eines linearen dynamischen Systems, gestört durch weißes Rauschen, darstellt. Der Kalman Filter wird auch dazu benutzt um die mögliche Zukunft von dynamischen Systemen vorherzusagen, die von Menschen nicht kontrolliert werden können, wie zum Beispiel die Flugbahn von Himmelskörpern, oder der Kurs von gehandelten Rohstoffen. (vgl. \cite{ekf} S.1)
+Eine der ersten Methoden zur Lösung des SLAM Problems war die Verwendung von Extendet Kalman Filter SLAM, welche um 1990 entwickelt wurde (\cite{orb_slam} S.1). Der Kalman Filter ist eine Schätzfunktion für das \glqq Linear-Quadratic-Problem\grqq{}, welches das Problem der Schätzung des augenblicklichen Zustands eines linearen dynamischen Systems, gestört durch weißes Rauschen, darstellt. Der Kalman Filter wird auch dazu verwendet um die mögliche Zukunft von dynamischen Systemen vorherzusagen, die von Menschen nicht kontrolliert werden können, wie zum Beispiel die Flugbahn von Himmelskörpern, oder der Kurs von gehandelten Rohstoffen (vgl. \cite{ekf} S.1).
 
-Der Kalman Filter besteht aus drei Schritten. Zuerst wird eine Messung vorhergesagt, welche dann mit der realen Messung verglichen wird. Die resultierende Differenz wird mit der Varianz der Messung gewichtet, um daraus eine neue Schätzung des Zustands zu erhalten. (vgl. \cite{slam_studi} S.13) Der Kalman Filter lässt sich jedoch nur auf lineare Systeme anwenden. Der Extended Kalman Filter verwedet für die Vorhersage der Messungen und der Zustände hingegen nichtlineare Funktionen. (vgl. \cite{slam_studi} S.16-17) Beim Extended Kalman Filter - SLAM ist die Map ein großer Stapel an Vektor und Sensordaten, sowie Zuständen von Landmarks.
+Der Kalman Filter besteht aus drei Schritten. Zuerst wird eine Messung vorhergesagt, welche dann mit der realen Messung verglichen wird. Die resultierende Differenz wird mit der Varianz der Messung gewichtet, um daraus eine neue Schätzung des Zustands zu erhalten (vgl. \cite{slam_studi} S.13). Der Kalman Filter lässt sich jedoch nur auf lineare Systeme anwenden. Der Extended Kalman Filter verwedet für die Vorhersage der Messungen und der Zustände hingegen nicht-lineare Funktionen (vgl. \cite{slam_studi} S.16-17). Beim Extended Kalman Filter - SLAM ist die Map ein großer Stapel an Vektor und Sensordaten, sowie Zuständen von Landmarks.
 
 \begin{equation}
   x =  \begin{bmatrix}
@@ -93,8 +97,8 @@ Der Kalman Filter besteht aus drei Schritten. Zuerst wird eine Messung vorherges
      	\end{bmatrix}
 \end{equation}
 
-\( R\) ist der Zustand des Roboters und \( M = (L_1, ..., L_n)\)  ist das Set an Zuständen der Landmarks.
-Bei EKF wird die Map durch eine gaußsche Variable modelliert, die den Mittelwert und die Kovarianzmatrix des Zustandsvektors verwendet, die jeweils durch \(\overline{x}\) und \(P\) beschrieben werden. Das Ziel ist es die Map \{\(\overline{x}, P\)\} zu allen Zeiten auf dem aktuellsten Stand zu halten.
+\( R\) ist der Zustand des Sensors und \( M = (L_1, ..., L_n)\) ist ein Set an Zuständen der Landmarks.
+Beim Extended Kalman Filter wird die Karte durch eine gaußsche Variable modelliert, die den Mittelwert und die Kovarianzmatrix des Zustandsvektors verwendet, die jeweils durch \(\overline{x}\) und \(P\) beschrieben werden. Das Ziel ist es die Map \{\(\overline{x}, P\)\} zu allen Zeiten auf dem aktuellen Stand zu halten.
 
 
 \begin{equation}
@@ -125,44 +129,43 @@ Bei EKF wird die Map durch eine gaußsche Variable modelliert, die den Mittelwer
      	\end{bmatrix}
 \end{equation}
 
-Diese Map, die als stochastische Map bezeichnet wird, wird durch die Vorhersage- und Korrekturprozesse des EKF in Stand gehalten. Um eine echte Erkundung der Umgebung zu erreichen, wird der EKF Algorithmus mit einem extra Schritt der Landmark Erkennung und Initialisierung gestartet, bei dem neue Landmarks der Map hinzugefügt werden. Die Landmark Initialisierung erfolgt durch eine Umkehrung der Bewertungsfunktion und der Verwendung dieser und der Ableitungsmatrix, um die beobachteten Landmarks und die benötigten Co- und Crossvarianzen für den Rest der Map zu berechnen. Diese Beziehungen werden dann an den Zustandsvektor und die Kovarianzmatrix angehängt. (vgl. \cite{ekf_slam} S.6-7)
+Diese stochastische Karte, wird durch die Vorhersage- und Korrekturprozesse des EKF in Stand gehalten. Um eine echte Erkundung der Umgebung zu erreichen, wird der EKF Algorithmus mit einem zusätzlichen Schritt der Landmark Erkennung und Initialisierung gestartet, bei dem neue Landmarks zu der Karte hinzugefügt werden. Die Landmark Initialisierung erfolgt durch eine Umkehrung der Bewertungsfunktion und der Verwendung dieser und der Ableitungsmatrix, um die beobachteten Landmarks und die benötigten Co- und Crossvarianzen für den Rest der Karte zu berechnen. Diese Beziehungen werden dann an den Zustandsvektor und die Kovarianzmatrix angehängt(vgl. \cite{ekf_slam} S.6-7).
 
-Eine zentrale Einschränkung des EKF basierten SLAM Ansatzes ist die Komplexität der Berechnung. Sensor-Updates benötigen Zeit, quadratisch zur Anzahl der Landmarks \(K\), die zu berechnen sind. Diese Komplexität ergibt sich aus der Tatsache, dass die vom Kalman-Filter verwaltete Kovarianzmatrix \(O(K²)\) Elemente enthält, die alle aktualisiert werden müssen, auch wenn nur ein einzelnes Landmark beobachtet wurde. Diese Komplexität limitiert die Anzahl an Landmarks, die durch diesen Ansatz verarbeitet werden konnen, auf ein paar Hunderte, während natürliche Umgebungsmodelle häufig Millionen von Features enthalten. (vgl. \cite{ekf_problems} S.1)
+Eine zentrale Einschränkung des EKF basierten SLAM Ansatzes ist die Komplexität der Berechnung. Sensor-Updates benötigen Zeit, quadratisch zur Anzahl der Landmarks \(K\), die zu berechnen sind. Diese Komplexität ergibt sich aus der Tatsache, dass die vom Kalman-Filter verwaltete Kovarianzmatrix \(O(K²)\) Elemente enthält, die alle aktualisiert werden müssen, auch wenn nur ein einzelnes Landmark beobachtet wurde. Diese Komplexität limitiert die Anzahl an Landmarks, die durch diesen Ansatz verarbeitet werden konnen, auf ein paar Hundert, während natürliche Umgebungsmodelle häufig Millionen von Features enthalten (vgl. \cite{ekf_problems} S.1).
 
-\url{http://www.iri.upc.edu/people/jsola/JoanSola/objectes/curs_SLAM/SLAM2D/SLAM%20course.pdf}
 
 \section{FAST-SLAM}
-Eine SLAM Methode, die sich aus dem EKF-SLAM entwicklelt hat ist FAST-SLAM (\cite{orb_slam} S.1). FAST-SLAM (Features from Accelerated Segment Test SLAM 1.0) zerlegt das SLAM-Problem in ein Lokalisierungsproblem des Roboters und eine Reihe von Landmark Schatzungsproblemen, die auf der Schätzung der Roboterposition beruhen. Fast-SLAM verwendet einen modifizierten Partikelfilter zur Schätzung der \glqq A-posteriori-Wahrscheinlichkeit\grqq{}  für die Roboterposition. Partikelfilter sind vom Prinzip her ähnlich wie Kalman Filter. Diese werden auch zur Schätzung von Zuständen verwendet, können aber viele verschiedene mögliche Zustände betrachten. Diese Anzahl an Zuständen wird Partikel genannt. Jedes Partikel besitzt wiederum Kalman-Filter, welche die Positionen der Landmarks schätzen, abhängig von der Pfadschätzung. Eine naive Implementation dieser Idee führt zu einem Algorithmus, der \(O(MK)\) Zeit benötigt, wobei \(M\) die Anzahl an Partikeln im Partikel Filter und \( K\) die Anzahl an Landmarks ist. Mit der Verwendung einer Baumstruktur kann die Laufzeit von FastSLAM auf \(O(MlogK)\) reduziert werden, was diesen Algorithmus deutlich schneller als EKF basierte SLAM ALgortihmen macht. (vgl. \cite{ekf_problems} S.1-2, \cite{slam_studi} S.18-19)
+Eine SLAM Verfahren, welches sich aus EKF-SLAM entwicklelt hat ist FAST-SLAM (vgl. \cite{orb_slam} S.1). FAST-SLAM (Features from Accelerated Segment Test SLAM 1.0) zerlegt das SLAM-Problem in ein Lokalisierungsproblem des Roboters und eine Reihe von Landmark Schatzungsproblemen, die auf der Schätzung der Roboterposition beruhen. Fast-SLAM verwendet einen modifizierten Partikelfilter zur Schätzung der \glqq A posteriori\grqq{} Wahrscheinlichkeit für die Roboterposition. Partikelfilter sind vom Prinzip her ähnlich wie Kalman Filter. Diese werden auch zur Schätzung von Zuständen verwendet, können aber viele verschiedene mögliche Zustände betrachten. Diese Anzahl an Zuständen werden Partikel genannt. Jedes Partikel besitzt wiederum Kalman-Filter, welche die Positionen der Landmarks abhängig von der Pfadschätzung beurteilen.
 
-Bei Fast-SLAM werden nicht nur die unterschiedlichen geschätzten Positionen verwendet, sondern auch verschiedene Maps der Umgebung betrachtet. Da verschiedenste Maps mit verschieden Warscheinlichkeiten der geschätzten Positionen betrachtet werden, können Fehler in der Map, die sich durch falsche gemessene oder geschätzte Positionen ergeben, durch die Anzahl an verschieden Maps relativieren. Es können sich im Laufe der Zeit Maps, die vorher weniger wahrscheinliche Positionen hatten, als richtig herausstellen. (vgl.  \cite{slam_studi} S.23)
+Eine naive Implementation dieser Idee führt zu einem Algorithmus, der \(O(MK)\) Zeit benötigt, wobei \(M\) die Anzahl an Partikeln im Partikel Filter und \( K\) die Anzahl an Landmarks ist. Mit der Verwendung einer Baumstruktur kann die Laufzeit von FAST-SLAM auf \(O(MlogK)\) reduziert werden, was diesen Algorithmus deutlich schneller als EKF basierte SLAM Algortihmen macht (vgl. \cite{ekf_problems} S.1-2, \cite{slam_studi} S.18-19).
 
-Fast-SLAM 2.0 ist eine weiterentwickelte Variante von Fast-SLAM. Hierbei wird eine Vorauswahl getroffen, berechnet durch einen weiteren Kalman Filtern, in wie weit und mit welcher Varianz die Partikel um den Mittelpunkt verteilt werden. Es ergibt sich eine bessere Auswahl des Mittelpunktes und des Streuradius für den Partikelfilter als in Fast-SLAM 1.0. Diese Methodik reduziert die Anzahl an Partikel und generierten Maps, ist demnach auch schneller berechnet. (vgl. \cite{slam_studi} S.29-30)
+Bei Fast-SLAM werden nicht nur die unterschiedlichen geschätzten Positionen verwendet, sondern auch verschiedene Maps der Umgebung betrachtet. Da verschiedenste Maps mit verschieden Warscheinlichkeiten der geschätzten Positionen betrachtet werden, können Fehler in der Map, die sich durch falsche gemessene oder geschätzte Positionen ergeben, durch die Anzahl an verschieden Maps relativieren. Es können sich im Laufe der Zeit Maps, die vorher weniger wahrscheinliche Positionen hatten, als richtig herausstellen (vgl.  \cite{slam_studi} S.23).
+
+Fast-SLAM 2.0 ist eine weiterentwickelte Variante von Fast-SLAM. Hierbei wird eine Vorauswahl getroffen, berechnet durch einen weiteren Kalman Filter, in wie weit und mit welcher Varianz die Partikel um den Mittelpunkt verteilt werden. Es ergibt sich eine bessere Auswahl des Mittelpunktes und des Streuradius für den Partikelfilter als in Fast-SLAM 1.0. Diese Methode reduziert die Anzahl an Partikel und generierten Maps und ist demnach auch schneller berechnet (vgl. \cite{slam_studi} S.29-30).
 
 \section{ORB-SLAM}
 
-ORB-SLAM (Oriented FAST and Rotated BRIEF - SLAM) ist eine Weiterentwicklung und Kombination von den Feature Erkennugsalgorithmen FAST und BRIEF. ORB Deskriptoren sind sehr schnell berechnet und können sehr schnell verglichen werden, während sie gleichzeitig einen gute perspektivische Invarianz besitzen. (\cite{orbslam_og} S.3) Der erste Schritt von ORB-SLAM ist es ORB-Features aus dem Bild zu extrahieren. Dies geschieht durch das Finden von Ecken mit FAST und der anschließenden Erstellung eines Deskriptors mit BRIEF.
+ORB-SLAM (Oriented FAST and Rotated BRIEF - SLAM) ist eine Weiterentwicklung und Kombination von den Feature Erkennugsalgorithmen FAST und BRIEF. ORB Deskriptoren sind schnell berechnet und können sehr schnell verglichen werden, während sie gleichzeitig einen gute perspektivische Invarianz besitzen (vgl. \cite{orbslam_og} S.3). Der erste Schritt von ORB-SLAM besteht darin ORB-Features aus dem Bild zu extrahieren. Dies geschieht durch das Finden von Ecken mit FAST und der anschließenden Erstellung eines Deskriptors mit BRIEF.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{orb.png}
-	\caption{ORB-SLAM System Übersicht: Tracking, Mapping und Loop Closing. Bildquelle \cite{orbslam_og}}
+	\includegraphics[scale=0.6]{orb.png}
+	\caption{ORB-SLAM System Übersicht: Tracking, Mapping und Loop Closing. Bildquelle \cite{orbslam_og}.}
 \end{figure} 
 
 ORB-SLAM arbeitet mit verschiedenen Threads, um das Tracking, Mapping und Loop Closing parallel auszuführen. 
 
-Der \textbf{Tracking} Thread ist für die Lokalisierung der Kamera zuständig und entscheidet auch, welche Keyframes verwendet werden. Keyframes sind die Menge der ausgewählten Frames, die für die Erstellung der Map verwendet werden. Dabei wird mit einem \glqq Survival of the Fittest\grqq{} Ansatz gearbeitet, der die nützlichsten Keyframes findet. Die initiale Positionsschätzung wird durch das Feature Matching zwischen ausgewähltem und vorherigem Keyframe erreicht. Danach wird die aktuelle Position mithilfe eines Bewegungsmodells optimiert, um die korrespondierenden Map Points auf dem Keyframe vorherzusagen und die 3D-Rekonstruktion zu optimieren. Wenn das Tracking eines vorherigen Frames verloren geht, wird ein globaler Lokalisierungsalgorithmus verwendet, um ein neues Keyframe zu finden, dass dann wieder mit dem aktuellen Frame verglichen werden kann. Ein erfolgreicher Tracking Schritt resultiert in dem Finden einer Kamerapose und einem initalen Set an Features, aus denen dann eine lokale Karte berechnet werden kann. 
+Der \textbf{Tracking} Thread ist für die Lokalisierung der Kamera zuständig und entscheidet auch, welche Keyframes verwendet werden. Keyframes sind die Menge der ausgewählten Frames, die für die Erstellung der Map verwendet werden. Dabei wird mit einem \glqq Survival of the Fittest\grqq{} Ansatz gearbeitet, der die nützlichsten Keyframes findet. Die initiale Positionsschätzung wird durch das Feature Matching zwischen ausgewähltem und vorherigem Keyframe erreicht. Danach wird die aktuelle Position mithilfe eines Bewegungsmodells optimiert, um die korrespondierenden Map Points aus dem Keyframe vorherzusagen und die 3D-Rekonstruktion zu optimieren. Wenn das Tracking eines vorherigen Frames verloren geht, wird ein globaler Lokalisierungsalgorithmus verwendet, um ein neues Keyframe zu finden, dass dann wieder mit dem aktuellen Frame verglichen werden kann. Ein erfolgreicher Tracking Schritt resultiert in dem Finden einer Kamerapose und einem initalen Set an Features, aus denen dann eine lokale Karte berechnet werden kann. 
 
-Die \textbf{Map} wird aus den ermittelten Keyframes und den darin enthaltenen Map Points im zweiten Thread erstellt. Wenn ein Keyframe erfasst wird, wird es in einem Graphen abgelegt, der Keyframes als Nodes und die gemeinsam beobachteten Map Points in den verschiedenen Keyframes als Verbindungen zwischen den Nodes modelliert. Die Gewichtung der Kanten ist die Anzahl der Map Points, die auf beiden Keyframes observiert wurden. Um eine unbeschränktes Wachstum des Graphen zu vermeiden werden Keyframes aussortiert, die im Vergleich zu anderen Keyframes zu ähnlich sind. Map Points werden ebenfalls aussortiert, wenn sie gleichzeitig von zu wenigen Keyframes erfasst werden. Auf diese Weise können Keyframes sehr großzügig in den Graphen eingefügt werden und bei Redundanz wieder entfernt werden.
+Die \textbf{Map} wird aus den ermittelten Keyframes und den darin enthaltenen Map Points im zweiten Thread erstellt. Wenn ein Keyframe erfasst wird, wird es in einem Graphen abgelegt, der Keyframes als Nodes und die gemeinsam beobachteten Map Points, in den verschiedenen Keyframes, als Verbindungen zwischen den Nodes modelliert. Die Gewichtung der Kanten ist die Anzahl der Map Points, die auf beiden Keyframes observiert wurden. Um eine unbeschränktes Wachstum des Graphen zu vermeiden werden Keyframes aussortiert, die im Vergleich zu anderen Keyframes zu ähnlich sind. Map Points werden ebenfalls aussortiert, wenn sie von zu wenigen Keyframes gleichzeitig erfasst werden. Auf diese Weise können Keyframes sehr großzügig in den Graphen eingefügt und bei Redundanz wieder entfernt werden.
 
-Das \textbf{Loop Closing} wird vom dritten Thread ausgeführt. Wenn erkannt wird, dass ein bestimmter Ort schon einmal besucht wurde, kann dann der Drift, der sich beim Durchlaufen der Schleife angesammelt hat korrigiert werden. Bei ORB-SLAM wird die Schleifenerkennung beim Einfügen jedes Keyframes in den Graphen vorgenommen. Dazu wird die Ähnlichkeit zwischen den Keyframes betrachtet, indem ein Ähnlichkeitswert zwischen den Keyframes, mithilfe der Repräsentation des \glqq Bag-of-words\grqq{} Modells, berechnet wird. Wenn ein Keyframe mehr Ähnlichkeiten mit einem neu eingefügten Keyframe aufweist, als seine Nachbarn im Graphen, ist es ein Kandidat für die Loop Closure. Wenn drei miteinander verbundene Kandidaten gefunden wurden, gilt der Loop als akzeptiert und die Schleife wird geschlossen. Abschließend wird der Graph aktualisiert. (vgl. \cite{orbslam_og} S.6-8, \cite{orb_slam} S.4-5)
+Das \textbf{Loop Closing} wird vom dritten Thread ausgeführt. Wenn erkannt wird, dass ein bestimmter Ort schon einmal besucht wurde, kann dann der Drift, der sich beim Durchlaufen der Schleife angesammelt hat, korrigiert werden. Bei ORB-SLAM wird die Schleifenerkennung beim Einfügen jedes Keyframes in den Graphen vorgenommen. Dazu wird die Ähnlichkeit zwischen den Keyframes betrachtet, indem ein Ähnlichkeitswert mithilfe der Repräsentation des \glqq Bag-of-Words\grqq{} Modells, berechnet wird. Wenn ein Keyframe mehr Ähnlichkeiten mit einem neu eingefügten Keyframe aufweist, als seine Nachbarn im Graphen, ist es ein Kandidat für die Schleifenschließung. Wenn drei miteinander verbundene Kandidaten gefunden wurden, gilt der Loop als akzeptiert und die Schleife wird geschlossen. Abschließend wird der Graph aktualisiert (vgl. \cite{orbslam_og} S.6-8, \cite{orb_slam} S.4-5).
 
-http://publications.lib.chalmers.se/records/fulltext/256291/256291.pdf
 
-ORB SLAM:
-https://arxiv.org/pdf/1502.00956.pdf
+\section{ORB-SLAM 2}
 
-ORB SLAM 2:
-https://arxiv.org/pdf/1610.06475.pdf
+(Evtl nicht mehr nötig)\\
+\url{https://arxiv.org/pdf/1610.06475.pdf}
 
 
 

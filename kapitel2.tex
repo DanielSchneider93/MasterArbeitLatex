@@ -101,15 +101,14 @@ f_{n_d}(p):= \sum_{1\geq i \geq n_d} 2^{i-1} \tau (p;x_i,y_i)
 
 Die Metrik, um die Deskriptoren zu vergleichen, ist die Hamming-Distanz, welche die Unterschiedlichkeit zwischen zwei Zeichenketten, anhand der Auswertung der Anzahl verschiedener Zeichen für die gleichen Positionen in zwei Strings der selben Länge, beschreibt (vgl. \cite{orb_slam} S.13-14).
 
-BRIEF ist nicht nur schneller als andere vergleichbare Algorithmen, sondern erzielt auch höhere Erkennungsraten, solange die Invarianz gegenüber größeren Rotationen in der Ebene nicht erforderlich ist. Aus praktischer Sicht hilft die Verwendung von BRIEF dabei, die benötigte Rechenleistung für das Matching von Deskriptoren zu reduzieren, so dass auch Geräte mit sehr begrenzter Rechenleistung in Echtzeit den Algorithmus verwenden können (vgl. \cite{brief} S.13-14).
+BRIEF ist nicht nur schneller als andere vergleichbare Algorithmen, sondern erzielt auch höhere Erkennungsraten, solange die Invarianz gegenüber größeren Rotationen in der Ebene nicht erforderlich ist. Aus praktischer Sicht hilft die Verwendung von BRIEF dabei, die benötigte Rechenleistung für das Matching von Deskriptoren zu reduzieren, so dass auch Geräte mit sehr begrenzter Rechenleistung in Echtzeit Feature und Image Matching verwenden können (vgl. \cite{brief} S.13-14).
 
 
 \subsection{Outlier Removal}
 
-\glqq Outlier Removal\grqq{} oder auch die Ausreißerbeseitigung, besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests. (vgl. \cite{natural_feature} S.28-29) 
+\glqq Outlier Removal\grqq{} oder auch die Ausreißerbeseitigung, besteht aus einer Reihe von Techniken zur Entfernung von unerwünschten, falsch erkannten oder fehlerhaften Keypoints, beginnend mit günstigen Methoden (einfache geometrische Tests) und abschließend mit teuren, homographie basierten Tests (vgl. \cite{natural_feature} S.28-29).
 
-
-Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen. Betrachtet man das erst Set and korrespondierender Punkte, $(x,y)$ im ersten Bild und $(x',y')$ im zweiten. Dann bildet die Homographie $H$ diese wie folgt ab.
+Die planare Homographie bezieht sich auf die dreidimensionale Lage zwischen zwei Bildebenen zueinander im Raum. Betrachtet man ein Set an korrespondierenden Punkten $(x,y)$ im ersten Bild und ein Set $(x',y')$ im zweiten Bild. Dann bildet die Homographie $H$ die Lage dieser beiden Ebenen zueinander wie folgt ab:
 
 \begin{equation}
   s  
@@ -150,29 +149,29 @@ oder
 h²_{11} + h²_{12} + h²_{13} + h²_{21} + h²_{22} + h²_{23} + h²_{31} + h²_{32} + h²_{33} = 1
 \end{equation}
 
-Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet (vgl. \cite{homography}). Die Resultate der Homographie werden als Ausgangspunkt für die Pose Estimation der Kamera verwendet. 
+Anhand dieser planaren Homographie, kann überprüft werden, ob zwei Keypoints, die in zwei Bildern erkannt worden sind und durch die Deskriptoren beschrieben wurden, wirklich aus geometrischer Sicht übereinstimmen. Sind Abweichungen zwischen den zwei Keypoints zu groß, werden diese als Ausreißer deklariert und anschließend entfernt oder korrigiert. 
+
+Homographie wird in vielen Anwendungsbereichen, wie Panoramaerstellung, Bildausrichtung, perspektivischer Entzerrung oder für die Schätzung der Kameraposition in Augmented Reality verwendet. Das Resultat der Ausreißerbeseitigung ist dann eine Reihe an korrekter Keypoints, die sowohl aus Sicht der Deskriptoren sowie aus geometrischer Sicht übereinstimmen und welche dann als Ausgangspunkt für die Pose Estimation der Kamera verwendet werden können (vgl. \cite{homography}). 
 
 \subsection{Pose Estimation}
 
-Der letzte Schritt in der Bestimmung der internen und externen Kameraparameter ist die Pose Estimation. Eric Marchand et al. (\cite{pose_estimation} S.2) beschreiben die Positionsschätzung als Problem, welches ursprünglich als \glqq Space Resection\grqq{} bekannt ist. Sie definieren sie folgendermaßen: \glqq given a set of correspondences between 3D features and their projections in the images plane, pose estimation consists in computing the position and orientation of the camera\grqq{}. Bei photogrammetrischen Verfahren wird die Positionsschätzung heute hauptsächlich mit dem Bündelblockausgleich durchgeführt, der alle Parameter gleichzeitig in mehreren Iterationsschritten anpasst.
-
-TODO: https://hal.inria.fr/hal-01246370/document
+Der letzte Schritt in der Pipeline der Bestimmung der internen und externen Kameraparameter ist die Pose Estimation. Eric Marchand et al. (\cite{pose_estimation} S.2) beschreiben die Positionsschätzung als Problem, welches ursprünglich als \glqq Space Resection\grqq{} bekannt ist und seinen Ursprung in der Photogrammetrie fand. Sie definieren sie folgendermaßen: \glqq given a set of correspondences between 3D features and their projections in the images plane, pose estimation consists in computing the position and orientation of the camera\grqq{}. Es gibt eine Vielzahl an Verfahren zur Lösung dieses inversen Problems, in Kapitel 4 werden Lösungen aus der Computer Vision vorgestellt. Bei photogrammetrischen Verfahren wird die Positionsschätzung heute hauptsächlich mit dem Bündelblockausgleich durchgeführt, der alle Parameter gleichzeitig in mehreren Iterationsschritten anpasst.
 
 
 \section{Der Bündelblockausgleich}
 
-Das Verfahren des Bündelblockausgeleichs, verwendet nun die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq least square\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert (Siehe Abbildung 3.5). Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera für jedes einzelne Foto. Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. (vgl. \cite{comparative_conditions_study} S.66-67)
+Das Verfahren des Bündelblockausgeleichs, verwendet die Methoden der \glqq collinearity condition \grqq{} (Kollinearitätsbedingung), der \glqq coplanarity condition\grqq{} (Koplanaritätsbedingung) oder die Methode der direkten linearen Transformation. (vgl. \cite{comparative_conditions_study} S.66, \cite{coll_exterior} S.1)
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{bundle.png}
+	\includegraphics[scale=0.55]{bundle.png}
 	\caption{Visualisierung des Bündelblockausgleichs. Bildquelle \cite{efficient_bundle}}
 \end{figure}
 
-Khalid El-AShmawy \cite{comparative_conditions_study} beschreibt die Verwendung von Strahlenbündel, die durch Fotos generiert werden, als zweifelsfrei den flexibelsten Ansatz zur Blockbildung, Blockanpassung und für Photogrammetrie im Allgemeinen und mit den besten Ergebnissen. In der Nahbereichsphotogrammetrie, bei der mehrstufige und konvergente Konfigurationen möglich sind, ist der Bündelansatz in seiner stärksten Form vertreten. 
-Der Ausgleich der Strahlenbündel in einem Set an Fotos beinhaltet die Rotation und Translation von jedem Bündel im Raum in eine Position, in der alle Strahlen sich an der korrekten Position im Objektraum schneiden. (vgl. \cite{comparative_conditions_study} S.66)
+Die gewünschten Parameter aller Fotos werden gleichzeitig durch eine iterative Wiederholung der \glqq Least Squares\grqq{} Methode (Methode der kleinsten Quadrate) angepasst und korrigiert. 
+Die Iterationen sind durch die nicht-Linearität der Konditionsgleichungen notwendig. Die Resulate des Bündelblockausgleichs aller Fotos sind dann die Ergebnisse der externen Orientierung der Kamera, für jedes einzelne Foto (Siehe Abbildung 3.5). Weiterhin ergibt sich eine Auflistung der Objektraumkoordinaten der gemessenen Punkte aller Fotos, sowie deren gemessene statische Genauigkeit. 
 
-Im Allgemeinen besteht ein Bündelblockausgleichsproblem aus den folgenden neun Elementen \cite{bundle_adjustment}:
+El-AShmawy \cite{comparative_conditions_study} beschreibt die Verwendung von Strahlenbündel, die durch Fotos generiert werden, als zweifelsfrei den flexibelsten Ansatz zur Blockbildung, Blockanpassung und für Photogrammetrie im Allgemeinen. In der Nahbereichsphotogrammetrie, bei der mehrstufige und konvergente Konfigurationen möglich sind, ist der Bündelansatz in seiner stärksten Form vertreten. Die Nahbereichsphotogrammetrie befasst sich beispielsweise mit der Erstellung von 3D-Modellen aus Bildersets oder Laserscandaten. Der Ausgleich der Strahlenbündel in einem Set an Fotos beinhaltet die Rotation und Translation von jedem Bündel im Raum in eine Position, in der sich alle Strahlen an der korrekten Position im Objektraum schneiden (vgl. \cite{comparative_conditions_study} S.66-67). Im Allgemeinen besteht ein Bündelblockausgleichsproblem aus den folgenden neun Elementen (\cite{bundle_adjustment} S.1-2):
 
 \begin{itemize}
 \item[(1)] Ein Projektionsmodell, welches die Projektion von 3D-Objektpunkte in 2D-Bildpunkte beschreibt. Dazu gehören innere, sowie äußere Orientierung.
@@ -195,14 +194,14 @@ Im Allgemeinen besteht ein Bündelblockausgleichsproblem aus den folgenden neun 
 
 \end{itemize}
 
-In den folgenden Abschnitten wird sich hauptsächlich auf Schritt (7) bezogen, dem Finden der optimalen Parameterwerte anhand der initialen Daten.
+In den folgenden Abschnitten wird sich hauptsächlich auf Schritt (7) bezogen, dem Finden der optimalen Parameterwerte anhand der initialen Daten. Anschließend werden die Verfahren der Kollinearitätsbedingung, der Koplanaritätsbedingung und die Methode der direkten linearen Transformation vorgestellt. 
 
 \section{Nicht-lineare Methode der kleinsten Quadrate}
 Die \glqq Method of Least Squares\grqq{} (Methode der kleinsten Quadrate) ist eine sehr leistungsfähige und flexible Technik, um alle Arten von Datenabgleichsproblemen zu lösen. Das Verfahren wird eingesetzt, um eine parametrisierbare Funktion an ein Datenset von Messwerten anzupassen, durch Minimierung der Summe des quadratischen Fehlers zwischen Funktion und Datenpunkten. Die verschiedenen Werkzeuge dieser Methode können auch eingesetzt werden, um beispielsweise die Korrelationsqualität der Messdaten zu bewerten. Gleichzeitig ermöglicht das System die Stabilisierung und Verbesserung der Korrelation, durch die Berücksichtigung geometrischer Randbedingungen. Wenn die anzupassende Funktion nicht linear ist, ist das Problem der kleinsten Quadrate ebenfalls nicht linear. Nichtlineare Lösungen der Methode der kleinsten Quadrate reduzieren iterativ die Summe der quadratischen Fehler zwischen Funktion und Messwerten, durch eine Abfolge von Aktualisierungen der Parameterwerte. (vgl. \cite{least_quares} S.1, \cite{lev_mar} S.1)
 
 In den folgenden Abschnitten werden verschiedene Methoden zur Bestimmung der externen Kameraparameter während des Bündelblockausgleichs vorgestellt. Die Methode der kleinsten Quadrate ist dabei essentiell für die Anwendbarkeit dieser Algorithmen, weswegen diese sowie das Gauss-Newton und das Levenberg-Marquardt Verfahren vorgestellt wird. 
 
-Die nicht lineare Methode der kleinsten Quadrate ist ein Standardoptimierungsproblem und wird definiert als \cite{nonlinear_1} :
+Die nicht lineare Methode der kleinsten Quadrate ist ein Standardoptimierungsproblem und wird definiert als (\cite{nonlinear_1} S.2) :
 
 \begin{equation}
 minimiere: \sum_{i=1}^m f_i(x)^2 =  ||f(x)||^2
@@ -220,7 +219,7 @@ f_1(x)\\ f_2(x)\\ \cdots \\ f_m(x)
 \end{bmatrix}
 \end{equation} 
 
-Das \textbf{Kameramodell} wird beschrieben durch die Parameter: $A \in  \textbf{R}^{2\times 3}, b \in \textbf{R}^2, c \in  \textbf{R}^3, d \in \textbf{R}$ welche die Position und Orientierung charakterisieren. Ein Objekt an Position $x \in \textbf{R}^3 $ erzeugt ein Bild an der Position $x^\prime \in \textbf{R}^2$ auf der Bildebene.
+Das \textbf{Kameramodell} wird beschrieben durch die Parameter (\cite{nonlinear_1} S.5-6): $A \in  \textbf{R}^{2\times 3}, b \in \textbf{R}^2, c \in  \textbf{R}^3, d \in \textbf{R}$ welche die Position und Orientierung charakterisieren. Ein Objekt an Position $x \in \textbf{R}^3 $ erzeugt ein Bild an der Position $x^\prime \in \textbf{R}^2$ auf der Bildebene.
 
 \begin{equation}
 x \prime = \frac{1}{c^Tx+d} (Ax +b )
@@ -232,7 +231,7 @@ $c^Tx+d >0$, wenn das Objekt vor der Kamera ist. Angenommen ein Objekt an Positi
 y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i
 \end{equation}
 
-Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dreidimensionale Position $e_{ex}$ von den $l$ Beobachtungen $y_1,...,y_l$ zu schätzen. Dies kann nun mit der nicht-linearen Methode der kleinsten Quadrate berechnet werden. $\hat x$ wird durch die Minimierung von (3.5) berechnet. (vgl. \cite{nonlinear_1} S.5-6)
+Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dreidimensionale Position $e_{ex}$ von den $l$ Beobachtungen $y_1,...,y_l$ zu schätzen. Dies kann nun mit der nicht-linearen Methode der kleinsten Quadrate berechnet werden. $\hat x$ wird durch die Minimierung von (3.9) berechnet. (vgl. \cite{nonlinear_1} S.5-6)
 
 \begin{equation}
 \sum_{i=1}^l || y_i = \frac{1}{c_i^T x_{ex}+d_i}(A_i x_{ex} + b_i) + v_i||²
@@ -240,7 +239,7 @@ Wobei $v_i$ der Mess- oder Quantisierungsfehler ist. Das Ziel ist es nun die dre
 
 \subsection{Gauß-Newton-Verfahren}
 
-Das Gauß-Newton Verfahren ist eine Technik zur Lösung der nicht linearen Methode der kleinsten Quadrate. Das Verfahren besteht aus einer Folge von linearen Annäherungen der kleinsten Quadrate an das nicht lineare Problem, bei dem jedes einzelne durch einen direkten oder iterativen Prozess gelöst wird. (vgl. \cite{approx_gn} S.1) Gegeben ist die Definition der Problemstellung der kleinsten Quadrate, siehe (3.1). Beginnend mit einer anfänglichen Schätzung $x^{(1)}$, werden weitere Näherungslösungen $k = 1,2,...$ berechnet (vgl. \cite{nonlinear_1} S.16-17).
+Das Gauß-Newton Verfahren ist eine Technik zur Lösung der nicht linearen Methode der kleinsten Quadrate. Das Verfahren besteht aus einer Folge von linearen Annäherungen der kleinsten Quadrate an das nicht-lineare Problem, bei dem jedes einzelne durch einen direkten oder iterativen Prozess gelöst wird (vgl. \cite{approx_gn} S.1). Gegeben ist die Definition der Problemstellung der kleinsten Quadrate, siehe (3.6). Beginnend mit einer anfänglichen Schätzung $x^{(1)}$, werden weitere Näherungslösungen $k = 1,2,...$ berechnet (vgl. \cite{nonlinear_1} S.16-17):
 
 Dazu wird $f$ um $x^{(k)}$ linearisiert:
 
@@ -248,7 +247,8 @@ Dazu wird $f$ um $x^{(k)}$ linearisiert:
 \overline{f}(x;x^{(k)}) = f(x^{(k)})+Df(x^{(k)})(x-x^{(k)})
 \end{equation}
 
-Ersetze die affine Annäherung $ \overline{f}(x;x^{(k)})$ für $f$ im Problem der kleinsten Quadrate (3.1):
+Ersetze die affine Annäherung $ \overline{f}(x;x^{(k)})$ für $f$ im Problem der kleinsten Quadrate:
+
 \begin{equation}
 minimiere: ||\overline{f}(x;x^{(k)})||²
 \end{equation}
@@ -256,16 +256,19 @@ minimiere: ||\overline{f}(x;x^{(k)})||²
 Die Lösung dieses linearen Problems wird nun als $x^{(k+1)}$ verwendet. 
 
 Das Problem der kleinsten Quadrate ist in Wiederholung $k$ des Gauß-Newton Verfahrens gelöst:
+
 \begin{equation}
 minimiere: ||f(x^{(k)}) + Df(x^{(k)})(x-x^{(k)})||²
 \end{equation}
 
 Wenn $Df(x^{(k)}) $ linear unabhängige Spalten hat, wird die Lösung gegeben durch:
+
 \begin{equation}
 x^{k+1} = x^{(k)}-\Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})
 \end{equation}
 
 Der Gauß-Newton Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
+
 \begin{equation}
 \begin{aligned}
 \Delta x^{(k)} &= -\Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})\\ &= -\frac{1}{2} \Big(Df(x^{(k)})^TDf(x^{(k)})\Big)^{-1} \nabla g(x^{(k)})
@@ -274,14 +277,14 @@ Der Gauß-Newton Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
 
 Wobei $\nabla g(x)$ der Gradient der Kosten für nichtlineare kleinste Quadrate ist.
 
-Das Gauß-Newton Verfahren eignet sich besonders gut für die Verarbeitung von großen Datenmengen mit hoher Varianz. Im Vergleich zum normalen Newton-Verfahren ist der Algorithmus attraktiver, da er keine Auswertung der zweiten Ableitungen in der Hesse-Matrix der Zielfunktion benötigt. (vgl.\cite{approx_gn} S.1, \cite{nonlinear_1} S.16-17)
+Das Gauß-Newton Verfahren eignet sich besonders gut für die Verarbeitung von großen Datenmengen mit hoher Varianz. Im Vergleich zum normalen Newton-Verfahren ist der Algorithmus attraktiver, da er keine Auswertung der zweiten Ableitungen in der Hesse-Matrix der Zielfunktion benötigt. (vgl. \cite{approx_gn} S.1, \cite{nonlinear_1} S.16-17)
 
 
 \subsection{Levenberg-Marquardt Verfahren}
 
-Das Levenberg-Marquardt Verfahren wurde 1944 von Kenneth Levenberg \cite{levenberg} veröffentlicht, in den 1960er Jahren von Donald Marquardt wiederentdeckt und entwickelt um nicht lineare Probleme der kleinsten Quadrate zu lösen. Der Algorithmus kombiniert zwei Minimierungsmethoden: \glqq Gradient descent\grqq{} (Gradientenverfahren) und das Gauß-Newton Verfahren. Beim Gradientenverfahren wird die Summe der quadratischen Fehler durch die Aktualisierung der Parameter in Richtung der steilsten Richtung zum Minimum hin reduziert. Das Levenberg-Marquardt Verfahren verhält sich wie das Gradientenverfahren, wenn die Parameter weit von ihrem optimalen Wert entfernt sind und wie das Gauß-Newton Verfahren, wenn die Parameter nahe an ihrem optimalen Wert liegen. Es wechselt also adaptiv die Parameterupdates zwischen den beiden Verfahren. (vgl. \cite{lev_mar} S.1)
+Das Levenberg-Marquardt Verfahren wurde 1944 von Kenneth Levenberg \cite{levenberg} veröffentlicht, in den 1960er Jahren von Donald Marquardt wiederentdeckt und entwickelt um nicht lineare Probleme der kleinsten Quadrate zu lösen. Der Algorithmus kombiniert zwei Minimierungsmethoden: \glqq Gradient descent\grqq{} (Gradientenverfahren) und das Gauß-Newton Verfahren. Beim Gradientenverfahren wird die Summe der quadratischen Fehler durch die Aktualisierung der Parameter in Richtung der steilsten Richtung zum Minimum hin reduziert. Das Levenberg-Marquardt Verfahren verhält sich wie das Gradientenverfahren, wenn die Parameter weit von ihrem optimalen Wert entfernt sind und wie das Gauß-Newton Verfahren, wenn die Parameter nahe an ihrem optimalen Wert liegen. Es wechselt also adaptiv die Parameterupdates zwischen den beiden Verfahren (vgl. \cite{lev_mar} S.1).
 
-Der Algorithmus befasst sich mit zwei Problembereichen des Gauß-Newton Verfahrens:
+Der Algorithmus befasst sich mit zwei Problembereichen des Gauß-Newton Verfahrens (vgl. \cite{nonlinear_1} S.19):
 
 \begin{itemize}
 \item Wie aktualisiert man $x^{(k)}$, wenn die Spalten von $Df(x^{(k)})$ linear Abhängig sind.
@@ -292,23 +295,27 @@ Der Algorithmus befasst sich mit zwei Problembereichen des Gauß-Newton Verfahre
 Das Verfahren wird mathematisch wie folgt beschrieben:
 
 Berechnung von $x^{(k+1)}$ durch Lösung eines normalisierten Problems der kleinsten Quadrate:
+
 \begin{equation}
 minimiere: ||\overline{f}(x;x^{(k)})||² + \lambda^{(k)}||x-x^{(k)}||²
 \end{equation}
 
-$\overline{f}(x;x^{(k)})$ ist dabei wie in Gleichung 3.6 gegeben. Mit $\lambda^{(k)} > 0$ gibt es immer eine eindeutige Lösung.
+$\overline{f}(x;x^{(k)})$ ist dabei wie beim Gauß-Newton Verfahren in Gleichung (3.11) gegeben. Mit $\lambda^{(k)} > 0$ gibt es immer eine eindeutige Lösung.
 
 Das normalisierte Problem der kleinsten Quadrate wird in Iteration $k$ gelöst:
+
 \begin{equation}
 minimiere: ||f(x^{(k)}) + Df(x^{(k)})(x-x^{(k)})||² + \lambda^{(k)}||x-x^{(k)}|²
 \end{equation}
 
-Die Lösung ist gegeben durch:
+Die Lösung wird dann gegeben durch:
+
 \begin{equation}
 x^{(k+1)} = x^{(k)} -\Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})
 \end{equation}
 
 Der Levenberg-Marquardt Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
+
 \begin{equation}
 \begin{aligned}
 \Delta x^{(k)} &= -\Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} Df(x^{(k)})^T f(x^{(k)})\\ &= -\frac{1}{2} \Big(Df(x^{(k)})^TDf(x^{(k)})+\lambda^{(k)}I\Big)^{-1} \nabla g(x^{(k)})
@@ -316,23 +323,24 @@ Der Levenberg-Marquardt Schritt $\Delta x^{(k)} = x^{(k+1)} - x^{(k)}$ ist:
 \end{equation}
 
 Für $\lambda^{(k)}=0$ ist das der Gauß-Newton Schritt; für große $\lambda{(k)}$:
+
 \begin{equation}
 \Delta x^{(k)} \approx -\frac{1}{2}\lambda^{(k)}\nabla g(x^{(k)})
 \end{equation}
 
-Es gibt verschiedene Strategien um $\lambda^{(k)}$ anzupassen:
+Es gibt verschiedene Strategien um $\lambda^{(k)}$ anzupassen (vgl. \cite{nonlinear_1} S.19-21):
 
 \begin{itemize}
-\item Nach Iteration $k$, berechne Lösung $\hat{x}$ von Gleichung (3.11)
+\item Nach Iteration $k$, berechne die Lösung $\hat{x}$ von Gleichung (3.16).
 \item Wenn $||f(\hat{x})||²<||f(x^{(k)})||²$, verwende $x^{(k+1)} = \hat{x}$ und verringere $\lambda$
 \item Wenn $||f(\hat{x})||²>||f(x^{(k)})||²$, lasse $x$ gleich (verwende $x^{(k+1)} = x^{(k)}$), und erhöhe $\lambda$
 \end{itemize}
-(vgl. \cite{nonlinear_1} S.20-22)
 
+Das Levenberg-Marquardt Verfahren ist aufgrund seiner sehr einfachen Implementation und der Verwendung einer effektiven Dämpfungsstrategie, welche es ermöglicht aus einer Vielzahl an initialen Situationen schnell an das Optimum zu konvergieren, sehr beliebt. Es hat sich zu einer Standardtechnik für nicht-lineare Probleme der kleinsten Quadrate entwickelt, die in verschiedensten Disziplinen, zur Lösung von Datenanpassungsproblemen, weit verbreitet ist (vgl. \cite{lev_efficient} S.1).
 
 \subsection{Die Kollinearitätsbedingung}
 
-Die Bestimmung der externen Kameraparameter mit Hilfe der Kollinearitätsbedingung, um die gleichzeitige Anpassung der Parameter im Bündelblockausgleich zu berechnen, erfolgt durch die Aufstellung von zwei Gleichungen für jeden gemessenen Bildpunkt. Die Lösung all dieser Gleichungen erfolgt dann nach der Methode der kleinesten Quadrate. Die Bedingung der Kollinearität sagt aus, dass ein Objektpunkt $P$, sein Bildpunkt $p$ und das perspektivische Zentrum $O$, alle auf der gleichen Geraden liegen müssen. Mathematisch wird die Bedingung wie folgt ausgedrückt  \cite{coll_exterior}:
+Die Bestimmung der externen Kameraparameter mit Hilfe der Kollinearitätsbedingung, um die gleichzeitige Anpassung der Parameter im Bündelblockausgleich zu berechnen, erfolgt durch die Aufstellung von zwei Gleichungen für jeden gemessenen Bildpunkt. Die Lösung all dieser Gleichungen erfolgt dann nach der Methode der kleinesten Quadrate. Die Bedingung der Kollinearität sagt aus, dass ein Objektpunkt $P$, sein Bildpunkt $p$ und das perspektivische Zentrum $O$, alle auf der gleichen Geraden liegen müssen. Mathematisch wird die Bedingung wie folgt ausgedrückt (vgl. \cite{comparative_conditions_study} S.67):
 
 \begin{equation}
 \begin{aligned}
@@ -341,9 +349,7 @@ Die Bestimmung der externen Kameraparameter mit Hilfe der Kollinearitätsbedingu
 \end{aligned}
 \end{equation}
 
-Dabei sind $x_p$ und $y_p$ die korrigierten Foto Koordinaten, $X_p,Y_p,Z_p$ die Objektpunktkoordinaten von $P$, $X_O,Y_O,Z_O$ die Koordinaten des perspektivischen Zentrums $O$, $f$ die kalibrierte Brennweite der Kamera und $m_{ij}$ die Elemente der Orientierungsmatrix $M$ des Fotos.
-
-Die linearisierte Form der Gleichung, für die Lösung der Methode der kleinsten Quadrate, wird gegeben als (\cite{comparative_conditions_study} S.67):
+Dabei sind $x_p$ und $y_p$ die korrigierten Foto Koordinaten, $X_p,Y_p,Z_p$ die Objektpunktkoordinaten von $P$, $X_O,Y_O,Z_O$ die Koordinaten des perspektivischen Zentrums $O$, $f$ die kalibrierte Brennweite der Kamera und $m_{ij}$ die Elemente der Orientierungsmatrix $M$ des Fotos. Die linearisierte Form der Gleichung, für die Lösung der Methode der kleinsten Quadrate, wird gegeben als (vgl. \cite{comparative_conditions_study} S.67):
 
 \begin{equation}
 V+B\cdot\triangle =\varepsilon
@@ -351,16 +357,16 @@ V+B\cdot\triangle =\varepsilon
 
 Wobei:
 \begin{itemize}
-\item $\triangle$ der Korrekturvektor zu dem aktuellen Werteset, für die unbekannten Werte (innere und äußere Orientierung, Objektkoordinaten der Punkte) der iterativen Lösung ist.
+\item $\triangle$ der Korrekturvektor zum aktuellen Werteset, für die unbekannten Werte (innere und äußere Orientierung, Objektkoordinaten der Punkte) der iterativen Lösung ist.
 
-\item $B$ die Matrix der partiellen Ableitungen von Gleichung (3.1), in Bezug auf die Unbekannten  ist.
+\item $B$ die Matrix der partiellen Ableitungen von Gleichung (3.21), in Bezug auf die Unbekannten  ist.
 
 \item $V$ der Korrekturvektor zu den Beobachtungen ist.
 
 \item $\varepsilon$ der Abweichungsvektor ist.
 \end{itemize}
 
-El-Ashmawy \cite{comparative_conditions_study} schlägt weitere Beschränkungen vor, indem ergänzende Beobachtungsgleichungen berücksichtigt werden, die sich aus den a priori Kenntnissen der Raumkoordinaten der Objekte der Kontrollpunkte in Gleichung (3.2) ergeben. Solche zusätzlichen Gleichungen können wie folgt beschrieben werden:
+El-Ashmawy (vgl. \cite{comparative_conditions_study} S.68) schlägt weitere Beschränkungen vor, indem ergänzende Beobachtungsgleichungen berücksichtigt werden, die sich aus den a priori Kenntnissen der Raumkoordinaten der Objekte der Kontrollpunkte in Gleichung (3.22) ergeben. Solche zusätzlichen Gleichungen können wie folgt beschrieben werden:
 
 \begin{equation}
 V^c-\triangle^c = \varepsilon^c
@@ -375,12 +381,22 @@ Wobei:
 
 \end{itemize}
 
-Beobachtungsgleichungen können dann durch das Zusammenführen von Gleichung (3.2) und (3.3) erhalten werden. Die grundlegenden Voraussetzungen an den Bündelblockausgleich sind die Schätzungen der Parameter für innere und äußere Orientierung der Kamera. Weiterhin können die - je nach spezifischem Ansatz - Schätzungen für die Objekt und Raumkoordinaten aller Kontrollpunkte  nützlich sein. Deshalb sollte ein Bündelverfahren immer eine praktikable Methode enthalten, mit der die ungefähren geschätzten initialen Werte ermittelt werden können. Dieses Vorwissen sorgt nicht nur für eine reduzierte Anzahl an Iterationen, sondern resultiert auch in schnelleren und genaueren Ergebnissen. (vgl. \cite{comparative_conditions_study} S.67)
+Beobachtungsgleichungen können dann durch das Zusammenführen von Gleichung (3.22) und (3.23) erhalten werden. 
+
+Die grundlegenden Voraussetzungen an den Bündelblockausgleich sind die Schätzungen der Parameter für innere und äußere Orientierung der Kamera. Weiterhin können die - je nach spezifischem Ansatz - Schätzungen für Objekt und Raumkoordinaten aller Kontrollpunkte nützlich sein. Deshalb sollte ein Bündelverfahren immer eine praktikable Methode enthalten, mit der die ungefähren geschätzten initialen Werte ermittelt werden können. Dieses Vorwissen sorgt nicht nur für eine reduzierte Anzahl an Iterationen, sondern resultiert auch in schnelleren und genaueren Ergebnissen (vgl. \cite{comparative_conditions_study} S.67).
 
 
 \subsection{Die Koplanaritätsbedingung}
 
-Die Koplanaritätsbedingung ist ein weiteres Verfahren zur Lösung des Bündelblockausgleichs und impliziert, dass die beiden perspektivischen Zentren von zwei Aufnahmen, ein beliebiger Objektpunkt und die entsprechenden Bildpunkte auf den beiden Fotos, alle in einer gemeinsamen Ebene liegen müssen (vgl. Abbildung 3.2). Die Koplanaritätsbedingung kann wie folgt dargestellt werden (\cite{pose_est_epi} S.1204):
+Die Koplanaritätsbedingung ist ein weiteres Verfahren zur Lösung des Bündelblockausgleichs und impliziert, dass die beiden perspektivischen Zentren von zwei Aufnahmen, ein beliebiger Objektpunkt und die entsprechenden Bildpunkte auf den beiden Fotos, alle in einer gemeinsamen Ebene liegen müssen (vgl. Abbildung 3.6). 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{coplanarity.png}
+	\caption{Koplanaritätsbedinung, Bildquelle \cite{comparative_conditions_study}}
+\end{figure} 
+
+Die Koplanaritätsbedingung kann wie folgt dargestellt werden (vgl. \cite{comparative_conditions_study} S.68):
 
 \begin{equation}
 F_i = \begin{vmatrix}
@@ -391,16 +407,7 @@ X_2 & Y_2 & Z_2
 =0
 \end{equation}
 
-Dabei sind $b_X,b_Y,b_Z$ die Komponenten des Basisvektors $b$ und $X_1,Y_1,Z_1$ sowie $X_2,Y_2,Z_2$ sind die Komponenten des Vektors $\vec{R_1}$ (von $O_1$ zu $P$) respektive  $\vec{R_2}$ (von $O_2$ zu $P$).
-
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{coplanarity.png}
-	\caption{Koplanaritätsbedinung, Bildquelle \cite{comparative_conditions_study}}
-\end{figure} 
-
-Das mathematische Modell besteht aus vier skalaren Gleichungen:
+Dabei sind $b_X,b_Y,b_Z$ die Komponenten des Basisvektors $b$ und $X_1,Y_1,Z_1$ sowie $X_2,Y_2,Z_2$ sind die Komponenten des Vektors $\vec{R_1}$ (von $O_1$ zu $P$) beziehungsweise  $\vec{R_2}$ (von $O_2$ zu $P$). Das mathematische Modell besteht aus vier skalaren Gleichungen:
 
 \begin{equation}
 \begin{aligned}
@@ -412,8 +419,7 @@ D_Y = \lambda\cdot X_1-p\cdot X_2-b_Y = 0.0
 \end{equation}
 
 Wobei $X_{O_1}, Y_{O_1},Z_{O_1}$ die Objektkoordinaten der ersten Kameraposition während der Belichtung sind und $\lambda$ und $p$ die Skalierungsfaktoren der entsprechenden Positionsvektoren $\vec{r_1}$ und $\vec{r_2}$ im Kameraraum sind. 
-
-Die linearisierte Form von Gleichung (3.5), mit ebenfalls von El-Ashmawy \cite{comparative_conditions_study} vorgeschlagenen zusätzlichen Beschränkungen, für das Verfahren der kleinsten Quadrate, wird gegeben als:
+Die linearisierte Form der Gleichungen (3.25), mit ebenfalls von El-Ashmawy (vgl. \cite{comparative_conditions_study} S.68) vorgeschlagenen zusätzlichen Beschränkungen, für das Verfahren der kleinsten Quadrate, wird gegeben als:
 
 \begin{equation}
 \begin{aligned}
@@ -422,14 +428,13 @@ V^c - \triangle^c = \varepsilon^c
 \end{aligned}
 \end{equation}
 
-
 Wobei:
 \begin{itemize}
 \item $\triangle$ der Korrekturvektor zu dem aktuellen Werteset, für die unbekannten Werte (innere und äußere Orientierung, Objektkoordinaten der Punkte) der iterativen Lösung ist.
 
-\item $A$ die Matrix der partiellen Ableitungen von Gleichung (3.5), in Bezug auf die Beobachtungen (korrigierte Foto-Koordinaten auf den linken und rechten Fotos, des gleichen Objektpunkts) ist.
+\item $A$ die Matrix der partiellen Ableitungen von Gleichung (3.25), in Bezug auf die Beobachtungen (korrigierte Foto-Koordinaten auf den linken und rechten Fotos, des gleichen Objektpunkts) ist.
 
-\item $B$ die Matrix der partiellen Ableitungen von Gleichung (3.5), in Bezug auf die Unbekannten  ist.
+\item $B$ die Matrix der partiellen Ableitungen von Gleichung (3.25), in Bezug auf die Unbekannten  ist.
 
 \item $V$ der Korrekturvektor zu den Beobachtungen ist.
 
@@ -439,9 +444,9 @@ Wobei:
 Zur Verwendung der iterativen Lösung der kleinsten Quadrate, ist die Berechnung der Ausgangswerte von Unbekannten, wie beim Verfahren mit der Kollinearitätsbedinung, notwendig. (vgl. \cite{comparative_conditions_study} S.68)
 
 
-\subsection{Das direkte lineare Transformationsverfahren}
+\subsection{Direkte lineare Transformation}
 
-Die Methode der \glqq direct linear transformation\grqq{}  modelliert die Transformation zwischen Bildkoordinatensystem und Objektkoordinatensystem als lineare Funktion und wurde von Abdel-Aziz und Karara \cite{dlt_intro} eingeführt. Die direkte lineare Transformation kann aus den Kollinearitätsgleichungen abgeleitet werden und lassen sich mathematisch wie folgt ausdrücken (\cite{dlt} S.72)
+Die Methode der \glqq Direct Linear Transformation\grqq{} modelliert die Transformation zwischen Bildkoordinatensystem und Objektkoordinatensystem als lineare Funktion. Die direkte lineare Transformation kann aus den Kollinearitätsgleichungen abgeleitet werden und lässt sich mathematisch wie folgt ausdrücken (vgl. \cite{dlt} S.72):
 
 \begin{equation}
 \begin{aligned}
@@ -466,7 +471,6 @@ X_0 \\ Y_0 \\ Z_0
  L_4 \\ L_8 \\ 1.0
  \end{bmatrix}
  \end{equation}
- 
  \begin{equation}
  \begin{aligned}
  x_0 &= (L_1L_9 + L_2L_{10} + L_3L_{11})/(L²_9 + L²_{10} + L²_{11}); \\
@@ -478,7 +482,5 @@ X_0 \\ Y_0 \\ Z_0
  \end{aligned}
  \end{equation}
 
-Wobei $X_0,Y_0,Z_0,\omega ,\phi , \kappa $ die externen Kameraparameter, $x_0,y_0$ die Bildkoordinaten des optischen Zentrums und $f$ die Brennweite ist. 
-
-Das direkte lineare Transformationsverfahren hat lange Zeit in den Bereichen Photogrammetrie, Computer Vision, Robotik und Biomechanik Verwendung gefunden. Dies liegt an der linearen Formulierung der Beziehung zwischen Objekt- und Bildkoordinaten. Weiterhin können Bildkoordinaten in einem nicht-orthogonalem System, mit unterschiedlichen Skalen ausgedrückt werden und die Position des Koordinatensystems kann unbekannt, sowie die Brennweite beliebig sein und von Bild zu Bild variieren. (vgl. \cite{dlt} S.72)
+Wobei $X_0,Y_0,Z_0,\omega ,\phi , \kappa $ die externen Kameraparameter, $x_0,y_0$ die Bildkoordinaten des optischen Zentrums und $f$ die Brennweite ist. Das direkte lineare Transformationsverfahren hat lange Zeit in den Bereichen Photogrammetrie, Computer Vision, Robotik und Biomechanik Verwendung gefunden. Dies liegt an der linearen Formulierung der Beziehung zwischen Objekt- und Bildkoordinaten. Weiterhin können Bildkoordinaten in einem nicht-orthogonalem System, mit unterschiedlichen Skalen ausgedrückt werden und die Position des Koordinatensystems kann unbekannt, sowie die Brennweite beliebig sein und von Bild zu Bild variieren. (vgl. \cite{dlt} S.72)
 

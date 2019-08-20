@@ -17,22 +17,23 @@
 \contentsline {subsection}{\numberline {3.2.2}Features from Accelerated Segment Test}{15}{subsection.3.2.2}
 \contentsline {subsection}{\numberline {3.2.3}Binary Robust Independent Elementary Features}{15}{subsection.3.2.3}
 \contentsline {subsection}{\numberline {3.2.4}Outlier Removal}{17}{subsection.3.2.4}
-\contentsline {subsection}{\numberline {3.2.5}Pose Estimation}{17}{subsection.3.2.5}
+\contentsline {subsection}{\numberline {3.2.5}Pose Estimation}{18}{subsection.3.2.5}
 \contentsline {section}{\numberline {3.3}Der B\IeC {\"u}ndelblockausgleich}{18}{section.3.3}
 \contentsline {section}{\numberline {3.4}Nicht-lineare Methode der kleinsten Quadrate}{20}{section.3.4}
 \contentsline {subsection}{\numberline {3.4.1}Gau\IeC {\ss }-Newton-Verfahren}{21}{subsection.3.4.1}
 \contentsline {subsection}{\numberline {3.4.2}Levenberg-Marquardt Verfahren}{22}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}Die Kollinearit\IeC {\"a}tsbedingung}{24}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}Die Koplanarit\IeC {\"a}tsbedingung}{25}{subsection.3.4.4}
-\contentsline {subsection}{\numberline {3.4.5}Das direkte lineare Transformationsverfahren}{27}{subsection.3.4.5}
+\contentsline {subsection}{\numberline {3.4.4}Die Koplanarit\IeC {\"a}tsbedingung}{26}{subsection.3.4.4}
+\contentsline {subsection}{\numberline {3.4.5}Direkte lineare Transformation}{28}{subsection.3.4.5}
 \contentsline {chapter}{\numberline {4}Simultaneous Localisation and Mapping}{29}{chapter.4}
-\contentsline {section}{\numberline {4.1}Loop closure detection}{32}{section.4.1}
+\contentsline {section}{\numberline {4.1}Loop Closure Detection}{32}{section.4.1}
 \contentsline {section}{\numberline {4.2}Visual SLAM}{33}{section.4.2}
 \contentsline {section}{\numberline {4.3}Extended Kalman Filter - SLAM}{34}{section.4.3}
-\contentsline {section}{\numberline {4.4}FAST-SLAM}{35}{section.4.4}
-\contentsline {section}{\numberline {4.5}ORB-SLAM}{36}{section.4.5}
-\contentsline {section}{\numberline {4.6}SLAM f\IeC {\"u}r mobiles Augumented Reality}{38}{section.4.6}
-\contentsline {section}{\numberline {4.7}Structure from Motion}{40}{section.4.7}
+\contentsline {section}{\numberline {4.4}FAST-SLAM}{36}{section.4.4}
+\contentsline {section}{\numberline {4.5}ORB-SLAM}{37}{section.4.5}
+\contentsline {section}{\numberline {4.6}ORB-SLAM 2}{39}{section.4.6}
+\contentsline {section}{\numberline {4.7}SLAM f\IeC {\"u}r mobiles Augumented Reality}{39}{section.4.7}
+\contentsline {section}{\numberline {4.8}Structure from Motion}{40}{section.4.8}
 \contentsline {chapter}{\numberline {5}Vergleich von Photogrammetrie und SLAM}{42}{chapter.5}
 \contentsline {section}{\numberline {5.1}\IeC {\"A}hnlichkeiten und Unterschiede}{42}{section.5.1}
 \contentsline {section}{\numberline {5.2}Unterschiede zwischen Visual SLAM, Photogrammetrie und SfM}{43}{section.5.2}
