@@ -1,10 +1,25 @@
 \chapter{Simultaneous Localisation and Mapping}
 
-Simultaneous Localisation and Mapping, kurz SLAM, ist das Problem der Auswertung einer unbekannten Umgebung und Erstellung einer Karte, während gleichzeitig die lokale Position innerhalb dieser Karte bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Dabei ist SLAM ein Alltagsproblem: Das Problem der räumlichen Erkundung. Jeder Mensch und jedes Tier hat dieses Verfahren gemeistert und benutzt es unterbewusst zur Navigation in unserer Realität. Wichtige Anwendungsbereiche von SLAM sind die automatische Fahrzeugsteuerung auf unbekannten Terrain, Rettungseinsätze in Umgebungen mit hohem Risiko, planetarische, terrestrische oder ozeanische Exploration, Augmented Reality Anwendungen, visuelle Überwachungssysteme oder Anwendungen in der Medizin.
-Die Lösung dieses Problems, wenn es für einen Roboter oder für Smartphones automatisiert ausgeführt werden soll, ist dagegen sehr komplex. Durch das Meistern dieser Technik kann man beispielsweise Roboter oder Fahrzeuge wirklich autonom steuern. Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur Positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben (vgl. \cite{slam} S. 1-2, \cite{survey} S.56).
+Um das Ziel des exakten Matchings von Realität und generierter virtueller Realität zu erreichen, ist Camera Localization die Schlüsseltechnologie für alle Augumented Reality Anwendungen (vgl. \cite{slam_mobile} S.1). Weiterhin ist es wichtig die Umgebung zu kartographieren, um Projektionsflächen für virtuelle dreidimensionale Objekte zu finden. Eine mögliche Lösung für dieses Problem ist die Verwendung von SLAM. In den letzten 20 Jahren hat sich bei SLAM ein Trend gezeigt, bei dem Kameras als einzige exterozeptive Sensoren verwendet werden. Der Hauptgrund dafür ist die Fähigkeit eines kamerabasierten Systems, Tiefeninformationen, Farben, Texturen und Helligkeiten zu erkennen, was beispielsweise Objekt- oder Gesichtserkennung ermöglicht. Darüber hinaus sind Kameras preiswert, leicht und haben einen geringen Stromverbrauch (vgl. \cite{survey} S.57). 
+
+Erst in den letzten Jahren hat sich SLAM in Alltagsanwendungen profilieren können, hauptsächlich durch das Aufkommen von leistungsstarken Smartphones. Smartphones sind mobil und haben die nötige Rechenleistung um SLAM Algorithmen in Echtzeit auszuführen. Dies hat zu einer Erweiterung der Forschungsmöglichkeiten von SLAM basierten Ansätzen geführt, und das Verfahren zu einer robusteren Technologie gemacht. Weiterhin verfügen Smartphones über eine Vielzahl an Sensoren, wie Beschleunigungssensor, Gyroskop, Magentometer oder GPS, mit denen die visuellen Daten ergänzt werden können, um die Map genauer und weniger anfällig für innere Drifteffekte zu machen, was jedoch wieder eigene komplexe Probleme bei der Verbindung von verschiedenen Sensordaten mit sich bringt (vgl. \cite{ar_slam} S.4). Folgende Tabelle gibt eine Übersicht an Software Development Kits, die SLAM implementiert haben, sowie die freie Verfügbarkeit deren Quelltext:
+
+\begin{table}[h!]
+\hskip-1.9cm
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+            & Vuforia & Wikitude & Metaio & ARToolKit & Kudan & EasyAR & MaxST & ARCore & ARKit \\ \hline
+SLAM        &  \checkmark       &   \checkmark       &   \checkmark     &    x       &  \checkmark     &   \checkmark     &      \checkmark &   \checkmark     &    \checkmark   \\ \hline
+Open Source &    x     &    x      &   x     &     \checkmark      &   x    &    x    &   x    &   \checkmark     &  x     \\ \hline
+\end{tabular}
+\end{table}
+
+Die Verwendung von SLAM im mobilen Bereich hat jedoch einige Probleme zu meistern. Durch die Ungenauigkeiten der absoluten Lokalisierung, ist es schwierig kontextsensitive Augmentation zu erzeugen. Auch wenn es möglich ist bekannte Objekte im Raum während des Trackings zu bestimmen, und die Information um diese herum zu zeigen, ist es fast unmöglich den kompletten Raum einer Szenerie zu bestimmen. Das zweite Problem liegt in der Ergonomie und Benutzbarkeit der Anwendung durch den Endbenutzer. Typischerweise soll ein Endverbraucher keinem komplexem Protokoll folgen müssen, um sich selbst in der Szene zu lokalisieren. Das System benötigt also ein Verfahren zur schnellen und robusten Lokalisierung im Raum (vgl. \cite{slam_mobile} S.1).
+
+SLAM ist das Problem der Auswertung einer unbekannten Umgebung und Erstellung einer Karte, während gleichzeitig die lokale Position innerhalb dieser Karte bestimmt wird. Die Lösung dieses SLAM Problems war vorallem in der Robotik eine fundamentale Aufgabe der letzten zwei Jahrzehnte. Dabei ist SLAM ein Alltagsproblem: Das Problem der räumlichen Erkundung. Jeder Mensch und jedes Tier hat dieses Verfahren gemeistert und benutzt es unterbewusst zur Navigation in unserer Realität. Wichtige Anwendungsbereiche von SLAM sind die automatische Fahrzeugsteuerung auf unbekannten Terrain, Rettungseinsätze in Umgebungen mit hohem Risiko, planetarische, terrestrische oder ozeanische Exploration, Augmented Reality Anwendungen, visuelle Überwachungssysteme oder Anwendungen in der Medizin. Die Lösung dieses Problems, wenn es für einen Roboter oder für Smartphones automatisiert ausgeführt werden soll, ist dagegen sehr komplex. Durch das Meistern dieser Technik kann man beispielsweise Roboter oder Fahrzeuge wirklich autonom steuern. Bei SLAM wird die Bewegung des Objekts an sich durch den Raum und die Position aller zur Positionsbestimmung notwendigen Merkmale berechnet, ohne auf vorheriges Wissen, über Position oder Lage im Raum, Kenntniss zu haben (vgl. \cite{slam} S. 1-2, \cite{survey} S.56).
 
 Dabei benötigt man mindestens einen exterozeptiven Sensor um äußere Informationen zu sammeln.
-SLAM besteht aus drei grundlegenden Operationen, die iterativ pro Zeitintervall ausgeführt werden ( vgl. \cite{ekf_slam} S.3):
+SLAM besteht aus drei grundlegenden Operationen, die iterativ pro Zeitintervall ausgeführt werden (vgl. \cite{ekf_slam} S.3):
 
 \textbf{Die Kamera bewegt sich} und erreicht eine neue Position in der Umwelt. Diese Bewegung erzeugt, durch unvermeidbares Rauschen und Fehler, Ungewissheit über die wirkliche absolute Position. Eine automatisierte Lösung benötigt ein mathematisches Modell für diese Bewegung. Dies ist das \glqq\textit{Motion Model}\grqq{}.
 
@@ -16,7 +31,7 @@ Mit diesen drei Modellen ist es möglich eine automatisierte Lösung für SLAM z
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{slam_problem.png}
+	\includegraphics[scale=0.55]{slam_problem.png}
 	\caption{Das SLAM Problem: Die wahren absoluten Positionen der extrahierten Features sind nie wirklich bekannt. Bildquelle \cite{slam}}
 \end{figure} 
 
@@ -164,47 +179,21 @@ Das \textbf{Loop Closing} wird vom dritten Thread ausgeführt. Wenn erkannt wird
 
 \section{ORB-SLAM 2}
 
-(Evtl nicht mehr nötig)\\
+(Optional mal sehen)\\
 \url{https://arxiv.org/pdf/1610.06475.pdf}
-
-
-
-
-\section{SLAM für mobiles Augumented Reality}
-
-Das Ziel von Augumented Reality ist es virtuelle Objekte oder Informationen in die echte Welt zu integrieren, um den Benutzer zusätzliche Informationen in die betrachtete Szene zu liefern. Dazu ist es notwendig, die echte und die virtuelle Welt präzise aneinander auszurichten. Dann kann für jeden Frame aus der Sequenz des Videobildes die genaue Position des mobilen Gerätes bestimmt werden. Um dieses Ziel des exakten Matchings von Realität und generierter virtueller Realität zu erreichen, ist "Camera Localization", also die Lokalisierung der Kamera im dreidimensionalen Raum, anhand von aufgenommenen zweidimensionalen Daten, die Schlüsseltechnologie für alle Augumented Reality Anwendungen. (vgl. \cite{slam_mobile} S.1) Weiterhin ist es wichtig die Umgebung zu kartographieren, um Projektionsflächen für virtuelle dreidimensionale Objekte zu finden. Eine mögliche Lösung für dieses Problem ist die Verwendung von SLAM. In den letzten 20 Jahren hat sich bei SLAM ein Trend gezeigt, bei dem Kameras als einzige exterozeptive Sensoren verwendet werden. Der Hauptgrund dafür ist die Fähigkeit eines kamerabasierten Systems, Tiefeninformationen, Farben, Texturen und Helligkeiten zu erkennen, was Robotern beispielsweise Objekt- oder Gesichtserkennung ermöglicht. Darüber hinaus sind Kameras preiswert, leicht und haben einen geringen Stromverbrauch. (vgl. \cite{survey} S.57) Erst in den letzten Jahren hat sich SLAM in Alltagsanwendungen profilieren können, hauptsächlich wegen dem Aufkommen von Smartphones. Smartphones sind mobil und haben die nötige Rechenleistung um SLAM Aufgaben in Echtzeit auszuführen. Dies hat zu einer Erweiterung der Forschungsmöglichkeiten von SLAM geführt und hat es zu einer robusteren Technologie gemacht. Weiterhin verfügen Smartphones über eine ganze Reihe an Sensoren, wie Beschleunigungssensoren, Gyroskop, Magentometer oder GPS, mit denen die visuellen Daten ergänzt werden können, um die Map genauer und weniger anfällig für innere Drifteffekte zu machen, was jedoch wieder eigene komplexe Probleme bei der Verbindung von verschiedenen Sensordaten mit sich bringt. (vgl. \cite{ar_slam} S.4) 
-
-Folgende Tabelle gibt eine Übersicht an Software Development Kits, die SLAM implementiert haben.
-
-\begin{table}[h!]
-\hskip-1.75cm
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
-\hline
-            & Vuforia & Wikitude & Metaio & ARToolKit & Kudan & EasyAR & MaxST & ARCore & ARKit \\ \hline
-SLAM        &  \checkmark       &   \checkmark       &   \checkmark     &    x       &  \checkmark     &   \checkmark     &      \checkmark &   \checkmark     &    \checkmark   \\ \hline
-Open Source &    x     &    x      &   x     &     \checkmark      &   x    &    x    &   x    &   \checkmark     &  x     \\ \hline
-\end{tabular}
-\end{table}
-
-Die Verwendung von SLAM im mobilen Bereich hat jedoch einige Probleme zu meistern. Durch die Ungenauigkeiten der absoluten Lokalisierung, ist es schwierig kontextsensitive Augmentation zu erzeugen. Auch wenn es möglich ist bekannte Objekte im Raum während des Trackings zu bestimmen, und die Information um diese herum zu zeigen, ist es fast unmöglich den gesamten Raum einer Szenerie zu bestimmen. Das zweite Problem liegt in der Ergonomie und Benutzbarkeit der Anwendung durch den Endbenutzer. Typischerweise soll ein Endverbraucher keinem komplexem Protokoll folgen müssen, um sich selbst in der Szene zu lokalisieren. Das System benötigt also eine Verfahren zur schnellen und robusten Lokalisierung im Raum. (vgl. \cite{slam_mobile} S.1)
-
-\url{https://hal.inria.fr/hal-00994756/document}
-\url{https://pdfs.semanticscholar.org/00f4/41387f04f40aad6491ce23bdeb0ece17d12e.pdf}
-file:///C:/Users/Daniel/Downloads/AIREVSLAMSurvey.pdf
-
 
 \section{Structure from Motion}
 
-Structure from Motion (SfM) ist ein Oberbegriff für die gleichzeitige Schätzung der Struktur einer dreidimensionalen Szene und der Kamerabewegung in dieser, aus mehreren überlappenden Bildern einer Szene (siehe Abbildung 4.5), unter dem verschiedene Verfahren zusammengefasst werden können. Die Rekonstruktion der 3D-Struktur der Originalobjekte aus diesen 2D-Bildsequenzen wird als SfM bezeichnet. 
+Structure from Motion (SfM) ist ein Oberbegriff unter dem verschiedene Verfahren zusammengefasst werden können. Es steht für die gleichzeitige Schätzung der Struktur einer dreidimensionalen Szene und der Bewegung des Sensors in dieser Szene, erstellt aus mehreren überlappenden Bildern einer Szene (siehe Abbildung 4.5). Die Rekonstruktion der 3D-Struktur der Originalobjekte aus diesen 2D-Bildsequenzen wird dann als SfM bezeichnet. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{sfm.png}
+	\includegraphics[scale=0.6]{sfm.png}
 	\caption{Structure from Motion: Überlappende Fotos zur Rekonstruktion der 3D Szene. Bildquelle \cite{sfm_photo}}
 \end{figure}  
 
-SfM hat in der Computer Vision Community große Beachtung gefunden. Kürzlich vorgestellte SfM haben erhebliche Fortschritte bei der bildbasierten Modellierung und Rendering gemacht. Die meisten Structure from Motion Systeme arbeiten sequentiell, beginnend mit einer kleinen Rekonstruktion und fügen dann schrittweise neue Kameras, durch die Pose Estimation und 3D Punkte durch Triangulation oder mit hierarchischen Verfahren, hinzu. Diese Ansätze erfordern zwischenzeitlich die Durchführung des Bündelblockausgleichs, sowie mehrere Iterationen der Ausreißerbeseitigung, um die Ausbreitung von Fehler zu minimieren, während die Rekonstruktion wächst. Für große Datensets ist dies sehr rechenintensiv. (vgl. \cite{sfm} S.1)
+Structure from Motion hat in der Computer Vision Community große Beachtung gefunden. Kürzlich vorgestellte Systeme haben erhebliche Fortschritte bei der bildbasierten Modellierung und beim Rendering gemacht. Die meisten Structure from Motion Systeme arbeiten sequentiell, beginnend mit einer kleinen Rekonstruktion aus beispielsweise zwei Bildern und fügen dann schrittweise neue Aufnahmen, durch die Pose Estimationn der Kamera hinzu. Die Punkte im 3D-Modell werden durch Triangulation oder mit hierarchischen Verfahren eingefügt. Diese SfM Ansätze erfordern je Sequenz die Durchführung des Bündelblockausgleichs, sowie mehrere Iterationen der Ausreißerbeseitigung, um die Ausbreitung von Fehler zu minimieren, während die Rekonstruktion wächst. Für große Datensets ist dies sehr rechenintensiv (vgl. \cite{sfm} S.1).
 
-Structure from Motion ist nicht nur in der Computer Vision vertreten, sondern hat auch in der Photogrammetrie bereits Anwendungsbereiche gefunden. In den letzten Jahrzehnten sind verschiedene Ansätze zur Lösung des SfM Problems entstanden, wie die \glqq Maximum likehood estimation\grqq{}, \glqq Kalman und Extended Kalman Filter\grqq{}, \glqq Particle Filter\grqq{} oder das \glqq Hidden Markov Model\grqq{}. (vgl. \cite{efficient_bundle} S.5)
+Structure from Motion ist nicht nur in der Computer Vision vertreten, sondern hat auch in der Photogrammetrie bereits Anwendungsbereiche gefunden. In den letzten Jahrzehnten sind verschiedene Ansätze zur Lösung des SfM Problems entstanden, wie die \glqq Maximum likehood estimation\grqq{}, \glqq Kalman und Extended Kalman Filter\grqq{}, \glqq Particle Filter\grqq{} oder das \glqq Hidden Markov Model\grqq{} (vgl. \cite{efficient_bundle} S.5).
 
-SfM unterscheidet sich von der herkömmlichen Photogrammetrie, indem die Geometrie der Szene, die Kameraposition und die Ausrichtung automatisch ohne die Kenntnis von a priori definierten 3D-Zielen berechnet werden kann. (vgl. \cite{sfm_photo} S.301)
+SfM unterscheidet sich von der herkömmlichen Photogrammetrie, indem die Geometrie der Szene, die Kameraposition und die Ausrichtung automatisch ohne die Kenntnis von a priori definierten 3D-Zielen berechnet werden kann (vgl. \cite{sfm_photo} S.301).
