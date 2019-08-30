@@ -39,19 +39,19 @@
 \contentsline {section}{\numberline {6.1}ARCore}{45}{section.6.1}
 \contentsline {subsection}{\numberline {6.1.1}Unterst\IeC {\"u}tze Ger\IeC {\"a}te}{46}{subsection.6.1.1}
 \contentsline {subsection}{\numberline {6.1.2}Grundlegende Konzepte}{46}{subsection.6.1.2}
-\contentsline {subsection}{\numberline {6.1.3}Entwicklungsumgebungen}{48}{subsection.6.1.3}
-\contentsline {section}{\numberline {6.2}Sceneform}{48}{section.6.2}
-\contentsline {section}{\numberline {6.3}Google Location Service}{48}{section.6.3}
-\contentsline {section}{\numberline {6.4}Dexter}{48}{section.6.4}
-\contentsline {section}{\numberline {6.5}Volley}{48}{section.6.5}
-\contentsline {section}{\numberline {6.6}Implementierung}{48}{section.6.6}
-\contentsline {chapter}{\numberline {7}Praxistest}{49}{chapter.7}
-\contentsline {section}{\numberline {7.1}Anwendungsbeispiele}{49}{section.7.1}
-\contentsline {section}{\numberline {7.2}Benchmarks}{49}{section.7.2}
-\contentsline {section}{\numberline {7.3}Tests}{49}{section.7.3}
-\contentsline {chapter}{\numberline {8}Weitere Verfahren}{50}{chapter.8}
-\contentsline {section}{\numberline {8.1}Depth Map mit Dual Camera}{50}{section.8.1}
-\contentsline {section}{\numberline {8.2}3-D Rekonstruktion}{50}{section.8.2}
-\contentsline {chapter}{\numberline {9}Zusammenfassung und Ausblick}{51}{chapter.9}
-\contentsline {chapter}{Literaturverzeichnis}{52}{section*.20}
-\contentsline {chapter}{Abbildungsverzeichnis}{58}{section*.22}
+\contentsline {subsection}{\numberline {6.1.3}Entwicklungsumgebungen}{49}{subsection.6.1.3}
+\contentsline {section}{\numberline {6.2}Sceneform}{50}{section.6.2}
+\contentsline {section}{\numberline {6.3}Google Places API}{51}{section.6.3}
+\contentsline {section}{\numberline {6.4}Dexter}{51}{section.6.4}
+\contentsline {section}{\numberline {6.5}Volley}{51}{section.6.5}
+\contentsline {section}{\numberline {6.6}Implementierung}{51}{section.6.6}
+\contentsline {chapter}{\numberline {7}Praxistest}{52}{chapter.7}
+\contentsline {section}{\numberline {7.1}Anwendungsbeispiele}{52}{section.7.1}
+\contentsline {section}{\numberline {7.2}Benchmarks}{52}{section.7.2}
+\contentsline {section}{\numberline {7.3}Tests}{52}{section.7.3}
+\contentsline {chapter}{\numberline {8}Weitere Verfahren}{53}{chapter.8}
+\contentsline {section}{\numberline {8.1}Depth Map mit Dual Camera}{53}{section.8.1}
+\contentsline {section}{\numberline {8.2}3-D Rekonstruktion}{53}{section.8.2}
+\contentsline {chapter}{\numberline {9}Zusammenfassung und Ausblick}{54}{chapter.9}
+\contentsline {chapter}{Literaturverzeichnis}{55}{section*.21}
+\contentsline {chapter}{Abbildungsverzeichnis}{62}{section*.23}
