@@ -43,6 +43,8 @@ Auch die Abbildungen über die Pipeline von COM zeigen eine hohe Übereinstimmun
 	\caption{Pipeline von COM. Bildquelle \cite{patent}}
 \end{figure} 
 
+Das Verfahren COM kann als Implementation des SLAM Verfahrens von Google interpretiert werden. Der Begriff Odometrie, der aus der Messung der realtiven Positionierung von Fahrzeugen anhand deren Eigenbewegung kommt (vgl. \cite{odometrie} S.7-9), wurde für Smartphones übernommen. Dies liegt wohl hauptsächlich in der Abgrenzung zu anderen Verfahren, für die Patentierung der Methode. Im Folgenden werden die Hauptkomponenten von ARCore beschrieben.
+
 
 \textbf{Environmental Understanding} wird in ARCore durch die Erkennung von Clustern von Feature Punkten auf üblichen horizontalen oder vertikalen Flächen ermöglicht. Weiterhin können die Grenzen dieser Ebenen bestimmt werden. Da ARCore zur Erkennung der Ebenen Features verwendet, werden flache oder texturlose Oberflächen, wie beispielsweise eine weiße Wand möglicherweise nicht richtig erkannt. 
 
@@ -72,7 +74,7 @@ ARCore kann mit vielen gängigen Entwicklungsumgebungen verwendet werden. Dazu z
 Sceneform ist eine Framework, das von Google entwickelt wurde und welches nahtlos in ARCore integriert werden kann. Es ermöglicht das einfache Rendern von realistischen 3D-Szenen in AR- und Nicht-AR-Anwendungen, ohne auf OpenGL zurückgreifen zu müssen. Sceneform bietet folgende Features (vgl. \cite{sceneform}):
 
 \begin{itemize}
-\item Einen high-level \textbf{Szenengraph API}.
+\item Eine \glqq high-level\grqq{} \textbf{Szenengraph API}.
 \item Einen realistischen \textbf{physikalischen Renderer} namens \textbf{Filament}.
 \item Ein \textbf{Android Studio-Plugin} zum Importieren, Anzeigen und Erstellen von \textbf{3D-Assets}.
 \end{itemize}
@@ -88,7 +90,7 @@ Filament ist eine physikalisch basierte Rendering (PBR) Engine für Android, die
 
 Im Rahmen dieser Arbeit wird die Google Places API, zur Abfrage von Informationen mithilfe des aktuellen Standort des Smartphones, verwendet. Die Places-API ist ein Dienst, der Informationen über bestimmte Orte mit HTTP-Anfragen zurückgibt. Places sind innerhalb der API definiert als Einrichtungen, geografische Standorte oder berühmte Points of Interest. Die Informationen die mit der API abgefragt werden können, sind etwa einfache Listen der näheren Orte, Details über die Orte in der Nähe oder Fotos der näheren Orte, aus der Google Datenbank. Die API ermöglicht auch die  Autovervöllständigung von Suchanfragen bestimmter Orte oder Querys. Jeder dieser Dienste wird als HTTP-Request aufgerufen und gibt entweder XML- oder JSON-Dateien als Antwort zurück. Alle Anfragen müssen das HTTPS Protkoll verwenden und benötigen einen eigenen API Schlüssel (vgl. \cite{places_api}).
 
-Bei der Implementation der App wurde die \glqq Place Search\grqq{} Funktion der API verwendet. Ein Call schaut wie folgt aus:
+Bei der Implementation der App wurde die \glqq Place Search\grqq{} Funktion der API verwendet. Ein Aufruf an die API schaut beispielsweise wie folgt aus:
 
 \begin{lstlisting}[basicstyle=\small]
 https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=
@@ -97,11 +99,15 @@ https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=
 
 Das Ergebnis dieses Anfrage Querys erhält eine Vielzahl an Informationen, die anschließend weiter verarbeitet werden können.
 
-
-
-
-
 \section{Dexter}
+
+Dexter ist eine Open Source Android-Bibliothek der Firma Karumi, die den Prozess der Anfrage von Berechtigungen während der Laufzeit einer App vereinfacht. Seit Android Version Marshmallow (6.0), welche im Oktober 2015 veröffentlicht wurde, werden App-Berechtigungen nicht mehr bei der Installation, sondern beim Zeitpunkt der Nutzung abgefragt. Weiterhin fragt die App nur nach einer bestimmten Erlaubnis für eine Features, wenn dieses verwendet wird (vgl. \cite{marshmallow}). Dieser Ansatz gibt dem Endnutzer mehr Kontrolle über die Anwendungen, erfordert jedoch die Implementation dieser Features durch die Entwickler. 
+
+TODO: Screenshot
+
+Die offizielle API zum Abfragen der Berechtigungen ist tief mit der Android \glqq Activity\grqq{} Klasse verbunden. Mit Dexter kann man die App Berechtigungen auch ohne Activities abfragen. Weiterhin kann die Logik überall implementiert werden (vgl. \cite{dexter}).
+
+Mit Dexter werden in der hier implementierten Applikation die Berechtigungen für Kamera, Standort über GPS und Internetzugriff abgefragt.
 
 \section{Volley}
 
