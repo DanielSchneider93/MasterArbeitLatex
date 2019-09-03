@@ -192,3 +192,45 @@ Structure from Motion hat in der Computer Vision Community große Beachtung gefu
 Structure from Motion ist nicht nur in der Computer Vision vertreten, sondern hat auch in der Photogrammetrie bereits Anwendungsbereiche gefunden. In den letzten Jahrzehnten sind verschiedene Ansätze zur Lösung des SfM Problems entstanden, wie die \glqq Maximum likehood estimation\grqq{}, \glqq Kalman und Extended Kalman Filter\grqq{}, \glqq Particle Filter\grqq{} oder das \glqq Hidden Markov Model\grqq{} (vgl. \cite{efficient_bundle} S.5).
 
 SfM unterscheidet sich von der herkömmlichen Photogrammetrie, indem die Geometrie der Szene, die Kameraposition und die Ausrichtung automatisch ohne die Kenntnis von a priori definierten 3D-Zielen berechnet werden kann (vgl. \cite{sfm_photo} S.301).
+
+\section{Weitere Verfahren - SLAM mit Stereo Kameras}
+
+Visual SLAM kann mit nur einer monokularen Kamera durchgeführt werden. Dies ist die günstigste und kleinste mögliche Sensoranordnung. Das Problem dabei ist jedoch, dass die Tiefeninformationen nicht von einer Kamera feststellbar ist. Dadurch sind der Maßstab der erstellten Map, sowie die geschätzte Trajektorie unbekannt. Weiterhin benötigt das System Mehrbildansichten oder Filtertechniken um die Generierung der initialen Map zu ermöglichen, da diese nicht vom ersten Frame an trianguliert werden kann. Weiterhin ist monokulares SLAM einem Drift ausgesetzt, der regelmäßig korrigiert werden muss und kann bei reiner Rotation in der Erkundung der Umwelt versagen. Durch den Einsatz von Stereo- oder RGB-D-Kameras können diese Probleme gelöst werden, was eine zuverlässige Lösung für SLAM bietet (vgl. \cite{orbslam2} S.1).
+
+\subsection{Stereo SLAM}
+
+Die meisten modernen Stereo SLAM Systeme sind Keyframe basiert und führen die Optimierung in einem lokalen Bereich mithilfe des Bündelblockausgleichs durch, um Stabilität zu erreichen. Beispiele für Stereo SLAM sind etwa \glqq Conditionally Independet Divide and Conquer EKF-SLAM\grqq{} (Paz et al. 2008), \glqq RSLAM\grqq{} (Mei et al. 2011), \glqq Stereo parallel tracking and mapping (S-PTAM)\grqq{} (Pire et al. 2015) oder \glqq Large-scale direct SLAM (LSD-SLAM)\grqq{} (Engel et al. 2015) (vgl. \cite{orbslam2} S.2).
+
+\subsection{RGB-D SLAM}
+
+Mithilfe von RGB-D Kameras, die neben den Farbinformationen noch einen extra Kanal für die Tiefeninformationen des Bild bereitstellen, haben sich verschiedenste SLAM Ansätze entwickelt. Dies hat sich jedoch erst nach dem Aufkommen von RGB-D Kamerasystemen ergeben. Die ersten Ansätze von RGB-D SLAM, basierten auf der Entwicklung der Kinect von Microsoft. Das System hieß KinectFusion und wurde von Newcombe et al. (2011) eingeführt. Bei diesem Verfahren wurden alle Tiefeninformationen zu einem volumetrisch ditchten Modell verschmolzen, mit dem dann die Kameraposition mittels ICP (Iterative Closest Point) verfolgt wird. Dieses System war aufgrund seiner volumetrischen Repräsentation auf kleine Arbeitsbereiche beschränkt, was auch durch das Fehlen von Loop Closing bedingt wurde. Weitere Beispiele für RGB-D SLAM Verfahren sind etwa \glqq Kintinous\grqq{} (Whelan et al. 2015), das Open Source RGB-D SLAM (Endres et al. 2014), \glqq DVO-SLAM\grqq{} (Kerl et al. 2013) oder \glqq ElasticFusion\grqq{} (Whelan et al. 2016) (vgl. \cite{orbslam2} S.2-3).
+
+\subsection{ORB-SLAM2}
+
+ORB-SLAM2 ist die Erweiterung von ORB-SLAM für Stereo oder RGB-D Kameras und verarbeitet die merkmalsbasierten Eingaben vor, um Merkmale an bestimmten Keypoints zu finden (siehe Abbildung 4.6. (b)).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.56]{orbslam2.png}
+	\caption{(a) Gesamtaufbau der drei Verarbeitungsthreads in ORB-SLAM2 (b) Vorverarbeitung des Stereo oder RGB-D Kamerabildes. Bildquelle \cite{orbslam2}}
+\end{figure}  
+
+Die Eingabebilder werden nach der Vorverarbeitung verworfen und alle Operationen des Systems basieren nur noch auf den extrahierten Features, sodass das System unabhängig von Stereo oder RGB-D Sensor arbeitet. ORB-SLAM2 kann aber genauso monokularen Input verarbeiten. Anders als die in Kapitel 4.7.2. genannten Methoden arbeitet ORB-SLAM2 mit dem Bündelblockausgleich und baut eine globale Rekonstruktion auf. Das Ziel ist es eine stabile, schnelle Methode zu liefern, die auf den meisten Standart CPUs arbeiten kann und die statt einer detailreichen dichten Rekonstruktion eher auf langfristige und konsistente Lokalisierung abzielt (vgl. \cite{orbslam2} S.2-3).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
