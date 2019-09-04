@@ -38,18 +38,19 @@
 \contentsline {subsection}{\numberline {4.7.3}ORB-SLAM2}{43}{subsection.4.7.3}
 \contentsline {chapter}{\numberline {5}Vergleich von Photogrammetrie und SLAM}{45}{chapter.5}
 \contentsline {section}{\numberline {5.1}\IeC {\"A}hnlichkeiten und Unterschiede zwischen Visual SLAM, Photogrammetrie und SfM}{45}{section.5.1}
-\contentsline {chapter}{\numberline {6}Implementation einer AR Anwendung f\IeC {\"u}r Android}{48}{chapter.6}
-\contentsline {section}{\numberline {6.1}ARCore}{48}{section.6.1}
-\contentsline {subsection}{\numberline {6.1.1}Unterst\IeC {\"u}tze Ger\IeC {\"a}te}{49}{subsection.6.1.1}
-\contentsline {subsection}{\numberline {6.1.2}Grundlegende Konzepte}{49}{subsection.6.1.2}
-\contentsline {subsection}{\numberline {6.1.3}Entwicklungsumgebungen}{53}{subsection.6.1.3}
-\contentsline {section}{\numberline {6.2}Sceneform}{53}{section.6.2}
-\contentsline {section}{\numberline {6.3}Google Places API}{54}{section.6.3}
-\contentsline {section}{\numberline {6.4}Dexter}{56}{section.6.4}
-\contentsline {section}{\numberline {6.5}Konzept}{57}{section.6.5}
-\contentsline {section}{\numberline {6.6}Anwendungsbeispiel}{57}{section.6.6}
-\contentsline {section}{\numberline {6.7}Benchmarks}{57}{section.6.7}
-\contentsline {section}{\numberline {6.8}Probleme}{57}{section.6.8}
-\contentsline {chapter}{\numberline {7}Zusammenfassung und Ausblick}{59}{chapter.7}
-\contentsline {chapter}{Literaturverzeichnis}{60}{section*.24}
-\contentsline {chapter}{Abbildungsverzeichnis}{67}{section*.26}
+\contentsline {chapter}{\numberline {6}Implementation einer AR Anwendung f\IeC {\"u}r Android}{49}{chapter.6}
+\contentsline {section}{\numberline {6.1}ARCore}{49}{section.6.1}
+\contentsline {subsection}{\numberline {6.1.1}Unterst\IeC {\"u}tze Ger\IeC {\"a}te}{50}{subsection.6.1.1}
+\contentsline {subsection}{\numberline {6.1.2}Grundlegende Konzepte}{50}{subsection.6.1.2}
+\contentsline {subsection}{\numberline {6.1.3}Entwicklungsumgebungen}{54}{subsection.6.1.3}
+\contentsline {section}{\numberline {6.2}Sceneform}{54}{section.6.2}
+\contentsline {section}{\numberline {6.3}Google Places API}{55}{section.6.3}
+\contentsline {section}{\numberline {6.4}Dexter}{57}{section.6.4}
+\contentsline {section}{\numberline {6.5}Konzept}{58}{section.6.5}
+\contentsline {section}{\numberline {6.6}Anwendungsbeispiel}{58}{section.6.6}
+\contentsline {section}{\numberline {6.7}Algorithmen}{58}{section.6.7}
+\contentsline {section}{\numberline {6.8}Benchmarks}{58}{section.6.8}
+\contentsline {section}{\numberline {6.9}Probleme}{59}{section.6.9}
+\contentsline {chapter}{\numberline {7}Zusammenfassung}{61}{chapter.7}
+\contentsline {chapter}{Literaturverzeichnis}{62}{section*.24}
+\contentsline {chapter}{Abbildungsverzeichnis}{70}{section*.26}

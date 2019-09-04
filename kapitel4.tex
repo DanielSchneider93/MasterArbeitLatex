@@ -119,18 +119,27 @@ Dexter ist eine Open Source Android-Bibliothek der Firma Karumi, die den Prozess
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.14]{request.png}
-	\caption{Abfrage der Berechtigungen mit Dexter}
+	\caption{Abfrage der Berechtigungen mit Dexter, während des Programmstarts.}
 \end{figure} 
 
-Die offizielle API zum Abfragen der Berechtigungen ist tief mit der Android \glqq Activity\grqq{} Klasse verbunden. Mit Dexter kann man die App Berechtigungen auch ohne Activities und zu einem beliebigen Zeitpunkt abfragen. Weiterhin kann die Logik überall implementiert werden (vgl. \cite{dexter}). Mit Dexter werden in der hier implementierten Applikation die Berechtigungen für Kamera und Standort, beim ersten Starten der Anwendung, abgefragt.
+Die offizielle API zum Abfragen der Berechtigungen ist tief mit der Android \glqq Activity\grqq{} Klasse verbunden. Mit Dexter kann man die App Berechtigungen auch ohne Activities und zu einem beliebigen Zeitpunkt abfragen. Weiterhin kann die Logik überall implementiert werden (vgl. \cite{dexter}). Mit Dexter werden, beim ersten Starten der Anwendung, in der hier erstellten Applikation die Berechtigungen für Kamera und Standort abgefragt.
 
 \section{Konzept}
 
-Die grundlegende Idee, auf der die Anwendung aufbaut, ist es, den Nutzer nach beliebigen Informationen - in Bezug auf seinen aktuellen Standort - suchen zu lassen und die Resultate dann in der Augmented Reality anzuzeigen. So kann sich der Nutzer beispielsweise Informationen über die näheren Hotels in der Umgebung anzeigen lassen. Dann werden ihm, nachdem er seine Suche durchgeführt und die virtuellen Modelle platziert hat, die Entfernung, die durchschnittliche Bewertung und die Himmelsrichtung der drei nächsten Hotels angezeigt.
+Die grundlegende Idee, auf der die Anwendung aufbaut, ist es, den Nutzer nach beliebigen Informationen - in Bezug auf seinen aktuellen Standort - suchen zu lassen und die Resultate dann in der Augmented Reality anzuzeigen. So kann sich der Nutzer beispielsweise Informationen über die nächsten Hotels in der Umgebung anzeigen lassen. Die Suchanfrage wird mit der Google Places API verarbeitet. Die abgefragten Informationen werden dann von der Anwendung in Echtzeit sortiert, die Entfernungen und Himmelsrichtungen berechnet und auf zweidimensionale Infoboxen gerendert. Diese virtuellen Modelle können dann vom Benutzer platziert werden. Die Infoboxen geben dem Nutzer Auskunft über die Entfernung, die durchschnittliche Bewertung und die Himmelsrichtung der drei nächsten Points of Interest.
 
 \section{Anwendungsbeispiel}
 
 Step by Step Tutorial
+
+\section{Algorithmen}
+
+Zur Bestimmung des Abstands zwischen zwei Standorten auf der Oberfläche der Weltkugel wurde die Haversine Fomel verwendet.
+\url{https://en.wikipedia.org/wiki/Haversine_formula}
+
+
+Um den Winkel der Himmelsrichtung zu bestimmen, in der ein Point of Interest liegt wurde...
+\url{https://en.wikipedia.org/wiki/Azimuth}
 
 \section{Benchmarks}
 
@@ -144,14 +153,23 @@ Anfragegeschwindigkeit für HTTP Requests an Google
 
 Die ursprüngliche Idee, die virtuellen Infoboxen richtig zur Himmelsrichtung ausgerichtet in der Augmented Reality zu platzieren, ist wegen mehrerer Probleme nicht realisierbar.
 
-Problem 1: Die Orientierung des von ARCore benutzen globalen Koordinatensystems ist bei jeder Session verschieden. Nur die Y-Achse ist immer nach oben orientiert, was an der Erkennung der horizontalen Flächen liegt. Die globale Orientierung der X- und Z-Achse ist jedoch immer unterschiedlich (vgl. \cite{arcore_geo}).
+\begin{itemize}
 
-Problem 2: Versuche das globale Koordinatensystem anhand der internen Sensoren, wie Magnetometer und Lagesensor auszurichten, hat wegen starken Ungenauigkeit dieser Sensoren zu oft zu falschen Ergebnissen geführt. Dies hat zur Folge, dass bei mehreren Initialisierungen des Koordinatenraums bei gleichen Startbedingungen teils sehr verschiedene Resultate und damit Drehungen des Koordinatensystems in die falsche Richtung zur Folge hatte. Auch nach der Kalibrierung der internen Sensoren war das Ergebnis eher ungenau. 
+\item \textbf{Problem 1}: Die Orientierung des von ARCore benutzen globalen Koordinatensystems ist bei jeder Session verschieden. Nur die Y-Achse ist immer nach oben orientiert, was an der Erkennung der horizontalen Flächen liegt. Die globale Orientierung der X- und Z-Achse ist jedoch immer unterschiedlich (vgl. \cite{arcore_geo}).
 
+\item \textbf{Problem 2}: Versuche das globale Koordinatensystem anhand der internen Sensoren, wie Magnetometer und Lagesensor auszurichten, hat wegen starken Ungenauigkeit dieser Sensoren zu oft zu falschen Ergebnissen geführt. Dies hat zur Folge, dass bei mehreren Initialisierungen des Koordinatenraums bei gleichen Startbedingungen teils sehr verschiedene Resultate und damit Drehungen des Koordinatensystems in die falsche Richtung zur Folge hatte. 
+
+\item \textbf{Problem 3}: Der Magnetfeldsensor in Smartphones ist sehr anfällig für Störungen, wenn er in Gebäuden oder in der Nähe von anderen elektronischen Geräten eingesetzt wird.
+
+\item \textbf{Problem 4}: Der Großteil der Benutzer von Smartphones hat noch nie das Magnetometer kalibriert. Nach der Kalibrierung der internen Sensoren ist das Ergebnis um ein Vielfaches genauer, jedoch trotzdem noch störanfällig und ungenau.
+\end{itemize}
+
+Um diese Probleme zu beheben müsste eine Methode zur Kalibrierung der internen Sensoren, beim ersten Starten der Applikation, implementiert werden. Weiterhin müsste ein Initialisierungsverfahren die Position, Lage und Ausrichtung des Geräts ermitteln und über einen kurzen Zeitraum messen, damit anschließend mit einem Optimierungsverfahren die gemittelte initiale Orientierung bestimmt werden kann. Dann müsste das interne Koordinatensystem von ARCore anhand dieser Daten ausgerichtet werden. Dies hätte den zeitlichen Rahmen dieser Arbeit gesprengt, weshalb als Alternative die Himmelrichtung der angefragten Points of Interest mit auf den Infoboxen angezeigt wird. In der Suchleiste der Anwendung ist ein kleiner Kompass implementiert worden, der die Himmelsrichtung des Gerätes anzeigt. 
+
+Das von Apple entwickelte Framework ARKit hat diese globale Orientierung des Koordinatensystems bereits implementiert (vgl. \cite{arkit_global}) Bei ARCore wurde dieses Feature schön seit längerer Zeit von Entwicklern erwartet, ist jedoch noch nicht offiziell erschienen.
 
 https://stackoverflow.com/questions/54356589/what-sensors-does-arcore-use
 
-\section{Optimierungsmöglichkeiten}
 
 
 
