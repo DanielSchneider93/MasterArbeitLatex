@@ -130,16 +130,56 @@ Die grundlegende Idee, auf der die Anwendung aufbaut, ist es, den Nutzer nach be
 
 \section{Anwendungsbeispiel}
 
-Step by Step Tutorial
+Nach dem Starten der App und der Erlaubnis der angeforderten Berechtigungen für Kamera und Position, ist das initiale Layout wie in Abbildung 6.5 links zu sehen. Zuerst wird die aktuelle Position des Nutzers mittels GPS bestimmt. Ist die Bestimmung erfolgreich wird dies, wie in Abbildung 6.5 (1) zu sehen, in einer Benachrichtigung im unteren Bildschirmrand angezeigt. Die animierte Hand mit Smartphone, zu sehen in Abbildung 6.5 (2), ist Teil des ArFragments von ARCore und symbolisiert dem Nutzer, dass er sein Gerät in alle Richtungen drehen und bewegen soll, damit die initiale interne Positionsbestimmung der Bodenebene durchgeführt werden kann. 
 
-\section{Algorithmen}
+Die Dauer dieser initialen Bestimmung ist abhängig von der Hardware (Kameraqualität, Rechenleistung und IMU Sensoren) und der Beleuchtungsintensität der Umgebung. Bei Tageslicht dauert die Bestimmung der initialen Pose unter einer Sekunde, bei künstlichem Licht zwischen ein und zwei Sekunden und bei spärlichen sehr dunklen Lichtverhältnissen ungefähr drei bis fünf Sekunden. Ab einem gewissen Helligkeitsgrenzwert kann die Bestimmung nicht mehr durchgeführt werden, weshalb gute Lichtverhältnisse ausschlaggebend für die optimale Funktionsweise von ARCore sind.
 
-Zur Bestimmung des Abstands zwischen zwei Standorten auf der Oberfläche der Weltkugel wurde die Haversine Fomel verwendet.
-\url{https://en.wikipedia.org/wiki/Haversine_formula}
+In der oberen Menüleiste kann der Nutzer eine Suchanfrage eingeben, siehe Abbildung 6.5 (3). Wenn die Anfrage erfolgreich ist, wird dies wie in Abbildung 6.5 (4) im unteren Bildschirmrand angezeigt. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.21]{initial_screen.png}
+	\caption{Lokalisierung (1), Posen Initialisierung (2),  Suche nach Point of Interest (3), Anzeige der Anzahl der gefundenen Ergebnisse (4).}
+\end{figure} 
+
+Weiterhin wird der Nutzer durch verschiedene Infofenster darauf hingewiesen, wenn das GPS nicht aktiviert ist oder wenn er ein Modell platzieren will, das durch eine fehlende Suchanfrage noch nicht zur Verfügung steht, siehe Abbildung 6.6. 
+
+Nach der durchgeführten Suche, werden im Hintergrund die Entfernungen und Himmelsrichtungen der nächsten drei gefundenen Points of Interest berechnet. Diese Informationen wie Name, Entfernung, Himmelrichtung und durchschnittliche Bewertung, werden in Echtzeit in zweidimensionale Container eingefügt, die dann von ARCore in dreidimensionale Modelle gerendert werden. Durch einen Tap auf die erkannte Bodenebene, die bei ARCore standardmäßig mit weißen Punkten visualisiert wird, siehe Abbildung 6.6, können die Modelle dann platziert werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.21]{infobox.png}
+	\caption{Infoboxen für den Nutzer und Visualisierung der erkannten Bodenebene.}
+\end{figure} 
+
+Das Ergebnis der Suchanfrage wird dann, wie in Abbildung 6.7 (1) dargestellt, in das Kamerabild eingefügt. Da die von ARCore berechneten Schatten der zweidimensionalen Infoboxen nicht ansatzweise realistisch aussehen, sind diese deaktiviert worden. Die kontextsensitive Beleuchtungsintensität der Modelle funktioniert jedoch gut und ist deshalb aktiv. Die Infoboxen zeigen die Distanz zum Zielort in Metern, sowie die Himmelrichtungen $N, S, O, W$ mit den Unterteilungen $NW, SW, SE, NE$ an. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.21]{result_screen.png}
+	\caption{Gerendete und Platzierte virtuelle Infokarten (1), Kompass (2).}
+\end{figure} 
+
+Wie in Abbildung 6.7 (2) dargestellt, wurde ein kleiner Kompass implementiert, da die ursprünglich geplante Rotation der Infoboxen in die korrekte Himmelsrichtung, in welcher der wirkliche Ort liegt, nicht umgesetzt werden konnte (Siehe Kapitel 6.9). 
 
 
-Um den Winkel der Himmelsrichtung zu bestimmen, in der ein Point of Interest liegt wurde...
-\url{https://en.wikipedia.org/wiki/Azimuth}
+\section{Haversin-Formel und Azimut}
+
+Zur Bestimmung des Abstands zwischen aktuellen Standort des Nutzers und dem Ziel wurde die Haversin Formel verwendet. Mithilfe der Formel kann der Großkreisabstand von zwei Punkten auf einer Kugel anhand ihrer Längen- und Breitengrade berechnet werden \cite{haversine}: 
+
+\begin{equation}
+d = 2 \pi \sin^{-1} (\sqrt{\sin²(\frac{\phi_2 - \phi_1}{2})+\cos(\phi_1)\cos(\phi_2)\sin²(\frac{\psi_2-\psi_1}{2}})
+\end{equation}
+
+Wobei $d$ die Entfernung zwischen zwei Punkten mit Längen- und Breitengrad $(\psi,\phi)$ und $r$ der Radius der Erde ist (vgl. \cite{haversine} S.299).
+
+Die Berechnung des Azimuts, also des Kurses angegeben durch einen Winkel, der die Himmelsrichtung vom Startpunkt des Nutzers bis zum Ziel beschreibt, wird mit folgender Formel berechnet, welche auch als \glqq Vorwärts-Azimut\grqq{} bezeichnet wird \cite{bearing}:
+
+\begin{equation}
+\theta = atan2(\sin \delta\lambda \cdot\cos\phi_2, \cos \phi_1 \cdot\sin\phi_2 - \cos\phi_2 \cdot\cos\delta\lambda)
+\end{equation}
+
+Wobei $\phi_1,\lambda_1$ der Startpunkt, $\phi_2,\lambda_2$ der Endpunkt und $\delta\lambda$   die Differenz der Längengrade ist (vgl \cite{bearing}).
 
 \section{Benchmarks}
 

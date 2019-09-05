@@ -48,9 +48,9 @@
 \contentsline {section}{\numberline {6.4}Dexter}{57}{section.6.4}
 \contentsline {section}{\numberline {6.5}Konzept}{58}{section.6.5}
 \contentsline {section}{\numberline {6.6}Anwendungsbeispiel}{58}{section.6.6}
-\contentsline {section}{\numberline {6.7}Algorithmen}{58}{section.6.7}
-\contentsline {section}{\numberline {6.8}Benchmarks}{58}{section.6.8}
-\contentsline {section}{\numberline {6.9}Probleme}{59}{section.6.9}
-\contentsline {chapter}{\numberline {7}Zusammenfassung}{61}{chapter.7}
-\contentsline {chapter}{Literaturverzeichnis}{62}{section*.24}
-\contentsline {chapter}{Abbildungsverzeichnis}{70}{section*.26}
+\contentsline {section}{\numberline {6.7}Haversin-Formel und Azimut}{61}{section.6.7}
+\contentsline {section}{\numberline {6.8}Benchmarks}{62}{section.6.8}
+\contentsline {section}{\numberline {6.9}Probleme}{62}{section.6.9}
+\contentsline {chapter}{\numberline {7}Zusammenfassung}{64}{chapter.7}
+\contentsline {chapter}{Literaturverzeichnis}{65}{section*.27}
+\contentsline {chapter}{Abbildungsverzeichnis}{73}{section*.29}
