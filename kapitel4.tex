@@ -138,17 +138,17 @@ In der oberen Menüleiste kann der Nutzer eine Suchanfrage eingeben, siehe Abbil
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.21]{initial_screen.png}
+	\includegraphics[scale=0.8]{initial_screen.png}
 	\caption{Lokalisierung (1), Posen Initialisierung (2),  Suche nach Point of Interest (3), Anzeige der Anzahl der gefundenen Ergebnisse (4).}
 \end{figure} 
 
 Weiterhin wird der Nutzer durch verschiedene Infofenster darauf hingewiesen, wenn das GPS nicht aktiviert ist oder wenn er Modelle platzieren will, die durch eine fehlende Suchanfrage noch nicht zur Verfügung stehen, siehe Abbildung 6.6. 
 
-Nach der durchgeführten Suche, werden im Hintergrund die Entfernungen und Himmelsrichtungen der nächsten drei gefundenen Points of Interest berechnet. Diese Informationen wie Name, Entfernung, Himmelrichtung und durchschnittliche Bewertung, werden in Echtzeit in zweidimensionale Container eingefügt, die dann von ARCore in dreidimensionale Modelle gerendert werden. Durch einen Tap auf die erkannte Bodenebene, die bei ARCore standardmäßig mit weißen Punkten visualisiert wird, siehe Abbildung 6.6, können die Modelle dann platziert werden.
+Nach der durchgeführten Suche, werden im Hintergrund die Entfernungen und Himmelsrichtungen der nächsten drei gefundenen Points of Interest berechnet. Diese Informationen wie Name, Entfernung, Himmelrichtung und durchschnittliche Bewertung, werden in Echtzeit in zweidimensionale Container eingefügt, die dann von ARCore in dreidimensionale Modelle gerendert werden. \\ Durch einen Tap auf die erkannte Bodenebene, die bei ARCore standardmäßig mit weißen Punkten visualisiert wird, siehe Abbildung 6.6, können die Modelle dann platziert werden.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.21]{infobox.png}
+	\includegraphics[scale=0.7]{infobox.png}
 	\caption{Infoboxen für den Nutzer und Visualisierung der erkannten Bodenebene.}
 \end{figure} 
 
@@ -156,7 +156,8 @@ Das Ergebnis der Suchanfrage wird dann, wie in Abbildung 6.7 (1) dargestellt, in
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.21]{result_screen.png}
+	\hspace*{-0.5in}
+	\includegraphics[scale=0.65]{result_screen.png}
 	\caption{Gerendete und Platzierte virtuelle Infokarten (1), Kompass (2).}
 \end{figure} 
 
@@ -196,7 +197,7 @@ Die ursprüngliche Idee, die virtuellen Infoboxen richtig zur Himmelsrichtung au
 \item \textbf{Problem 4}: Der Großteil der Benutzer von Smartphones hat noch nie das Magnetometer oder andere interne Sensoren kalibriert. Nach der Kalibrierung der internen Sensoren ist das Ergebnis um ein Vielfaches genauer, jedoch trotzdem noch störanfällig und ungenau.
 \end{itemize}
 
-Um diese Probleme zu beheben müsste eine Methode zur Kalibrierung der internen Sensoren, beim ersten Starten der Applikation, implementiert werden. Weiterhin müsste ein Initialisierungsverfahren die Position, Lage und Ausrichtung des Geräts ermitteln und über einen kurzen Zeitraum messen, damit anschließend mit einem Optimierungsverfahren die gemittelte initiale Orientierung bestimmt werden kann. Dann müsste das interne Koordinatensystem von ARCore anhand dieser Daten ausgerichtet werden. Dies hätte den zeitlichen Rahmen dieser Arbeit gesprengt, weshalb als Alternative die Himmelrichtung der angefragten Points of Interest mit auf den Infoboxen angezeigt wird. In der Suchleiste der Anwendung ist ein kleiner Kompass implementiert worden, der die Himmelsrichtung des Gerätes anzeigt. 
+Um diese Probleme zu beheben müsste eine Methode zur Kalibrierung der internen Sensoren, beim ersten Starten der Applikation, implementiert werden. \\ \\ Weiterhin müsste ein Initialisierungsverfahren die Position, Lage und Ausrichtung des Geräts ermitteln und über einen kurzen Zeitraum messen, damit anschließend mit einem Optimierungsverfahren die gemittelte initiale Orientierung bestimmt werden kann. Dann müsste das interne Koordinatensystem von ARCore anhand dieser Daten ausgerichtet werden. Dies hätte den zeitlichen Rahmen dieser Arbeit gesprengt, weshalb als Alternative die Himmelrichtung der angefragten Points of Interest mit auf den Infoboxen angezeigt wird. In der Suchleiste der Anwendung ist ein kleiner Kompass implementiert worden, der die Himmelsrichtung des Gerätes anzeigt. 
 
 Das von Apple entwickelte Framework ARKit hat diese globale Orientierung des Koordinatensystems bereits implementiert (vgl. \cite{arkit_global}) Bei ARCore wurde dieses Feature schön seit längerer Zeit von Entwicklern erwartet, ist jedoch noch nicht offiziell erschienen. 
 
