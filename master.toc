@@ -49,8 +49,8 @@
 \contentsline {section}{\numberline {6.5}Konzept}{58}{section.6.5}
 \contentsline {section}{\numberline {6.6}Anwendungsbeispiel}{58}{section.6.6}
 \contentsline {section}{\numberline {6.7}Haversin-Formel und Azimut}{61}{section.6.7}
-\contentsline {section}{\numberline {6.8}Benchmarks}{62}{section.6.8}
-\contentsline {section}{\numberline {6.9}Probleme}{62}{section.6.9}
+\contentsline {section}{\numberline {6.8}Probleme}{62}{section.6.8}
+\contentsline {section}{\numberline {6.9}Erkenntnisse}{63}{section.6.9}
 \contentsline {chapter}{\numberline {7}Zusammenfassung}{64}{chapter.7}
 \contentsline {chapter}{Literaturverzeichnis}{65}{section*.27}
 \contentsline {chapter}{Abbildungsverzeichnis}{73}{section*.29}

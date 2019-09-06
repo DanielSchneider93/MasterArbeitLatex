@@ -130,7 +130,7 @@ Die grundlegende Idee, auf der die Anwendung aufbaut, ist es, den Nutzer nach be
 
 \section{Anwendungsbeispiel}
 
-Nach dem Starten der App und der Erlaubnis der angeforderten Berechtigungen für Kamera und Position, ist das initiale Layout wie in Abbildung 6.5 links zu sehen. Zuerst wird die aktuelle Position des Nutzers mittels GPS bestimmt. Ist die Bestimmung erfolgreich wird dies, wie in Abbildung 6.5 (1) zu sehen, in einer Benachrichtigung im unteren Bildschirmrand angezeigt. Die animierte Hand mit Smartphone, zu sehen in Abbildung 6.5 (2), ist Teil des ArFragments von ARCore und symbolisiert dem Nutzer, dass er sein Gerät in alle Richtungen drehen und bewegen soll, damit die initiale interne Positionsbestimmung der Bodenebene durchgeführt werden kann. 
+Nach dem Starten der App und dem Bewilligen der angeforderten Berechtigungen für Kamera und Position, wird das initiale Layout, wie in Abbildung 6.5 links zu sehen, angezeigt. Zuerst wird die aktuelle Position des Nutzers mittels GPS bestimmt. Ist die Bestimmung erfolgreich wird dies, wie in Abbildung 6.5 (1) zu sehen, in einer Benachrichtigung im unteren Bildschirmrand angezeigt. Die animierte Hand mit Smartphone, zu sehen in Abbildung 6.5 (2), ist Teil des ArFragments von ARCore und symbolisiert dem Nutzer, dass er sein Gerät in alle Richtungen drehen und bewegen soll, damit die initiale interne Positionsbestimmung der Bodenebene durchgeführt werden kann. 
 
 Die Dauer dieser initialen Bestimmung ist abhängig von der Hardware (Kameraqualität, Rechenleistung und IMU Sensoren) und der Beleuchtungsintensität der Umgebung. Bei Tageslicht dauert die Bestimmung der initialen Pose unter einer Sekunde, bei künstlichem Licht zwischen ein und zwei Sekunden und bei spärlichen sehr dunklen Lichtverhältnissen ungefähr drei bis fünf Sekunden. Ab einem gewissen Helligkeitsgrenzwert kann die Bestimmung nicht mehr durchgeführt werden, weshalb gute Lichtverhältnisse ausschlaggebend für die optimale Funktionsweise von ARCore sind.
 
@@ -142,7 +142,7 @@ In der oberen Menüleiste kann der Nutzer eine Suchanfrage eingeben, siehe Abbil
 	\caption{Lokalisierung (1), Posen Initialisierung (2),  Suche nach Point of Interest (3), Anzeige der Anzahl der gefundenen Ergebnisse (4).}
 \end{figure} 
 
-Weiterhin wird der Nutzer durch verschiedene Infofenster darauf hingewiesen, wenn das GPS nicht aktiviert ist oder wenn er ein Modell platzieren will, das durch eine fehlende Suchanfrage noch nicht zur Verfügung steht, siehe Abbildung 6.6. 
+Weiterhin wird der Nutzer durch verschiedene Infofenster darauf hingewiesen, wenn das GPS nicht aktiviert ist oder wenn er Modelle platzieren will, die durch eine fehlende Suchanfrage noch nicht zur Verfügung stehen, siehe Abbildung 6.6. 
 
 Nach der durchgeführten Suche, werden im Hintergrund die Entfernungen und Himmelsrichtungen der nächsten drei gefundenen Points of Interest berechnet. Diese Informationen wie Name, Entfernung, Himmelrichtung und durchschnittliche Bewertung, werden in Echtzeit in zweidimensionale Container eingefügt, die dann von ARCore in dreidimensionale Modelle gerendert werden. Durch einen Tap auf die erkannte Bodenebene, die bei ARCore standardmäßig mit weißen Punkten visualisiert wird, siehe Abbildung 6.6, können die Modelle dann platziert werden.
 
@@ -160,7 +160,7 @@ Das Ergebnis der Suchanfrage wird dann, wie in Abbildung 6.7 (1) dargestellt, in
 	\caption{Gerendete und Platzierte virtuelle Infokarten (1), Kompass (2).}
 \end{figure} 
 
-Wie in Abbildung 6.7 (2) dargestellt, wurde ein kleiner Kompass implementiert, da die ursprünglich geplante Rotation der Infoboxen in die korrekte Himmelsrichtung, in welcher der wirkliche Ort liegt, nicht umgesetzt werden konnte (Siehe Kapitel 6.9). 
+Wie in Abbildung 6.7 (2) dargestellt, wurde ein kleiner Kompass implementiert, da die ursprünglich geplante Rotation der Infoboxen in die korrekte Himmelsrichtung, in welcher der wirkliche Ort liegt, nicht umgesetzt werden konnte (Siehe Kapitel 6.8). 
 
 
 \section{Haversin-Formel und Azimut}
@@ -179,15 +179,7 @@ Die Berechnung des Azimuts, also des Kurses angegeben durch einen Winkel, der di
 \theta = atan2(\sin \delta\lambda \cdot\cos\phi_2, \cos \phi_1 \cdot\sin\phi_2 - \cos\phi_2 \cdot\cos\delta\lambda)
 \end{equation}
 
-Wobei $\phi_1,\lambda_1$ der Startpunkt, $\phi_2,\lambda_2$ der Endpunkt und $\delta\lambda$   die Differenz der Längengrade ist (vgl \cite{bearing}).
-
-\section{Benchmarks}
-
-Zeit bis die Flächen gefunden wurden in Abhängigkeit der Lichtverhältnisse
-
-Performance (vertices to fps) (kleinen Test bauen mit großem model)
-
-Anfragegeschwindigkeit für HTTP Requests an Google
+Wobei $\phi_1,\lambda_1$ der Startpunkt, $\phi_2,\lambda_2$ der Endpunkt und $\delta\lambda$   die Differenz der Längengrade ist (vgl \cite{bearing}). Die ermittelte Himmelsrichtung in Grad wird dann in die acht Kategorien der Himmelsrichtung umgewandelt.
 
 \section{Probleme}
 
@@ -197,18 +189,23 @@ Die ursprüngliche Idee, die virtuellen Infoboxen richtig zur Himmelsrichtung au
 
 \item \textbf{Problem 1}: Die Orientierung des von ARCore benutzen globalen Koordinatensystems ist bei jeder Session verschieden. Nur die Y-Achse ist immer nach oben orientiert, was an der Erkennung der horizontalen Flächen liegt. Die globale Orientierung der X- und Z-Achse ist jedoch immer unterschiedlich (vgl. \cite{arcore_geo}).
 
-\item \textbf{Problem 2}: Versuche das globale Koordinatensystem anhand der internen Sensoren, wie Magnetometer und Lagesensor auszurichten, hat wegen starken Ungenauigkeit dieser Sensoren zu oft zu falschen Ergebnissen geführt. Dies hat zur Folge, dass bei mehreren Initialisierungen des Koordinatenraums bei gleichen Startbedingungen teils sehr verschiedene Resultate und damit Drehungen des Koordinatensystems in die falsche Richtung zur Folge hatte. 
+\item \textbf{Problem 2}: Versuche das globale Koordinatensystem anhand der internen Sensoren, wie Magnetometer und Lagesensor auszurichten, hat wegen starken Ungenauigkeit dieser Sensoren zu oft zu falschen Ergebnissen geführt. Dies hat zur Folge, dass sich bei mehreren Initialisierungen des Koordinatenraums unter gleichen Startbedingungen teils sehr verschiedene Resultate und damit Drehungen des Koordinatensystems in die falsche Richtung ergeben haben. 
 
-\item \textbf{Problem 3}: Der Magnetfeldsensor in Smartphones ist sehr anfällig für Störungen, wenn er in Gebäuden oder in der Nähe von anderen elektronischen Geräten eingesetzt wird.
+\item \textbf{Problem 3}: Der Magnetfeldsensor in Smartphones ist sehr anfällig für Störungen, wenn er in Gebäuden oder in der Nähe von anderen elektronischen Geräten eingesetzt wird, was durch die sehr kleine Baugröße bedingt ist. Die unter Strom gesetzte metallische Platte, welche die Lorentzkraft misst, ist so klein, dass selbst schwache Magnetfelder diese beeinflussen können.
 
-\item \textbf{Problem 4}: Der Großteil der Benutzer von Smartphones hat noch nie das Magnetometer kalibriert. Nach der Kalibrierung der internen Sensoren ist das Ergebnis um ein Vielfaches genauer, jedoch trotzdem noch störanfällig und ungenau.
+\item \textbf{Problem 4}: Der Großteil der Benutzer von Smartphones hat noch nie das Magnetometer oder andere interne Sensoren kalibriert. Nach der Kalibrierung der internen Sensoren ist das Ergebnis um ein Vielfaches genauer, jedoch trotzdem noch störanfällig und ungenau.
 \end{itemize}
 
 Um diese Probleme zu beheben müsste eine Methode zur Kalibrierung der internen Sensoren, beim ersten Starten der Applikation, implementiert werden. Weiterhin müsste ein Initialisierungsverfahren die Position, Lage und Ausrichtung des Geräts ermitteln und über einen kurzen Zeitraum messen, damit anschließend mit einem Optimierungsverfahren die gemittelte initiale Orientierung bestimmt werden kann. Dann müsste das interne Koordinatensystem von ARCore anhand dieser Daten ausgerichtet werden. Dies hätte den zeitlichen Rahmen dieser Arbeit gesprengt, weshalb als Alternative die Himmelrichtung der angefragten Points of Interest mit auf den Infoboxen angezeigt wird. In der Suchleiste der Anwendung ist ein kleiner Kompass implementiert worden, der die Himmelsrichtung des Gerätes anzeigt. 
 
-Das von Apple entwickelte Framework ARKit hat diese globale Orientierung des Koordinatensystems bereits implementiert (vgl. \cite{arkit_global}) Bei ARCore wurde dieses Feature schön seit längerer Zeit von Entwicklern erwartet, ist jedoch noch nicht offiziell erschienen.
+Das von Apple entwickelte Framework ARKit hat diese globale Orientierung des Koordinatensystems bereits implementiert (vgl. \cite{arkit_global}) Bei ARCore wurde dieses Feature schön seit längerer Zeit von Entwicklern erwartet, ist jedoch noch nicht offiziell erschienen. 
 
-https://stackoverflow.com/questions/54356589/what-sensors-does-arcore-use
+\section{Erkenntnisse}
+
+Trotz der in Kapitel 6.8 genannten Probleme ist die Entwicklung der Anwendung mit ARCore, Sceneform und Android Studio sehr intuitiv und ohne weitere Probleme verlaufen. Das verwendete Smartphone, das zum Testen in dieser Arbeit verwendet wurde, ist das \textit{LG G7 ThinkQ}, welches Android 9.0, einen Snapdragon 845 SoC (System-on-a-Chip), 4GB RAM und eine 16 MP Kamera mit 2160p mit sich bringt. 
+
+Das Tracking von ARCore ist sehr flüssig, schnell und sehr akkurat. Die Performance des Renderings der Modelle ist auch bei Experimenten mit vielen Modellen, einer großen Anzahl an Vertices, Schatten und kontextsensitiver Beleuchtung sehr stabil. ARCore und Sceneform lassen sich einfach kombinieren, das Wegfallen von OpenGL zum Rendern der Modelle, erleichtert zusätzlich den Einstieg in die Entwicklung von AR Applikationen. Das Echtzeitsystem, welches die Schatten erzeugt, funktioniert für 3D-Modelle sehr gut, für 2D-Planes nicht wirklich. Die User Interaction, um Modelle in ihrer Größe zu verändern oder im Raum zu verschieben wurde in dieser Anwendung deaktiviert, mit normalen 3D-Modellen funktioniert dies einwandfrei. Die Einstiegshürden um AR-Anwendungen zu erstellen werden in den nächsten Jahren weiter sinken, ARCore leistet dazu einen großen Entwicklungsschritt.
+
 
 
 
